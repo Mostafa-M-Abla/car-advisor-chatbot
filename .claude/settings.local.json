@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:eg.hatla2ee.com)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
