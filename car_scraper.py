@@ -204,9 +204,9 @@ class CarScraper:
 
         self.log_info(f"Found {len(trims)} trims to process")
 
-        # Process each trim
-        for i, trim in enumerate(trims[:3]):  # Limit to first 3 for testing
-            self.log_info(f"Processing trim {i+1}/{min(3, len(trims))}: {trim['name']}")
+        # Process all trims
+        for i, trim in enumerate(trims):  # Process ALL trims
+            self.log_info(f"Processing trim {i+1}/{len(trims)}: {trim['name']}")
             self.scrape_trim_data(brand, model_name, trim)
 
         self.log_info("Test completed successfully!")
@@ -293,6 +293,11 @@ class CarScraper:
 
             # Scrape detailed specifications
             self.scrape_specifications(soup, row_data)
+
+            # If Market_Price_EGP is empty but Official_Price_EGP exists, copy official price to market price
+            if not row_data.get('Market_Price_EGP') and row_data.get('Official_Price_EGP'):
+                row_data['Market_Price_EGP'] = row_data['Official_Price_EGP']
+                self.log_info(f"Set Market_Price_EGP to Official_Price_EGP for {trim['full_name']}")
 
             # Save to CSV
             self.save_row_to_csv(row_data)
