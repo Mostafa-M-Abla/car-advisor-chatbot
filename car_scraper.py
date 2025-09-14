@@ -358,21 +358,64 @@ class CarScraper:
             # Get all page text for pattern matching
             all_text = soup.get_text().lower()
 
+# Debug removed - Transmission and Traction patterns updated
+
             # Search for all features in the text
-            for website_name, mapping in self.features_mapping.items():
+            # Sort by length (longest first) to match more specific terms before general ones
+            sorted_features = sorted(self.features_mapping.items(), key=lambda x: len(x[0]), reverse=True)
+
+            for website_name, mapping in sorted_features:
                 if website_name in all_text:
                     if mapping['d_type'] == 'bool':
                         # For boolean features, presence indicates True
                         row_data[mapping['output_csv']] = True
                     else:
-                        # Try to extract numeric values near the feature name
-                        pattern = rf'{re.escape(website_name)}[:\s]*(\d+(?:\.\d+)?(?:,\d+)*)\s*(\w*)'
-                        match = re.search(pattern, all_text)
-                        if match:
-                            value = match.group(1).replace(',', '')
-                            converted_value = self.convert_data_type(value, mapping['d_type'])
-                            if converted_value is not None:
-                                row_data[mapping['output_csv']] = converted_value
+                        # Try to extract values near the feature name (both numeric and text)
+                        if mapping['d_type'] in ['int', 'float']:
+                            # For numeric values
+                            pattern = rf'{re.escape(website_name)}[:\s]*(\d+(?:\.\d+)?(?:,\d+)*)\s*(\w*)'
+                            match = re.search(pattern, all_text)
+                            if match:
+                                value = match.group(1).replace(',', '')
+                                converted_value = self.convert_data_type(value, mapping['d_type'])
+                                if converted_value is not None:
+                                    row_data[mapping['output_csv']] = converted_value
+                        else:
+                            # For string values, look for text after the feature name
+                            # Use word boundaries to ensure exact matching
+                            if mapping['output_csv'] == 'Traction_Type':
+                                # Special pattern for traction type - website shows "traction typefront traction"
+                                pattern = rf'{re.escape(website_name)}([a-zA-Z]+\s+[a-zA-Z]+)'
+                            elif mapping['output_csv'] == 'Transmission':
+                                # Special pattern for transmission - website shows "transmission typeautomatic"
+                                pattern = rf'{re.escape(website_name)}([a-zA-Z]+)'
+                            elif mapping['output_csv'] == 'Fuel_Type':
+                                # Special pattern for fuel type to capture both numeric (92, 95) and text (Diesel) values
+                                pattern = rf'\b{re.escape(website_name)}\b[:\s]*([a-zA-Z0-9]+)'
+                            elif mapping['output_csv'] == 'Year':
+                                # Special pattern for year to capture 4-digit year
+                                pattern = rf'\b{re.escape(website_name)}\b[:\s]*(\d{{4}})'
+                            else:
+                                # Use word boundaries to avoid partial matches
+                                pattern = rf'\b{re.escape(website_name)}\b[:\s]*([a-zA-Z0-9]+(?:[a-zA-Z0-9\s/\-]*?[a-zA-Z0-9])?)'
+
+                            match = re.search(pattern, all_text)
+                            if match:
+                                value = match.group(1).strip()
+# Debug removed
+                                # Clean up the value
+                                if mapping['output_csv'] in ['Traction_Type', 'Transmission', 'Fuel_Type', 'Year']:
+                                    # For these specific fields, use the full matched value
+                                    clean_value = value
+                                else:
+                                    # For other fields, take first word only
+                                    words = value.split()[:1]
+                                    clean_value = ' '.join(words)
+
+                                converted_value = self.convert_data_type(clean_value, mapping['d_type'])
+                                if converted_value is not None:
+                                    row_data[mapping['output_csv']] = converted_value
+# Debug removed
 
             # Look for specific sections with headings
             headings = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])

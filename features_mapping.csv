@@ -8,7 +8,7 @@ Horsepower_HP,Horse Power,int
 Max_Speed_kmh,Maximum Speed,int
 Acceleration_0_100_sec,Acceleration,float
 Speeds,Speeds,int
-Transmission,Transmission Type,string
+Transmission,transmission type,string
 Fuel_Type,Fuel,string
 Number_of_Cylinders,Number of cylinder,int
 Fuel_Tank_L,Fuel tank capacity,int
@@ -21,9 +21,9 @@ Wheelbase_mm,Wheel Base,int
 Trunk_Size_L,Trunk Size,int
 Origin_Country,Origin Country,string
 Assembly_Country,Assembly Country,string
-Year,Year,int
+Year,yearyear,string
 Number_of_Seats,Seats,int
-Traction_Type,Traction Type,string
+Traction_Type,traction type,string
 ABS,ABS,bool
 EBD,EBD,bool
 Driver_Airbag,Driver Airbag,bool
