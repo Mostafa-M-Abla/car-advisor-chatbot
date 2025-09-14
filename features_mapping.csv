@@ -1,0 +1,93 @@
+output_csv,website,d_type
+Official_Price_EGP,Official Prices,int
+Market_Price_EGP,Market Price,int
+Insurance_Price_EGP,Insurance Price,int
+Register_Price_EGP,Registration Price,int
+Engine_CC,Engine capacity,int
+Horsepower_HP,Horse Power,int
+Max_Speed_kmh,Maximum Speed,int
+Acceleration_0_100_sec,Acceleration,float
+Speeds,Speeds,int
+Transmission,Transmission Type,string
+Fuel_Type,Fuel,string
+Number_of_Cylinders,Number of cylinder,int
+Fuel_Tank_L,Fuel tank capacity,int
+Torque_Newton_Meter,Torque of newton,int
+Length_mm,Length (mm),int
+Width_mm,Width (mm),int
+Height_mm,Height (mm),int
+Ground_Clearance_mm,Ground Clearance,int
+Wheelbase_mm,Wheel Base,int
+Trunk_Size_L,Trunk Size,int
+Origin_Country,Origin Country,string
+Assembly_Country,Assembly Country,string
+Year,Year,int
+Number_of_Seats,Seats,int
+Traction_Type,Traction Type,string
+ABS,ABS,bool
+EBD,EBD,bool
+Driver_Airbag,Driver Airbag,bool
+Passenger_Airbag,Passenger Airbag,bool
+Rear_Sensors,Rear sensors,bool
+Air_Conditioning,Air Conditioning,bool
+Power_Steering,Power Steering,bool
+Electric_Mirrors,Electric mirrors,bool
+Remote_Keyless,Remote Keyless,bool
+Central_Locking,Central lock,bool
+Cruise_Control,Cruise control,bool
+Sunroof,Sunroof,bool
+Tinted_Glass,Tinted Glass,bool
+Front_Power_Windows,Front Power Windows,bool
+Back_Power_Windows,Back Power Windows,bool
+Multimedia_System,Multimedia System,bool
+Bluetooth,Bluetooth,bool
+USB_Port,USB Port,bool
+AUX,AUX,bool
+Alloy_Wheels,Alloy wheels,bool
+Fog_Light,Fog light,bool
+Fog_Lights,Fog Lights,bool
+Fabric_Brushes,Fabric brushes,bool
+Multifunction,Multifunction,bool
+Warranty,Warranty,bool
+Minimum_Installment,Min.Installment,bool
+Minimum_Deposit,Min.Deposit,int
+Fuel_Consumption_l_100_km,liter/100KM,float
+Side_Airbag,Side Airbag,bool
+Power_Seats,Power Seats,bool
+Cassette_Radio,Cassette Radio,bool
+CD_Changer,CD Changer,bool
+DVD_Player,DVD Player,bool
+CD_Player,CD Player,bool
+Closing_Mirrors,Closing mirrors,bool
+Leather_Seats,Leather seats,bool
+EPS,EPS,bool
+Rear_Camera,Rear camera,bool
+GPS,GPS,bool
+Front_Sensors,Front sensors,bool
+Intelligent_Parking_System,Intelligent parking system,bool
+Rear_Spoiler,Rear spoiler,bool
+Electric_Chairs,Electric chairs,bool
+Start_Engine,Start engine,bool
+ESP,ESP,bool
+Steptronic,Steptronic,bool
+Panoramic_Sunroof,Panoramic Sunroof,bool
+Touch_Activated_Door_Lock,Touch activated door lock,bool
+Cloth,Cloth,bool
+Velour,Velour,bool
+AM_FM_Radio,AM/FM Radio,bool
+Heated_Seats,Heated seats,bool
+Cool_Box,Cool Box,bool
+Rear_Seat_Entertainment,Rear Seat Entertainment,bool
+Daytime_Running_Lights,Daytime running lights,bool
+Start_Stop_System,Start/Stop system,bool
+Tyre_Pressure_Sensor,Tyre pressure sensor,bool
+Xenon_Headlights,Xenon Headlights,bool
+Front_Camera,Front Camera,bool
+Immobilizer_Key,Immobilizer Key,bool
+Roof_Rack,Roof Rack,bool
+Alarm_or_Anti_Theft_System,Alarm/Anti-Theft System,bool
+Anti_Theft_System,Anti - theft System,bool
+Alarm,Alarm,bool
+Touch_Screen,Touch Screen,bool
+Touch_Screen,Multimedia touch screen,bool
+Off_Road_Tyres,Off-Road Tyres,bool
