@@ -1,8 +1,8 @@
 output_csv,website,d_type
-Official_Price_EGP,Official Prices,int
+Official_Price_EGP,Official Price,int
 Market_Price_EGP,Market Price,int
 Insurance_Price_EGP,Insurance Price,int
-Register_Price_EGP,Registration Price,int
+Register_Price_EGP,Register Price,int
 Engine_CC,Engine capacity,int
 Horsepower_HP,Horse Power,int
 Max_Speed_kmh,Maximum Speed,int
