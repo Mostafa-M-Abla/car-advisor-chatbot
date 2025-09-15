@@ -3,7 +3,7 @@ Official_Price_EGP,Official Price,int
 Market_Price_EGP,Market Price,int
 Insurance_Price_EGP,Insurance Price,int
 Register_Price_EGP,Register Price,int
-Engine_CC,Engine capacity,int
+Engine_CC,Engine capacity,string
 Horsepower_HP,Horse Power,int
 Max_Speed_kmh,Maximum Speed,int
 Acceleration_0_100_sec,Acceleration,float
@@ -48,7 +48,7 @@ Fog_Light,Fog light,bool
 Fog_Lights,Fog Lights,bool
 Fabric_Brushes,Fabric brushes,bool
 Multifunction,Multifunction,bool
-Warranty,Warranty,bool
+Warranty,Warranty,string
 Minimum_Installment,Min.Installment,int
 Minimum_Deposit,Min.Deposit,int
 Fuel_Consumption_l_100_km,liter/100KM,float
@@ -89,5 +89,5 @@ Alarm_or_Anti_Theft_System,Alarm/Anti-Theft System,bool
 Anti_Theft_System,Anti - theft System,bool
 Alarm,Alarm,bool
 Touch_Screen,Touch Screen,bool
-Touch_Screen,Multimedia touch screen,bool
+Multimedia_Touch_Screen,Multimedia touch screen,bool
 Off_Road_Tyres,Off-Road Tyres,bool
