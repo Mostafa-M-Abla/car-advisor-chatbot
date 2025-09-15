@@ -184,6 +184,44 @@ class CarScraper:
             self.log_error(f"Failed to extract models for {brand}: {e}")
             return []
 
+    def scrape_all_hyundai_models(self):
+        """Scrape all Hyundai models and their trims"""
+        brand = "hyundai"
+        self.log_info(f"Starting to scrape all {brand} models")
+
+        # Initialize CSV
+        self.initialize_csv()
+
+        # Get all models for Hyundai
+        models = self.get_models(brand)
+        if not models:
+            self.log_error(f"No models found for {brand}")
+            return
+
+        self.log_info(f"Found {len(models)} models to process for {brand}")
+
+        # Process each model
+        for model_idx, model in enumerate(models):
+            model_name = model['name']
+            self.log_info(f"Processing model {model_idx+1}/{len(models)}: {model_name}")
+
+            # Get trims for this model
+            model_url = f"{self.base_url}/{brand}/{model_name}"
+            trims = self.get_trims(brand, model_name, model_url)
+
+            if not trims:
+                self.log_info(f"No trims found for {brand} {model_name}")
+                continue
+
+            self.log_info(f"Found {len(trims)} trims for {model_name}")
+
+            # Process all trims for this model
+            for trim_idx, trim in enumerate(trims):
+                self.log_info(f"Processing trim {trim_idx+1}/{len(trims)} of {model_name}: {trim['name']}")
+                self.scrape_trim_data(brand, model_name, trim)
+
+        self.log_info("All Hyundai models completed successfully!")
+
     def test_single_model(self, brand: str = "hyundai", model_name: str = "Accent-RB"):
         """Test scraping with a single model"""
         self.log_info(f"Starting test with {brand} {model_name}")
@@ -358,7 +396,7 @@ class CarScraper:
             # Get all page text for pattern matching
             all_text = soup.get_text().lower()
 
-# Debug removed - Transmission and Traction patterns updated
+# Debug removed - Fuel pattern updated to "fuel92" format
 
             # Search for all features in the text
             # Sort by length (longest first) to match more specific terms before general ones
@@ -390,8 +428,8 @@ class CarScraper:
                                 # Special pattern for transmission - website shows "transmission typeautomatic"
                                 pattern = rf'{re.escape(website_name)}([a-zA-Z]+)'
                             elif mapping['output_csv'] == 'Fuel_Type':
-                                # Special pattern for fuel type to capture both numeric (92, 95) and text (Diesel) values
-                                pattern = rf'\b{re.escape(website_name)}\b[:\s]*([a-zA-Z0-9]+)'
+                                # Special pattern for fuel type - website shows "fuel92" concatenated
+                                pattern = rf'{re.escape(website_name)}([0-9]+|diesel|petrol)'
                             elif mapping['output_csv'] == 'Year':
                                 # Special pattern for year to capture 4-digit year
                                 pattern = rf'\b{re.escape(website_name)}\b[:\s]*(\d{{4}})'
@@ -402,7 +440,7 @@ class CarScraper:
                             match = re.search(pattern, all_text)
                             if match:
                                 value = match.group(1).strip()
-# Debug removed
+# Debug removed - Fuel_Type now working correctly
                                 # Clean up the value
                                 if mapping['output_csv'] in ['Traction_Type', 'Transmission', 'Fuel_Type', 'Year']:
                                     # For these specific fields, use the full matched value
@@ -513,4 +551,4 @@ class CarScraper:
 
 if __name__ == "__main__":
     scraper = CarScraper()
-    scraper.test_single_model()
+    scraper.scrape_all_hyundai_models()

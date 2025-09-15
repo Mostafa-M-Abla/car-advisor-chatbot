@@ -9,7 +9,7 @@ Max_Speed_kmh,Maximum Speed,int
 Acceleration_0_100_sec,Acceleration,float
 Speeds,Speeds,int
 Transmission,transmission type,string
-Fuel_Type,Fuel,string
+Fuel_Type,fuel,string
 Number_of_Cylinders,Number of cylinder,int
 Fuel_Tank_L,Fuel tank capacity,int
 Torque_Newton_Meter,Torque of newton,int
