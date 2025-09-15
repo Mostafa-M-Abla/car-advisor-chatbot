@@ -1,25 +1,39 @@
-# Car Selection Chatbot - Web Scraper
+# Car Selection Chatbot - Universal Web Scraper
 
-This project contains a comprehensive web scraper for extracting car information from the hatla2ee.com website.
+This project contains a comprehensive, multi-brand web scraper for extracting car information from the hatla2ee.com website.
 
 ## Project Overview
 
-The scraper extracts detailed car specifications for all Hyundai models and their trims, saving the data to a structured CSV file for further analysis.
+The scraper extracts detailed car specifications for **all car brands and models** available on the website (62+ brands), processing thousands of trims and saving the data to structured CSV files for analysis. Features intelligent rate limiting, comprehensive error handling, and flexible configuration options.
 
 ## Files
 
-- `car_scraper.py` - Main scraper implementation
+- `car_scraper.py` - Main scraper implementation with universal brand support
 - `features_mapping.csv` - Field mapping configuration (website field names → output CSV columns)
-- `scrapped_data.csv` - Generated output file with car data
-- `error_log.txt` - Error logging for debugging
+- `scrapped_data.csv` - Generated output file with car data (timestamped filenames available)
+- `scrapper_error_log.txt` - Comprehensive error logging for debugging
+- `claude.md` - This documentation file
 
 ## Features
 
+### Universal Brand Support
+- **All Car Brands**: Automatically discovers and scrapes 62+ brands (Hyundai, Toyota, BMW, Mercedes, etc.)
+- **Complete Coverage**: Processes all models and trims for each brand
+- **Flexible Targeting**: Option to scrape specific brands or exclude certain brands
+- **Scalable Architecture**: Easily handles thousands of car models and trims
+
 ### Data Extraction
-- **All Hyundai Models**: Automatically discovers and scrapes all available Hyundai models
-- **Complete Specifications**: Extracts 95 fields including prices, technical specs, and features
+- **Comprehensive Specifications**: Extracts 95+ fields including prices, technical specs, and features
+- **Enhanced Data Quality**: Improved Engine_CC extraction with turbo detection ("1500 cc - turbo")
+- **Complete Warranty Info**: Full warranty text extraction ("100000 km / 3 year(s)")
 - **Multiple Years**: Handles different model years (2024, 2025, 2026)
-- **All Trim Levels**: Processes every available trim for each model
+- **Dual Touch Screen Support**: Separate columns for Touch_Screen and Multimedia_Touch_Screen
+
+### Website Politeness & Rate Limiting
+- **Intelligent Delays**: 200-500ms between requests with random jitter
+- **Brand Transitions**: 1.5s delays when switching between brands
+- **Exponential Backoff**: Smart retry logic for failed requests
+- **Configurable Timing**: Adjustable delays for different use cases
 
 ### Key Fields Extracted
 - **Basic Info**: Brand, model, trim name
@@ -31,22 +45,65 @@ The scraper extracts detailed car specifications for all Hyundai models and thei
 - **Smart Field Mapping**: Uses `features_mapping.csv` for flexible field name translation
 - **Data Type Conversion**: Automatic conversion to int, float, bool, string types
 - **Duplicate Prevention**: Avoids processing the same trim multiple times
-- **Error Handling**: Comprehensive logging and graceful error recovery
-- **Progress Tracking**: Real-time progress updates during scraping
+- **Multi-Brand Error Handling**: Graceful failure recovery continues processing other brands
+- **Advanced Progress Tracking**: Real-time statistics, processing rates, and completion estimates
+- **Command-Line Interface**: Full argument parsing with multiple operation modes
+- **Configurable Output**: Timestamped filenames and flexible file management
 
 ## Usage
 
-### Basic Usage
+### Command-Line Options
+
+The scraper now features a comprehensive command-line interface with multiple operation modes:
+
+```bash
+# Scrape all brands (default - processes 62+ brands)
+python car_scraper.py
+
+# Test with specific brands only
+python car_scraper.py --test-brands hyundai toyota
+
+# Scrape specific brands
+python car_scraper.py --brands bmw mercedes audi
+
+# Exclude certain brands
+python car_scraper.py --exclude hyundai kia
+
+# Legacy mode (Hyundai only)
+python car_scraper.py --hyundai-only
+
+# Custom rate limiting
+python car_scraper.py --min-delay 0.1 --max-delay 0.3 --brand-delay 1.0
+
+# Get help
+python car_scraper.py --help
+```
+
+### Operation Modes
+
+#### Full Mode (Default)
 ```bash
 python car_scraper.py
 ```
+- Processes **all 62+ brands** available on the website
+- Generates timestamped output files
+- Uses intelligent rate limiting (200-500ms delays)
+- Provides comprehensive progress tracking
 
-This will:
-1. Load field mappings from `features_mapping.csv`
-2. Discover all Hyundai models from the website
-3. Process each model and all its trims
-4. Save results to `scrapped_data.csv`
-5. Log any errors to `error_log.txt`
+#### Test Mode
+```bash
+python car_scraper.py --test-brands hyundai toyota
+```
+- Perfect for testing with a subset of brands
+- Faster execution for development and verification
+- Same data quality as full mode
+
+#### Legacy Mode
+```bash
+python car_scraper.py --hyundai-only
+```
+- Maintains compatibility with original Hyundai-only functionality
+- Uses the original scraping method
 
 ### Configuration
 
@@ -66,12 +123,26 @@ ABS,ABS,bool
 - `website`: Field name as it appears on the website (case-sensitive)
 - `d_type`: Data type for conversion (int, float, string, bool)
 
+#### Rate Limiting Configuration
+```bash
+# Conservative (slower, very website-friendly)
+python car_scraper.py --min-delay 0.5 --max-delay 1.0 --brand-delay 3.0
+
+# Balanced (default)
+python car_scraper.py --min-delay 0.2 --max-delay 0.5 --brand-delay 1.5
+
+# Aggressive (faster, still polite)
+python car_scraper.py --min-delay 0.1 --max-delay 0.3 --brand-delay 1.0
+```
+
 #### Special Pattern Handling
-The scraper handles various website text formats:
+The scraper handles various website text formats with enhanced accuracy:
 - **Concatenated fields**: `"transmission typeautomatic"` → extracts `"automatic"`
 - **Multi-word values**: `"traction typefront traction"` → extracts `"front traction"`
 - **Numeric patterns**: `"fuel92"` → extracts `"92"`
 - **Year patterns**: `"yearyear2026"` → extracts `"2026"`
+- **Engine with Turbo**: `"engine capacity1500 cc - turbo"` → extracts `"1500 cc - turbo"`
+- **Complete Warranty**: `"warranty100000 km / 3 year(s)"` → extracts `"100000 km / 3 year(s)"`
 
 ## Output Format
 
