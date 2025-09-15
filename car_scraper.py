@@ -31,8 +31,8 @@ class CarScraper:
         self.features_mapping = self.load_features_mapping()
 
         # Initialize CSV
-        self.csv_filename = f"scrapped_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-        self.error_log_filename = "error_log.txt"
+        self.csv_filename = f"scrapped_data.csv"
+        self.error_log_filename = "scrapper_error_log.txt"
         self.scraped_trims = set()  # To avoid duplicates
 
         # Progress tracking
