@@ -49,7 +49,7 @@ Fog_Lights,Fog Lights,bool
 Fabric_Brushes,Fabric brushes,bool
 Multifunction,Multifunction,bool
 Warranty,Warranty,bool
-Minimum_Installment,Min.Installment,bool
+Minimum_Installment,Min.Installment,int
 Minimum_Deposit,Min.Deposit,int
 Fuel_Consumption_l_100_km,liter/100KM,float
 Side_Airbag,Side Airbag,bool
