@@ -6,14 +6,23 @@ import time
 import logging
 from typing import Dict, List, Optional, Any
 import re
+import random
+import argparse
+from datetime import datetime
 
 class CarScraper:
-    def __init__(self):
+    def __init__(self, min_delay=0.2, max_delay=0.5, brand_delay=1.5, excluded_brands=None):
         self.base_url = "https://eg.hatla2ee.com/en/new-car"
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         })
+
+        # Rate limiting configuration
+        self.min_delay = min_delay  # Minimum delay between requests (seconds)
+        self.max_delay = max_delay  # Maximum delay between requests (seconds)
+        self.brand_delay = brand_delay  # Delay between brands (seconds)
+        self.excluded_brands = excluded_brands or []
 
         # Setup logging
         self.setup_logging()
@@ -22,9 +31,18 @@ class CarScraper:
         self.features_mapping = self.load_features_mapping()
 
         # Initialize CSV
-        self.csv_filename = "scrapped_data.csv"
+        self.csv_filename = f"scrapped_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
         self.error_log_filename = "error_log.txt"
         self.scraped_trims = set()  # To avoid duplicates
+
+        # Progress tracking
+        self.stats = {
+            'brands_processed': 0,
+            'models_processed': 0,
+            'trims_processed': 0,
+            'errors': 0,
+            'start_time': None
+        }
 
     def setup_logging(self):
         """Setup logging to console and error file"""
@@ -111,15 +129,40 @@ class CarScraper:
             self.log_error(f"Failed to convert '{value}' to {data_type}: {e}")
             return None
 
-    def make_request(self, url: str) -> Optional[BeautifulSoup]:
-        """Make HTTP request and return BeautifulSoup object"""
-        try:
-            response = self.session.get(url, timeout=30)
-            response.raise_for_status()
-            return BeautifulSoup(response.content, 'html.parser')
-        except Exception as e:
-            self.log_error(f"Failed to load page {url}: {e}")
-            return None
+    def wait_politely(self, is_brand_change=False):
+        """Add polite delays between requests"""
+        if is_brand_change:
+            delay = self.brand_delay
+            self.log_info(f"Waiting {delay}s before switching to next brand...")
+        else:
+            delay = random.uniform(self.min_delay, self.max_delay)
+
+        time.sleep(delay)
+
+    def make_request(self, url: str, max_retries=3) -> Optional[BeautifulSoup]:
+        """Make HTTP request with retries and return BeautifulSoup object"""
+        for attempt in range(max_retries):
+            try:
+                # Add polite delay before request (except first attempt)
+                if attempt > 0:
+                    wait_time = 2 ** attempt  # Exponential backoff
+                    self.log_info(f"Retrying request (attempt {attempt + 1}) after {wait_time}s...")
+                    time.sleep(wait_time)
+                else:
+                    self.wait_politely()
+
+                response = self.session.get(url, timeout=30)
+                response.raise_for_status()
+                return BeautifulSoup(response.content, 'html.parser')
+
+            except Exception as e:
+                self.log_error(f"Attempt {attempt + 1} failed for {url}: {e}")
+                self.stats['errors'] += 1
+                if attempt == max_retries - 1:
+                    self.log_error(f"All {max_retries} attempts failed for {url}")
+                    return None
+
+        return None
 
     def get_brands(self) -> List[str]:
         """Extract all car brands from main page"""
@@ -221,6 +264,108 @@ class CarScraper:
                 self.scrape_trim_data(brand, model_name, trim)
 
         self.log_info("All Hyundai models completed successfully!")
+
+    def scrape_all_brands_and_models(self, specific_brands=None):
+        """Scrape all brands and their models from the website"""
+        self.stats['start_time'] = time.time()
+        self.log_info("Starting to scrape all brands and models")
+
+        # Initialize CSV
+        self.initialize_csv()
+
+        # Get all available brands
+        brands = self.get_brands()
+        if not brands:
+            self.log_error("No brands found on website")
+            return
+
+        # Filter brands if specific ones requested
+        if specific_brands:
+            brands = [b for b in brands if b in specific_brands]
+            self.log_info(f"Filtering to specific brands: {specific_brands}")
+
+        # Remove excluded brands
+        brands = [b for b in brands if b not in self.excluded_brands]
+        if self.excluded_brands:
+            self.log_info(f"Excluding brands: {self.excluded_brands}")
+
+        self.log_info(f"Found {len(brands)} brands to process: {brands}")
+
+        # Process each brand
+        for brand_idx, brand in enumerate(brands):
+            try:
+                # Add delay between brands (except first)
+                if brand_idx > 0:
+                    self.wait_politely(is_brand_change=True)
+
+                self.log_info(f"Processing brand {brand_idx+1}/{len(brands)}: {brand}")
+                self.log_info(f"Progress: {self.stats['brands_processed']}/{len(brands)} brands, "
+                             f"{self.stats['models_processed']} models, "
+                             f"{self.stats['trims_processed']} trims processed")
+
+                # Get models for this brand
+                models = self.get_models(brand)
+                if not models:
+                    self.log_info(f"No models found for {brand}")
+                    continue
+
+                self.log_info(f"Found {len(models)} models for {brand}")
+
+                # Process each model
+                for model_idx, model in enumerate(models):
+                    try:
+                        model_name = model['name']
+                        self.log_info(f"Processing model {model_idx+1}/{len(models)} of {brand}: {model_name}")
+
+                        # Get trims for this model
+                        model_url = f"{self.base_url}/{brand}/{model_name}"
+                        trims = self.get_trims(brand, model_name, model_url)
+
+                        if not trims:
+                            self.log_info(f"No trims found for {brand} {model_name}")
+                            continue
+
+                        self.log_info(f"Found {len(trims)} trims for {brand} {model_name}")
+
+                        # Process all trims for this model
+                        for trim_idx, trim in enumerate(trims):
+                            try:
+                                self.log_info(f"Processing trim {trim_idx+1}/{len(trims)} of {brand} {model_name}: {trim['name']}")
+                                self.scrape_trim_data(brand, model_name, trim)
+                                self.stats['trims_processed'] += 1
+
+                                # Log progress every 10 trims
+                                if self.stats['trims_processed'] % 10 == 0:
+                                    elapsed = time.time() - self.stats['start_time']
+                                    self.log_info(f"Progress update: {self.stats['trims_processed']} trims processed in {elapsed:.1f}s")
+
+                            except Exception as e:
+                                self.log_error(f"Failed to process trim {trim['name']} of {brand} {model_name}: {e}")
+                                continue
+
+                        self.stats['models_processed'] += 1
+
+                    except Exception as e:
+                        self.log_error(f"Failed to process model {model_name} of {brand}: {e}")
+                        continue
+
+                self.stats['brands_processed'] += 1
+                self.log_info(f"Completed brand {brand} ({brand_idx+1}/{len(brands)})")
+
+            except Exception as e:
+                self.log_error(f"Failed to process brand {brand}: {e}")
+                continue
+
+        # Final statistics
+        elapsed = time.time() - self.stats['start_time']
+        self.log_info(f"Scraping completed!")
+        self.log_info(f"Final statistics:")
+        self.log_info(f"  - Brands processed: {self.stats['brands_processed']}/{len(brands)}")
+        self.log_info(f"  - Models processed: {self.stats['models_processed']}")
+        self.log_info(f"  - Trims processed: {self.stats['trims_processed']}")
+        self.log_info(f"  - Errors encountered: {self.stats['errors']}")
+        self.log_info(f"  - Total time: {elapsed:.1f}s")
+        self.log_info(f"  - Output file: {self.csv_filename}")
 
     def test_single_model(self, brand: str = "hyundai", model_name: str = "Accent-RB"):
         """Test scraping with a single model"""
@@ -557,6 +702,38 @@ class CarScraper:
         except Exception as e:
             self.log_error(f"Failed to save row to CSV: {e}")
 
+def main():
+    """Main function with command-line argument parsing"""
+    parser = argparse.ArgumentParser(description='Car Scraper for hatla2ee.com')
+    parser.add_argument('--brands', nargs='*', help='Specific brands to scrape (default: all brands)')
+    parser.add_argument('--exclude', nargs='*', default=[], help='Brands to exclude from scraping')
+    parser.add_argument('--min-delay', type=float, default=0.2, help='Minimum delay between requests (seconds)')
+    parser.add_argument('--max-delay', type=float, default=0.5, help='Maximum delay between requests (seconds)')
+    parser.add_argument('--brand-delay', type=float, default=1.5, help='Delay between brands (seconds)')
+    parser.add_argument('--hyundai-only', action='store_true', help='Only scrape Hyundai models (legacy mode)')
+    parser.add_argument('--test-brands', nargs='*', help='Test mode: scrape only specified brands')
+
+    args = parser.parse_args()
+
+    # Create scraper with configuration
+    scraper = CarScraper(
+        min_delay=args.min_delay,
+        max_delay=args.max_delay,
+        brand_delay=args.brand_delay,
+        excluded_brands=args.exclude
+    )
+
+    if args.hyundai_only:
+        # Legacy mode - only scrape Hyundai
+        scraper.log_info("Running in Hyundai-only mode")
+        scraper.scrape_all_hyundai_models()
+    elif args.test_brands:
+        # Test mode - scrape only specified brands
+        scraper.log_info(f"Running in test mode for brands: {args.test_brands}")
+        scraper.scrape_all_brands_and_models(specific_brands=args.test_brands)
+    else:
+        # Full mode - scrape all brands
+        scraper.scrape_all_brands_and_models(specific_brands=args.brands)
+
 if __name__ == "__main__":
-    scraper = CarScraper()
-    scraper.scrape_all_hyundai_models()
+    main()
