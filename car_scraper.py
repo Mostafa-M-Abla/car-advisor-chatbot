@@ -433,6 +433,14 @@ class CarScraper:
                             elif mapping['output_csv'] == 'Year':
                                 # Special pattern for year to capture 4-digit year
                                 pattern = rf'\b{re.escape(website_name)}\b[:\s]*(\d{{4}})'
+                            elif mapping['output_csv'] == 'Engine_CC':
+                                # Special pattern for Engine_CC - capture full text including turbo
+                                # Handles formats like "1500 CC - Turbo", "1600 CC", "1500 cc turbo", etc.
+                                pattern = rf'{re.escape(website_name)}[:\s]*([0-9]+\s*cc(?:\s*-\s*turbo)?)'
+                            elif mapping['output_csv'] == 'Warranty':
+                                # Special pattern for Warranty - capture only the warranty text
+                                # Handles formats like "100000 Km / 3 Year(s)", "2 Years", etc.
+                                pattern = rf'{re.escape(website_name)}[:\s]*([0-9]+\s*(?:km|kilometers?)?\s*(?:/\s*[0-9]*\s*(?:year\(s\)?|years?|yr\(s\)?)?)?)'
                             else:
                                 # Use word boundaries to avoid partial matches
                                 pattern = rf'\b{re.escape(website_name)}\b[:\s]*([a-zA-Z0-9]+(?:[a-zA-Z0-9\s/\-]*?[a-zA-Z0-9])?)'
@@ -442,9 +450,9 @@ class CarScraper:
                                 value = match.group(1).strip()
 # Debug removed - Fuel_Type now working correctly
                                 # Clean up the value
-                                if mapping['output_csv'] in ['Traction_Type', 'Transmission', 'Fuel_Type', 'Year']:
-                                    # For these specific fields, use the full matched value
-                                    clean_value = value
+                                if mapping['output_csv'] in ['Traction_Type', 'Transmission', 'Fuel_Type', 'Year', 'Engine_CC', 'Warranty']:
+                                    # For these specific fields, use the full matched value but normalize whitespace
+                                    clean_value = ' '.join(value.split())
                                 else:
                                     # For other fields, take first word only
                                     words = value.split()[:1]
