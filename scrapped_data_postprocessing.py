@@ -1,6 +1,7 @@
 import os
 import shutil
 import pandas as pd
+from datetime import datetime
 
 def main():
     # 1) Copy the CSV to the current path and name it processed_data.csv
@@ -69,6 +70,35 @@ def main():
         print(f"Rows removed: {rows_before - rows_after}")
     else:
         print("Column 'Official_Price_EGP' not found, skipping price filter.")
+
+    # Date-based Year filtering
+    current_date = datetime.now()
+    current_month = current_date.month
+    current_year = current_date.year
+
+    if "Year" in df.columns:
+        # Convert Year to numeric
+        df["Year"] = pd.to_numeric(df["Year"], errors="coerce")
+
+        rows_before = len(df)
+
+        if current_month <= 6:  # January to June
+            min_year = current_year - 1
+            condition = df["Year"] < min_year
+        else:  # July to December
+            min_year = current_year
+            condition = df["Year"] < min_year
+
+        df = df.loc[~condition].copy()
+        rows_after = len(df)
+
+        print(f"Current date: {current_date.strftime('%B %Y')}")
+        print(f"Minimum allowed year: {min_year}")
+        print(f"Rows BEFORE year filtering: {rows_before}")
+        print(f"Rows AFTER year filtering: {rows_after}")
+        print(f"Rows removed (old years): {rows_before - rows_after}")
+    else:
+        print("Column 'Year' not found, skipping year-based filtering.")
 
     # Save back to processed_data.csv
     df.to_csv(dst, index=False)
