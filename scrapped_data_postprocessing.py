@@ -100,6 +100,13 @@ def main():
     else:
         print("Column 'Year' not found, skipping year-based filtering.")
 
+    # Rename Official_Price_EGP column to Price_EGP
+    if "Official_Price_EGP" in df.columns:
+        df = df.rename(columns={"Official_Price_EGP": "Price_EGP"})
+        print("Renamed column 'Official_Price_EGP' to 'Price_EGP'")
+    else:
+        print("Column 'Official_Price_EGP' not found, skipping column rename.")
+
     # Save back to processed_data.csv
     df.to_csv(dst, index=False)
     print(f"Processed data saved to '{dst}'")
