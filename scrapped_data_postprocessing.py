@@ -169,7 +169,12 @@ def main():
 
         turbo_count = engine_turbo_values.sum()
         total_count = len(df)
-        print(f"Added 'engine_turbo' column after 'Engine_CC': {turbo_count} out of {total_count} cars have turbo engines")
+        print(f"Added 'Engine_Turbo' column after 'Engine_CC': {turbo_count} out of {total_count} cars have turbo engines")
+
+        # Clean Engine_CC column - keep only the numeric value
+        # Extract numeric values using regex (digits only)
+        df["Engine_CC"] = df["Engine_CC"].str.extract(r'(\d+)')[0]
+        print("Cleaned 'Engine_CC' column to keep only numeric values")
     else:
         print("Column 'Engine_CC' not found, skipping engine_turbo column creation.")
 
