@@ -1,0 +1,186 @@
+table: cars
+primary_key: id (INTEGER, autoincrement)
+columns:
+  - name: id
+    doc_type: INTEGER
+  - name: car_brand
+    doc_type: TEXT
+  - name: car_model
+    doc_type: TEXT
+  - name: car_trim
+    doc_type: TEXT
+  - name: Price_EGP
+    doc_type: INTEGER
+  - name: Insurance_Price_EGP
+    doc_type: INTEGER
+  - name: Register_Price_EGP
+    doc_type: INTEGER
+  - name: Engine_CC
+    doc_type: TEXT
+  - name: Horsepower_HP
+    doc_type: INTEGER
+  - name: Max_Speed_kmh
+    doc_type: INTEGER
+  - name: Acceleration_0_100_sec
+    doc_type: REAL
+  - name: No_transmission_Speeds
+    doc_type: INTEGER
+  - name: Transmission
+    doc_type: TEXT
+  - name: Fuel_Type
+    doc_type: TEXT
+  - name: Number_of_Cylinders
+    doc_type: INTEGER
+  - name: Fuel_Tank_L
+    doc_type: INTEGER
+  - name: Torque_Newton_Meter
+    doc_type: INTEGER
+  - name: Length_mm
+    doc_type: INTEGER
+  - name: Width_mm
+    doc_type: INTEGER
+  - name: Height_mm
+    doc_type: INTEGER
+  - name: Ground_Clearance_mm
+    doc_type: INTEGER
+  - name: Wheelbase_mm
+    doc_type: INTEGER
+  - name: Trunk_Size_L
+    doc_type: INTEGER
+  - name: Origin_Country
+    doc_type: TEXT
+  - name: Assembly_Country
+    doc_type: TEXT
+  - name: Year
+    doc_type: INTEGER
+  - name: Number_of_Seats
+    doc_type: TEXT
+  - name: Traction_Type
+    doc_type: TEXT
+  - name: ABS
+    doc_type: BOOLEAN
+  - name: EBD
+    doc_type: BOOLEAN
+  - name: Driver_Airbag
+    doc_type: BOOLEAN
+  - name: Passenger_Airbag
+    doc_type: BOOLEAN
+  - name: Rear_Sensors
+    doc_type: BOOLEAN
+  - name: Air_Conditioning
+    doc_type: BOOLEAN
+  - name: Power_Steering
+    doc_type: BOOLEAN
+  - name: Electric_Mirrors
+    doc_type: BOOLEAN
+  - name: Remote_Keyless
+    doc_type: BOOLEAN
+  - name: Central_Locking
+    doc_type: BOOLEAN
+  - name: Cruise_Control
+    doc_type: BOOLEAN
+  - name: Sunroof
+    doc_type: BOOLEAN
+  - name: Tinted_Glass
+    doc_type: BOOLEAN
+  - name: Front_Power_Windows
+    doc_type: BOOLEAN
+  - name: Back_Power_Windows
+    doc_type: BOOLEAN
+  - name: Bluetooth
+    doc_type: BOOLEAN
+  - name: USB_Port
+    doc_type: BOOLEAN
+  - name: AUX
+    doc_type: BOOLEAN
+  - name: Alloy_Wheels
+    doc_type: BOOLEAN
+  - name: Fog_Light
+    doc_type: BOOLEAN
+  - name: Multifunction
+    doc_type: BOOLEAN
+  - name: Warranty
+    doc_type: TEXT
+  - name: Minimum_Installment
+    doc_type: INTEGER
+  - name: Minimum_Deposit
+    doc_type: INTEGER
+  - name: Fuel_Consumption_l_100_km
+    doc_type: TEXT
+  - name: Side_Airbag
+    doc_type: BOOLEAN
+  - name: Power_Seats
+    doc_type: BOOLEAN
+  - name: CD_Player
+    doc_type: BOOLEAN
+  - name: Closing_Mirrors
+    doc_type: BOOLEAN
+  - name: Leather_Seats
+    doc_type: BOOLEAN
+  - name: EPS
+    doc_type: BOOLEAN
+  - name: Rear_Camera
+    doc_type: BOOLEAN
+  - name: GPS
+    doc_type: BOOLEAN
+  - name: Front_Sensors
+    doc_type: BOOLEAN
+  - name: Intelligent_Parking_System
+    doc_type: BOOLEAN
+  - name: Rear_Spoiler
+    doc_type: BOOLEAN
+  - name: Electric_Chairs
+    doc_type: BOOLEAN
+  - name: Start_Engine
+    doc_type: BOOLEAN
+  - name: ESP
+    doc_type: BOOLEAN
+  - name: Steptronic
+    doc_type: BOOLEAN
+  - name: Panoramic_Sunroof
+    doc_type: BOOLEAN
+  - name: Touch_Activated_Door_Lock
+    doc_type: BOOLEAN
+  - name: Heated_Seats
+    doc_type: BOOLEAN
+  - name: Cool_Box
+    doc_type: BOOLEAN
+  - name: Rear_Seat_Entertainment
+    doc_type: BOOLEAN
+  - name: Daytime_Running_Lights
+    doc_type: BOOLEAN
+  - name: Start_Stop_System
+    doc_type: BOOLEAN
+  - name: Tyre_Pressure_Sensor
+    doc_type: BOOLEAN
+  - name: Xenon_Headlights
+    doc_type: BOOLEAN
+  - name: Front_Camera
+    doc_type: BOOLEAN
+  - name: Immobilizer_Key
+    doc_type: BOOLEAN
+  - name: Roof_Rack
+    doc_type: BOOLEAN
+  - name: Anti_Theft_System
+    doc_type: BOOLEAN
+  - name: Alarm
+    doc_type: BOOLEAN
+  - name: Multimedia_Touch_Screen
+    doc_type: BOOLEAN
+  - name: Off_Road_Tyres
+    doc_type: BOOLEAN
+units:
+  Price_EGP: EGP
+null_policy: "Treat NULL as unknown; only enforce features when the user explicitly requires them (e.g., ESP=1)."
+disambiguation_rules:
+  country_mentions_default: "Origin_Country"
+hints:
+  id: "Synthetic row id / primary key (INTEGER autoincrement). Use for stable references."
+  Assembly_Country: "Final assembly country (TEXT). Use only if the user explicitly mentions assembly."
+  No_transmission_Speeds: "Number of transmission speeds (INTEGER)."
+  Origin_Country: "Manufacturer country of origin (TEXT). Default country filter refers to this column unless user explicitly says 'assembly'."
+  Price_EGP: "Price in Egyptian Pounds (EGP), INTEGER. Used for sorting and budget filters."
+  Transmission: "Gearbox type (TEXT): automatic, dsg (dual-clutch), cvt, manual. Map 'auto/AT' to 'automatic'."
+  car_brand: "Brand/manufacturer (TEXT)."
+  car_model: "Model name (TEXT)."
+  car_trim: "Trim/variant (TEXT)."

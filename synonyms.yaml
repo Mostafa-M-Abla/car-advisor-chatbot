@@ -1,0 +1,26 @@
+version: 1
+columns:
+  Transmission:
+    - auto
+    - automatic gearbox
+    - at
+  ESP:
+    - esc
+    - stability control
+    - electronic stability
+  ABS:
+    - anti lock
+    - anti-lock brakes
+predicates:
+  non_chinese:
+    column: Origin_Country
+    op: '!='
+    value: china
+ranges:
+  price:
+    column: Price_EGP
+    aliases:
+      - under
+      - below
+      - budget
+      - max
