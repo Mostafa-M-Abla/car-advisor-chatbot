@@ -156,6 +156,23 @@ def main():
     else:
         print("Column 'car_trim' not found, skipping substring removal.")
 
+    # Create engine_turbo column based on Engine_CC
+    if "Engine_CC" in df.columns:
+        # Find the position of Engine_CC column
+        engine_cc_pos = df.columns.get_loc("Engine_CC")
+
+        # Create engine_turbo column with True/False based on whether "turbo" is in Engine_CC
+        engine_turbo_values = df["Engine_CC"].str.contains("turbo", case=False, na=False)
+
+        # Insert the new column right after Engine_CC
+        df.insert(engine_cc_pos + 1, 'Engine_Turbo', engine_turbo_values)
+
+        turbo_count = engine_turbo_values.sum()
+        total_count = len(df)
+        print(f"Added 'engine_turbo' column after 'Engine_CC': {turbo_count} out of {total_count} cars have turbo engines")
+    else:
+        print("Column 'Engine_CC' not found, skipping engine_turbo column creation.")
+
     # Add id column as the first column
     df.insert(0, 'id', range(1, len(df) + 1))
     print(f"Added 'id' column as first column with values from 1 to {len(df)}")
