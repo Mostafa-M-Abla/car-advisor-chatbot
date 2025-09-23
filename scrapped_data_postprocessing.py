@@ -149,6 +149,10 @@ def main():
     else:
         print("Column 'car_trim' not found, skipping substring removal.")
 
+    # Add id column as the first column
+    df.insert(0, 'id', range(1, len(df) + 1))
+    print(f"Added 'id' column as first column with values from 1 to {len(df)}")
+
     # Save back to processed_data.csv
     df.to_csv(dst, index=False)
     print(f"Processed data saved to '{dst}'")
