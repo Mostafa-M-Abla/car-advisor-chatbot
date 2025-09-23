@@ -125,6 +125,30 @@ def main():
     else:
         print("No additional columns found to drop.")
 
+    # Clean car_trim column - remove specific substrings
+    if "car_trim" in df.columns:
+        substrings_to_remove = ["( AUTO MOBILITY)", "Local simplified", "(Abou Ghaly)"]
+        rows_modified = 0
+
+        for substring in substrings_to_remove:
+            # Count rows that will be modified before replacement
+            mask = df["car_trim"].str.contains(substring, na=False)
+            count_before = mask.sum()
+
+            # Remove the substring
+            df["car_trim"] = df["car_trim"].str.replace(substring, "", regex=False)
+
+            if count_before > 0:
+                rows_modified += count_before
+                print(f"Removed '{substring}' from {count_before} rows in car_trim column")
+
+        if rows_modified == 0:
+            print("No specified substrings found in car_trim column to remove")
+        else:
+            print(f"Total rows modified in car_trim column: {rows_modified}")
+    else:
+        print("Column 'car_trim' not found, skipping substring removal.")
+
     # Save back to processed_data.csv
     df.to_csv(dst, index=False)
     print(f"Processed data saved to '{dst}'")
