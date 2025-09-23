@@ -107,6 +107,24 @@ def main():
     else:
         print("Column 'Official_Price_EGP' not found, skipping column rename.")
 
+    # Delete additional specified columns
+    additional_cols_to_drop = [
+        "Market_Price_EGP",
+        "Cassette_Radio",
+        "Fabric_Brushes",
+        "CD_Changer",
+        "DVD_Player",
+        "Cloth",
+        "Velour",
+        "AM_FM_Radio"
+    ]
+    existing_additional_to_drop = [c for c in additional_cols_to_drop if c in df.columns]
+    df = df.drop(columns=existing_additional_to_drop, errors="ignore")
+    if existing_additional_to_drop:
+        print(f"Dropped additional columns: {existing_additional_to_drop}")
+    else:
+        print("No additional columns found to drop.")
+
     # Save back to processed_data.csv
     df.to_csv(dst, index=False)
     print(f"Processed data saved to '{dst}'")
