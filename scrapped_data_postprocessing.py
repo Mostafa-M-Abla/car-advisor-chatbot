@@ -95,6 +95,98 @@ Please be accurate and only include the country name without any additional text
         print("Please make sure you have set your OpenAI API key in .env file and have sufficient credits.")
         return {}
 
+def get_car_body_types_with_openai(brand_model_combinations):
+    """
+    Use OpenAI API to get body types for car brand-model combinations using GPT-4.
+
+    Args:
+        brand_model_combinations: List of (brand, model) tuples
+
+    Returns:
+        dict: Mapping of (brand, model) tuple to body type
+    """
+    if not OPENAI_AVAILABLE:
+        print("OpenAI library not available. Please install it with: pip install openai")
+        return {}
+
+    if not openai_client:
+        print("OpenAI client not available. Please check your .env file.")
+        return {}
+
+    body_type_mapping = {}
+
+    try:
+        # Create a prompt asking for body types of the brand-model combinations
+        combinations_text = ""
+        for brand, model in brand_model_combinations:
+            combinations_text += f"{brand} {model}\n"
+
+        prompt = f"""For each of the following car brand-model combinations, provide the body type.
+You must respond ONLY with one of these allowed body types: sedan, hatchback, crossover/suv, coupe, convertible, van
+
+Please respond in the format: brand model:body_type (use lowercase for everything)
+
+Car brand-model combinations:
+{combinations_text}
+
+Example format:
+toyota camry:sedan
+honda civic:hatchback
+ford explorer:crossover/suv
+bmw z4:convertible
+porsche 911:coupe
+
+IMPORTANT: Only use these exact body types: sedan, hatchback, crossover/suv, coupe, convertible, van
+If uncertain, choose the most appropriate from the allowed list."""
+
+        print(f"Querying OpenAI GPT-4 for body types of {len(brand_model_combinations)} brand-model combinations...")
+
+        # Make API call to OpenAI using GPT-4
+        response = openai_client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that provides accurate information about car body types. Always respond in the exact format requested using only the allowed body types: sedan, hatchback, crossover/suv, coupe, convertible, van."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=1000,
+            temperature=0.1
+        )
+
+        # Parse the response
+        response_text = response.choices[0].message.content.strip()
+        print(f"OpenAI GPT-4 Response for body types:\n{response_text}")
+
+        # Parse the response to extract brand model:body_type mappings
+        lines = response_text.split('\n')
+        for line in lines:
+            line = line.strip()
+            if ':' in line:
+                parts = line.split(':', 1)
+                if len(parts) == 2:
+                    brand_model_text = parts[0].strip().lower()
+                    body_type = parts[1].strip().lower()
+
+                    # Validate body type
+                    allowed_types = ['sedan', 'hatchback', 'crossover/suv', 'coupe', 'convertible', 'van']
+                    if body_type not in allowed_types:
+                        print(f"Warning: Invalid body type '{body_type}' for '{brand_model_text}', skipping...")
+                        continue
+
+                    # Match the brand-model from our original list (case insensitive)
+                    for original_brand, original_model in brand_model_combinations:
+                        original_text = f"{original_brand} {original_model}".lower()
+                        if original_text == brand_model_text:
+                            body_type_mapping[(original_brand, original_model)] = body_type
+                            break
+
+        print(f"Successfully extracted {len(body_type_mapping)} body types from OpenAI GPT-4")
+        return body_type_mapping
+
+    except Exception as e:
+        print(f"Error calling OpenAI API for body types: {e}")
+        print("Please make sure you have set your OpenAI API key in .env file and have sufficient credits.")
+        return {}
+
 def main():
     # 1) Copy the CSV to the current path and name it processed_data.csv
     src = os.path.join("web_scrapper", "scrapped_data.csv")
@@ -198,6 +290,82 @@ def main():
         print("Renamed column 'Official_Price_EGP' to 'Price_EGP'")
     else:
         print("Column 'Official_Price_EGP' not found, skipping column rename.")
+
+    # Create body_type column after Price_EGP using OpenAI
+    if "Price_EGP" in df.columns and "car_brand" in df.columns and "car_model" in df.columns:
+        # Find the position of Price_EGP column
+        price_pos = df.columns.get_loc("Price_EGP")
+
+        # Get unique combinations of car_brand and car_model
+        unique_combinations = df[["car_brand", "car_model"]].drop_duplicates()
+        brand_model_combinations = [(row["car_brand"], row["car_model"]) for _, row in unique_combinations.iterrows()]
+
+        print(f"\nFound {len(brand_model_combinations)} unique brand-model combinations for body type classification")
+
+        # Use OpenAI to get body types for all combinations (in batches)
+        if OPENAI_AVAILABLE:
+            print("Using OpenAI GPT-4 to determine body types for all brand-model combinations...")
+
+            # Process combinations in batches to avoid token limits
+            batch_size = 50  # Process 50 combinations at a time
+            body_type_mapping = {}
+
+            for i in range(0, len(brand_model_combinations), batch_size):
+                batch = brand_model_combinations[i:i + batch_size]
+                batch_num = (i // batch_size) + 1
+                total_batches = (len(brand_model_combinations) + batch_size - 1) // batch_size
+
+                print(f"Processing batch {batch_num}/{total_batches} ({len(batch)} combinations)...")
+                batch_mapping = get_car_body_types_with_openai(batch)
+
+                if batch_mapping:
+                    body_type_mapping.update(batch_mapping)
+                    print(f"Batch {batch_num} completed successfully: {len(batch_mapping)} body types extracted")
+                else:
+                    print(f"Batch {batch_num} failed - no body types extracted")
+
+            print(f"Batch processing completed. Total body types extracted: {len(body_type_mapping)}")
+
+            if body_type_mapping:
+                # Create body_type column and fill it
+                df["body_type"] = pd.NA
+
+                for (brand, model), body_type in body_type_mapping.items():
+                    mask = (df["car_brand"] == brand) & (df["car_model"] == model)
+                    df.loc[mask, "body_type"] = body_type
+
+                # Move the body_type column to be right after Price_EGP
+                body_type_column = df.pop("body_type")
+                df.insert(price_pos + 1, "body_type", body_type_column)
+
+                # Count successful mappings
+                filled_count = df["body_type"].notna().sum()
+                total_count = len(df)
+                unfilled_count = total_count - filled_count
+
+                print(f"Successfully added 'body_type' column after 'Price_EGP'")
+                print(f"Filled body type for {filled_count} out of {total_count} cars")
+                if unfilled_count > 0:
+                    unfilled_combinations = df[df["body_type"].isna()][["car_brand", "car_model"]].drop_duplicates()
+                    print(f"Could not determine body type for {unfilled_count} cars from {len(unfilled_combinations)} brand-model combinations:")
+                    for _, row in unfilled_combinations.iterrows():
+                        print(f"  - {row['car_brand']} {row['car_model']}")
+
+                # Show body type distribution
+                body_type_counts = df["body_type"].value_counts()
+                print(f"Body type distribution:")
+                for body_type, count in body_type_counts.items():
+                    print(f"  {body_type}: {count}")
+            else:
+                # Create empty body_type column if OpenAI fails
+                df.insert(price_pos + 1, "body_type", pd.NA)
+                print("Failed to get body types from OpenAI. Created empty 'body_type' column.")
+        else:
+            # Create empty body_type column if OpenAI not available
+            df.insert(price_pos + 1, "body_type", pd.NA)
+            print("OpenAI not available. Created empty 'body_type' column after 'Price_EGP'")
+    else:
+        print("Required columns for body type classification not found, skipping body type creation.")
 
     # Rename Speeds column to Number_transmission_Speeds
     if "Speeds" in df.columns:
