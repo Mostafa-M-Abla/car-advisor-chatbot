@@ -12,6 +12,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings  # FREE, local
 
 # Chat model (OpenAI, only used for final answer)
 from langchain_openai import ChatOpenAI
+from langchain_huggingface import HuggingFaceEmbeddings
 
 
 def build_index(csv_path: str, csv_encoding: str = "utf-8"):
