@@ -2,6 +2,98 @@ import os
 import shutil
 import pandas as pd
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+try:
+    from openai import OpenAI
+    # Initialize OpenAI client with API key from environment variable
+    openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+    OPENAI_AVAILABLE = True
+    if not os.getenv('OPENAI_API_KEY'):
+        print("Warning: OPENAI_API_KEY not found in .env file")
+        OPENAI_AVAILABLE = False
+except ImportError:
+    OPENAI_AVAILABLE = False
+    openai_client = None
+    print("Warning: OpenAI library not installed. Install with: pip install openai")
+
+def get_car_brand_origin_with_openai(brands_list):
+    """
+    Use OpenAI API to get origin countries for car brands using GPT-4.
+
+    Args:
+        brands_list: List of car brand names
+
+    Returns:
+        dict: Mapping of brand name to origin country
+    """
+    if not OPENAI_AVAILABLE:
+        print("OpenAI library not available. Please install it with: pip install openai")
+        return {}
+
+    if not openai_client:
+        print("OpenAI client not available. Please check your .env file.")
+        return {}
+
+    brand_origin_mapping = {}
+
+    try:
+        # Create a prompt asking for origin countries of the brands
+        brands_text = ", ".join(brands_list)
+        prompt = f"""For each of the following car brands, provide the country of origin (where the company was founded/headquartered).
+Please respond in the format: brand_name:country_name (use lowercase for country names)
+
+Car brands: {brands_text}
+
+Example format:
+toyota:japan
+bmw:germany
+ford:usa
+
+Please be accurate and only include the country name without any additional text."""
+
+        print(f"Querying OpenAI GPT-4 for origin countries of brands: {brands_list}")
+
+        # Make API call to OpenAI using GPT-4
+        response = openai_client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that provides accurate information about car brand origins. Always respond in the exact format requested."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=500,
+            temperature=0.1
+        )
+
+        # Parse the response
+        response_text = response.choices[0].message.content.strip()
+        print(f"OpenAI GPT-4 Response:\n{response_text}")
+
+        # Parse the response to extract brand:country mappings
+        lines = response_text.split('\n')
+        for line in lines:
+            line = line.strip()
+            if ':' in line:
+                parts = line.split(':', 1)
+                if len(parts) == 2:
+                    brand = parts[0].strip().lower()
+                    country = parts[1].strip().lower()
+                    # Match the brand from our original list (case insensitive)
+                    for original_brand in brands_list:
+                        if original_brand.lower() == brand:
+                            brand_origin_mapping[original_brand] = country
+                            break
+
+        print(f"Successfully extracted {len(brand_origin_mapping)} brand origins from OpenAI GPT-4")
+        return brand_origin_mapping
+
+    except Exception as e:
+        print(f"Error calling OpenAI API: {e}")
+        print("Please make sure you have set your OpenAI API key in .env file and have sufficient credits.")
+        return {}
 
 def main():
     # 1) Copy the CSV to the current path and name it processed_data.csv
@@ -204,6 +296,120 @@ def main():
             print("No values over 9 found in 'Number_of_Seats' column")
     else:
         print("Column 'Number_of_Seats' not found, skipping seat count cleaning.")
+
+    # Create Warranty_km and Warranty_years columns from Warranty column
+    if "Warranty" in df.columns:
+        # Find the position of Warranty column
+        warranty_pos = df.columns.get_loc("Warranty")
+
+        # Extract km value (number before "km")
+        warranty_km_values = df["Warranty"].str.extract(r'(\d+)\s*km', expand=False)
+        warranty_km_values = pd.to_numeric(warranty_km_values, errors='coerce')
+
+        # Extract years value (number after "/" and before "year")
+        warranty_years_values = df["Warranty"].str.extract(r'/\s*(\d+)\s*year', expand=False)
+        warranty_years_values = pd.to_numeric(warranty_years_values, errors='coerce')
+
+        # Insert the new columns right after Warranty
+        df.insert(warranty_pos + 1, 'Warranty_km', warranty_km_values)
+        df.insert(warranty_pos + 2, 'Warranty_years', warranty_years_values)
+
+        # Count successful extractions
+        km_count = warranty_km_values.notna().sum()
+        years_count = warranty_years_values.notna().sum()
+        total_warranty_count = df["Warranty"].notna().sum()
+
+        print(f"Added 'Warranty_km' and 'Warranty_years' columns after 'Warranty'")
+        print(f"Successfully extracted km values from {km_count} out of {total_warranty_count} warranty entries")
+        print(f"Successfully extracted years values from {years_count} out of {total_warranty_count} warranty entries")
+
+        # Delete the original Warranty column after successful extraction
+        df = df.drop(columns=["Warranty"])
+        print("Deleted original 'Warranty' column after splitting into km and years columns")
+    else:
+        print("Column 'Warranty' not found, skipping warranty parsing.")
+
+    # Fill missing Origin_Country values based on car_brand
+    if "Origin_Country" in df.columns and "car_brand" in df.columns:
+        # Count missing values before processing
+        missing_before = df["Origin_Country"].isna().sum()
+        print(f"\nOrigin_Country missing values before processing: {missing_before}")
+
+        if missing_before > 0:
+            # Get unique brands that have missing Origin_Country
+            brands_with_missing = df[df["Origin_Country"].isna()]["car_brand"].unique()
+            print(f"Car brands with missing Origin_Country: {list(brands_with_missing)}")
+
+            # Create a mapping of brand to origin country based on available data
+            brand_origin_mapping = {}
+            filled_brands = []
+
+            for brand in brands_with_missing:
+                # Find non-null origin countries for this brand
+                brand_origins = df[(df["car_brand"] == brand) & (df["Origin_Country"].notna())]["Origin_Country"].unique()
+
+                if len(brand_origins) > 0:
+                    # Use the most common origin country for this brand
+                    most_common_origin = df[(df["car_brand"] == brand) & (df["Origin_Country"].notna())]["Origin_Country"].mode()
+                    if len(most_common_origin) > 0:
+                        brand_origin_mapping[brand] = most_common_origin.iloc[0]
+                        filled_brands.append(brand)
+
+            # Fill missing values using the mapping
+            for brand, origin in brand_origin_mapping.items():
+                mask = (df["car_brand"] == brand) & (df["Origin_Country"].isna())
+                df.loc[mask, "Origin_Country"] = origin
+
+            # Count missing values after processing
+            missing_after = df["Origin_Country"].isna().sum()
+            filled_count = missing_before - missing_after
+
+            print(f"Successfully filled Origin_Country for brands: {filled_brands}")
+            print(f"Filled {filled_count} missing Origin_Country values")
+            print(f"Origin_Country missing values after processing: {missing_after}")
+
+            # Check if there are still missing values and which brands they belong to
+            if missing_after > 0:
+                remaining_brands = df[df["Origin_Country"].isna()]["car_brand"].unique()
+                print(f"Brands still missing Origin_Country (no reference data available): {list(remaining_brands)}")
+
+                # Use OpenAI to fill remaining missing values
+                if OPENAI_AVAILABLE and len(remaining_brands) > 0:
+                    print("\nUsing OpenAI GPT-4 to fill remaining missing Origin_Country values...")
+                    openai_brand_mapping = get_car_brand_origin_with_openai(list(remaining_brands))
+
+                    if openai_brand_mapping:
+                        # Fill missing values using OpenAI results
+                        openai_filled_brands = []
+                        for brand, origin in openai_brand_mapping.items():
+                            mask = (df["car_brand"] == brand) & (df["Origin_Country"].isna())
+                            df.loc[mask, "Origin_Country"] = origin
+                            openai_filled_brands.append(brand)
+
+                        # Final count after OpenAI filling
+                        final_missing = df["Origin_Country"].isna().sum()
+                        openai_filled_count = missing_after - final_missing
+
+                        print(f"OpenAI GPT-4 successfully filled Origin_Country for brands: {openai_filled_brands}")
+                        print(f"OpenAI filled {openai_filled_count} additional missing Origin_Country values")
+                        print(f"Final Origin_Country missing values: {final_missing}")
+
+                        if final_missing > 0:
+                            final_remaining_brands = df[df["Origin_Country"].isna()]["car_brand"].unique()
+                            print(f"Brands still missing after OpenAI (could not be resolved): {list(final_remaining_brands)}")
+                        else:
+                            print("SUCCESS: All Origin_Country values successfully filled using dataset + OpenAI!")
+                    else:
+                        print("OpenAI could not provide origin information for the remaining brands")
+                else:
+                    if not OPENAI_AVAILABLE:
+                        print("OpenAI not available to fill remaining missing values")
+            else:
+                print("All Origin_Country values successfully filled using existing data!")
+        else:
+            print("No missing Origin_Country values found")
+    else:
+        print("Columns 'Origin_Country' or 'car_brand' not found, skipping origin country filling.")
 
     # Add id column as the first column
     df.insert(0, 'id', range(1, len(df) + 1))
