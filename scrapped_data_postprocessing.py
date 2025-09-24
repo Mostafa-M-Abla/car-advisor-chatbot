@@ -186,6 +186,25 @@ def main():
     else:
         print("Column 'Engine_CC' not found, skipping engine_turbo column creation.")
 
+    # Clean Number_of_Seats column - delete values over 9
+    if "Number_of_Seats" in df.columns:
+        # Convert to numeric, keep original for comparison
+        numeric_seats = pd.to_numeric(df["Number_of_Seats"], errors="coerce")
+
+        # Count how many values are over 9
+        over_9_mask = numeric_seats > 9
+        over_9_count = over_9_mask.sum()
+
+        # Delete values over 9 by setting them to NaN
+        df.loc[over_9_mask, "Number_of_Seats"] = pd.NA
+
+        if over_9_count > 0:
+            print(f"Deleted {over_9_count} values over 9 in 'Number_of_Seats' column")
+        else:
+            print("No values over 9 found in 'Number_of_Seats' column")
+    else:
+        print("Column 'Number_of_Seats' not found, skipping seat count cleaning.")
+
     # Add id column as the first column
     df.insert(0, 'id', range(1, len(df) + 1))
     print(f"Added 'id' column as first column with values from 1 to {len(df)}")
