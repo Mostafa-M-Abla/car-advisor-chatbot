@@ -11,6 +11,8 @@ columns:
     doc_type: TEXT
   - name: Price_EGP
     doc_type: INTEGER
+  - name: body_type
+    doc_type: TEXT 
   - name: Insurance_Price_EGP
     doc_type: INTEGER
   - name: Register_Price_EGP
@@ -101,8 +103,10 @@ columns:
     doc_type: BOOLEAN
   - name: Multifunction
     doc_type: BOOLEAN
-  - name: Warranty
-    doc_type: TEXT
+  - name: Warranty_km
+    doc_type: INTEGER
+  - name: Warranty_years
+    doc_type: INTEGER
   - name: Minimum_Installment
     doc_type: INTEGER
   - name: Minimum_Deposit
