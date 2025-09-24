@@ -114,6 +114,14 @@ def main():
     else:
         print("Column 'Speeds' not found, skipping column rename.")
 
+    # Rename Transmission column to Transmission_Type
+    if "Transmission" in df.columns:
+        df = df.rename(columns={"Transmission": "Transmission_Type"})
+        print("Renamed column 'Transmission' to 'Transmission_Type'")
+    else:
+        print("Column 'Transmission_Type' not found, skipping column rename.")
+
+
     # Delete additional specified columns
     additional_cols_to_drop = [
         "Market_Price_EGP",
