@@ -1,9 +1,12 @@
 version: 1
 columns:
-  Transmission:
+  Transmission_Type:
     - auto
     - automatic gearbox
     - at
+    - manual
+    - dsg
+    - cvt
   ESP:
     - esc
     - stability control

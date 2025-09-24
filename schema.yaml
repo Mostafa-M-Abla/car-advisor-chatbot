@@ -16,19 +16,21 @@ columns:
   - name: Register_Price_EGP
     doc_type: INTEGER
   - name: Engine_CC
-    doc_type: TEXT
+    doc_type: INTEGER
+  - name: Engine_Turbo
+    doc_type: BOOLEAN
   - name: Horsepower_HP
     doc_type: INTEGER
   - name: Max_Speed_kmh
     doc_type: INTEGER
   - name: Acceleration_0_100_sec
     doc_type: REAL
-  - name: No_transmission_Speeds
+  - name: Number_transmission_Speeds
     doc_type: INTEGER
-  - name: Transmission
+  - name: Transmission_Type
     doc_type: TEXT
   - name: Fuel_Type
-    doc_type: TEXT
+    doc_type: INTEGER
   - name: Number_of_Cylinders
     doc_type: INTEGER
   - name: Fuel_Tank_L
@@ -54,7 +56,7 @@ columns:
   - name: Year
     doc_type: INTEGER
   - name: Number_of_Seats
-    doc_type: TEXT
+    doc_type: INTEGER
   - name: Traction_Type
     doc_type: TEXT
   - name: ABS
@@ -171,16 +173,15 @@ columns:
     doc_type: BOOLEAN
 units:
   Price_EGP: EGP
-null_policy: "Treat NULL as unknown; only enforce features when the user explicitly requires them (e.g., ESP=1)."
+null_policy: "Treat NULL as unknown;"
 disambiguation_rules:
   country_mentions_default: "Origin_Country"
 hints:
   id: "Synthetic row id / primary key (INTEGER autoincrement). Use for stable references."
   Assembly_Country: "Final assembly country (TEXT). Use only if the user explicitly mentions assembly."
-  No_transmission_Speeds: "Number of transmission speeds (INTEGER)."
   Origin_Country: "Manufacturer country of origin (TEXT). Default country filter refers to this column unless user explicitly says 'assembly'."
   Price_EGP: "Price in Egyptian Pounds (EGP), INTEGER. Used for sorting and budget filters."
-  Transmission: "Gearbox type (TEXT): automatic, dsg (dual-clutch), cvt, manual. Map 'auto/AT' to 'automatic'."
+  Transmission_Type: "Gearbox type (TEXT): automatic, dsg (dual-clutch), cvt, manual. Map 'auto/AT' to 'automatic'."
   car_brand: "Brand/manufacturer (TEXT)."
   car_model: "Model name (TEXT)."
   car_trim: "Trim/variant (TEXT)."
