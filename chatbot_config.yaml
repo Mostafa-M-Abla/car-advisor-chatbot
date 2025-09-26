@@ -4,7 +4,7 @@ database:
   table: "cars"
 
 openai:
-  model: "gpt-4"
+  model: "gpt-4.1"
   temperature: 0.1
   max_tokens: 1000
 
