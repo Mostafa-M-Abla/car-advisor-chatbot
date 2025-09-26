@@ -137,7 +137,7 @@ class ConversationManager:
                 if feature not in self.user_preferences['preferred_features']:
                     self.user_preferences['preferred_features'].append(feature)
 
-    def get_conversation_context(self, turns: int = 3) -> str:
+    def get_conversation_context(self, turns: int = 6) -> str:
         """
         Get conversation context for the last N turns.
 
