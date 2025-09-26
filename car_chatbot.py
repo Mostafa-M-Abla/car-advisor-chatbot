@@ -10,7 +10,7 @@ from database_handler import DatabaseHandler
 from query_processor import QueryProcessor
 from response_generator import ResponseGenerator
 from conversation_manager import ConversationManager
-from web_search_handler import WebSearchHandler
+from knowledge_handler import KnowledgeHandler
 
 class CarChatbot:
     """Main chatbot class that orchestrates all components."""
@@ -33,7 +33,7 @@ class CarChatbot:
         self.conversation_manager = ConversationManager(
             max_history=self.config.get('conversation', {}).get('max_history', 10)
         )
-        self.web_search_handler = WebSearchHandler(config_path=config_path)
+        self.knowledge_handler = KnowledgeHandler(config_path=config_path)
 
         self.logger = logging.getLogger(__name__)
 
@@ -152,7 +152,7 @@ class CarChatbot:
                 return response
 
             # Check if this is an external knowledge query
-            needs_external, category = self.web_search_handler.is_external_knowledge_query(user_input)
+            needs_external, category = self.knowledge_handler.is_external_knowledge_query(user_input)
 
             if needs_external:
                 return self._handle_external_knowledge_query(user_input, category, context)
@@ -226,27 +226,27 @@ class CarChatbot:
             # Check if query mentions specific cars from our database
             car_context = self._extract_car_context_from_query(user_input)
 
-            # Use web search handler to get information
+            # Use knowledge handler to get information
             if category == 'comparison' and len(car_context) >= 2:
-                response = self.web_search_handler.compare_cars(car_context[0], car_context[1])
+                response = self.knowledge_handler.compare_cars(car_context[0], car_context[1])
             elif category == 'market':
-                response = self.web_search_handler.get_market_insights(user_input)
+                response = self.knowledge_handler.get_market_insights(user_input)
             elif len(car_context) == 1:
                 # Query about a specific car
                 car = car_context[0]
                 if category == 'reliability':
-                    response = self.web_search_handler.get_reliability_information(
+                    response = self.knowledge_handler.get_reliability_information(
                         car.get('car_brand', ''), car.get('car_model', '')
                     )
                 elif category == 'reviews':
-                    response = self.web_search_handler.get_car_reviews_summary(
+                    response = self.knowledge_handler.get_car_reviews_summary(
                         car.get('car_brand', ''), car.get('car_model', ''), car.get('Year')
                     )
                 else:
-                    response = self.web_search_handler.search_car_information(user_input, car)
+                    response = self.knowledge_handler.get_car_information(user_input, car)
             else:
                 # General automotive question
-                response = self.web_search_handler.search_car_information(user_input)
+                response = self.knowledge_handler.get_car_information(user_input)
 
             # Add to conversation history
             self.conversation_manager.add_turn(

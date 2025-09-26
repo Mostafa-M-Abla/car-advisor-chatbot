@@ -1,12 +1,11 @@
-import requests
 from typing import Dict, Any, List, Optional
 import logging
 import os
 import yaml
 from openai import OpenAI
 
-class WebSearchHandler:
-    """Handles web searches for information not available in the database."""
+class KnowledgeHandler:
+    """Handles automotive knowledge queries using LLM capabilities for information not available in the database."""
 
     def __init__(self, timeout: int = 10, config_path: str = "chatbot_config.yaml"):
         self.timeout = timeout
@@ -24,11 +23,11 @@ class WebSearchHandler:
             self.logger.error(f"Failed to load config: {e}")
             return {}
 
-    def search_car_information(self, query: str, car_info: Dict[str, Any] = None) -> str:
+    def get_car_information(self, query: str, car_info: Dict[str, Any] = None) -> str:
         """
-        Search for car information using GPT-4's knowledge base.
+        Get car information using GPT-4.1's knowledge base.
 
-        This method uses GPT-4's training data to provide information about cars
+        This method uses GPT-4.1's training data to provide information about cars
         that may not be in our database, such as reliability, market reputation,
         historical information, etc.
 
@@ -83,12 +82,12 @@ class WebSearchHandler:
             return result + disclaimer
 
         except Exception as e:
-            self.logger.error(f"Error in web search: {e}")
+            self.logger.error(f"Error in knowledge query: {e}")
             return "I'm sorry, I'm currently unable to access additional information about this car. I can only provide the specifications available in our database."
 
     def get_car_reviews_summary(self, brand: str, model: str, year: Optional[int] = None) -> str:
         """
-        Get a summary of car reviews and reputation using GPT-4.
+        Get a summary of car reviews and reputation using GPT-4.1.
 
         Args:
             brand: Car brand
@@ -280,9 +279,9 @@ class WebSearchHandler:
             self.logger.error(f"Error getting market insights: {e}")
             return "I'm unable to provide market insights at the moment. Please try again later."
 
-    def search_by_category(self, category: str, user_query: str) -> str:
+    def get_information_by_category(self, category: str, user_query: str) -> str:
         """
-        Search for information by category (reliability, reviews, specifications, etc.).
+        Get information by category (reliability, reviews, specifications, etc.).
 
         Args:
             category: Type of information requested
@@ -292,21 +291,21 @@ class WebSearchHandler:
             Category-specific response
         """
         category_handlers = {
-            'reliability': lambda: self.search_car_information(f"reliability information: {user_query}"),
-            'reviews': lambda: self.search_car_information(f"reviews and ratings: {user_query}"),
-            'specifications': lambda: self.search_car_information(f"technical specifications: {user_query}"),
-            'performance': lambda: self.search_car_information(f"performance and driving experience: {user_query}"),
-            'maintenance': lambda: self.search_car_information(f"maintenance costs and service: {user_query}"),
-            'comparison': lambda: self.search_car_information(f"car comparison: {user_query}"),
+            'reliability': lambda: self.get_car_information(f"reliability information: {user_query}"),
+            'reviews': lambda: self.get_car_information(f"reviews and ratings: {user_query}"),
+            'specifications': lambda: self.get_car_information(f"technical specifications: {user_query}"),
+            'performance': lambda: self.get_car_information(f"performance and driving experience: {user_query}"),
+            'maintenance': lambda: self.get_car_information(f"maintenance costs and service: {user_query}"),
+            'comparison': lambda: self.get_car_information(f"car comparison: {user_query}"),
             'market': lambda: self.get_market_insights(user_query),
-            'history': lambda: self.search_car_information(f"history and background: {user_query}")
+            'history': lambda: self.get_car_information(f"history and background: {user_query}")
         }
 
         handler = category_handlers.get(category.lower())
         if handler:
             return handler()
         else:
-            return self.search_car_information(user_query)
+            return self.get_car_information(user_query)
 
     def is_external_knowledge_query(self, query: str) -> tuple[bool, str]:
         """
@@ -316,7 +315,7 @@ class WebSearchHandler:
             query: User's query
 
         Returns:
-            Tuple of (needs_external_search, category)
+            Tuple of (needs_external_knowledge, category)
         """
         external_keywords = {
             'reliability': ['reliable', 'problems', 'issues', 'quality', 'durability'],
