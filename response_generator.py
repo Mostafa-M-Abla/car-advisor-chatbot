@@ -184,7 +184,8 @@ class ResponseGenerator:
                 user_input=user_input,
                 sql_query=sql_query,
                 results=results_summary,
-                count=len(results)
+                count=len(results),
+                context=context
             )
 
             response = self.openai_client.chat.completions.create(
@@ -276,69 +277,6 @@ class ResponseGenerator:
 
         return response
 
-    def generate_clarification_request(self, user_input: str,
-                                     unclear_aspects: List[str]) -> str:
-        """
-        Generate a clarification request when user input is ambiguous.
-
-        Args:
-            user_input: Original user input
-            unclear_aspects: List of unclear aspects
-
-        Returns:
-            Clarification request
-        """
-        try:
-            prompts = self.config.get('prompts', {})
-            clarification_prompt = prompts.get('clarification_prompt', '')
-
-            if not clarification_prompt:
-                return self._create_fallback_clarification(unclear_aspects)
-
-            user_prompt = clarification_prompt.format(
-                user_input=user_input,
-                unclear_aspects=", ".join(unclear_aspects)
-            )
-
-            response = self.openai_client.chat.completions.create(
-                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
-                messages=[
-                    {"role": "system", "content": "You are a helpful car advisor asking for clarification."},
-                    {"role": "user", "content": user_prompt}
-                ],
-                temperature=0.3,
-                max_tokens=200
-            )
-
-            return response.choices[0].message.content.strip()
-
-        except Exception as e:
-            self.logger.error(f"Error generating clarification request: {e}")
-            return self._create_fallback_clarification(unclear_aspects)
-
-    def _create_fallback_clarification(self, unclear_aspects: List[str]) -> str:
-        """Create a fallback clarification request."""
-        clarifications = {
-            'budget': "What's your budget range in EGP?",
-            'body_type': "What type of car are you looking for? (sedan, hatchback, crossover/SUV, etc.)",
-            'transmission': "Do you prefer automatic or manual transmission?",
-            'origin': "Any preference for the car's country of origin?",
-            'features': "Are there any specific features you need? (ABS, ESP, sunroof, etc.)"
-        }
-
-        questions = []
-        for aspect in unclear_aspects:
-            if aspect in clarifications:
-                questions.append(clarifications[aspect])
-
-        if not questions:
-            questions = ["Could you provide more details about what you're looking for?"]
-
-        response = "I need a bit more information to help you better:\n\n"
-        for i, question in enumerate(questions, 1):
-            response += f"{i}. {question}\n"
-
-        return response
 
     def generate_general_knowledge_response(self, question: str) -> str:
         """

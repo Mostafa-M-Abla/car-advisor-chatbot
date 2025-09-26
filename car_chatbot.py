@@ -139,18 +139,6 @@ class CarChatbot:
             # Get conversation context
             context = self.conversation_manager.get_conversation_context()
 
-            # Check if clarification is needed
-            needs_clarification, unclear_aspects = self.conversation_manager.should_ask_for_clarification(user_input)
-
-            if needs_clarification:
-                response = self.response_generator.generate_clarification_request(user_input, unclear_aspects)
-                self.conversation_manager.add_turn(
-                    user_input=user_input,
-                    bot_response=response,
-                    response_type="clarification"
-                )
-                return response
-
             # Check if this is an external knowledge query
             needs_external, category = self.knowledge_handler.is_external_knowledge_query(user_input)
 

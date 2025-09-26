@@ -209,39 +209,6 @@ class ConversationManager:
 
         return "; ".join(summary_parts) if summary_parts else "No specific preferences identified."
 
-    def should_ask_for_clarification(self, user_input: str) -> tuple[bool, List[str]]:
-        """
-        Determine if clarification is needed based on user input.
-
-        Args:
-            user_input: User's input message
-
-        Returns:
-            Tuple of (needs_clarification, list_of_unclear_aspects)
-        """
-        unclear_aspects = []
-        user_lower = user_input.lower()
-
-        # Check for vague price mentions
-        if any(word in user_lower for word in ['cheap', 'expensive', 'affordable', 'budget']) and \
-           not any(char.isdigit() for char in user_input):
-            unclear_aspects.append('budget')
-
-        # Check for vague body type mentions
-        if 'car' in user_lower and not any(body_type in user_lower for body_type in
-                                          ['sedan', 'hatchback', 'crossover', 'suv', 'coupe', 'convertible', 'van']):
-            unclear_aspects.append('body_type')
-
-        # Check for vague feature requests
-        if any(word in user_lower for word in ['good', 'nice', 'best', 'quality']) and \
-           len(user_input.split()) < 5:
-            unclear_aspects.append('features')
-
-        # Check if input is too short or vague
-        if len(user_input.split()) < 3 and not any(char.isdigit() for char in user_input):
-            unclear_aspects.append('general')
-
-        return len(unclear_aspects) > 0, unclear_aspects
 
     def get_refined_criteria(self, new_criteria: Dict[str, Any]) -> Dict[str, Any]:
         """
