@@ -13,7 +13,7 @@ web_search:
   timeout: 10
 
 conversation:
-  max_history: 10
+  max_history: 20
   greeting: |
     Hello! I'm your AI car advisor for the Egyptian market. I have access to detailed information about 886 cars with comprehensive specs, prices, and features.
 

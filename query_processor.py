@@ -8,13 +8,24 @@ import os
 class QueryProcessor:
     """Processes natural language queries and converts them to SQL."""
 
-    def __init__(self, schema_path: str = "schema.yaml", synonyms_path: str = "synonyms.yaml"):
+    def __init__(self, schema_path: str = "schema.yaml", synonyms_path: str = "synonyms.yaml", config_path: str = "chatbot_config.yaml"):
         self.schema_path = schema_path
         self.synonyms_path = synonyms_path
+        self.config_path = config_path
         self.schema = self._load_schema()
         self.synonyms = self._load_synonyms()
+        self.config = self._load_config()
         self.openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
         self.logger = logging.getLogger(__name__)
+
+    def _load_config(self) -> Dict[str, Any]:
+        """Load chatbot configuration from YAML file."""
+        try:
+            with open(self.config_path, 'r', encoding='utf-8') as file:
+                return yaml.safe_load(file)
+        except Exception as e:
+            self.logger.error(f"Failed to load config: {e}")
+            return {}
 
     def _load_schema(self) -> Dict[str, Any]:
         """Load database schema from YAML file."""
@@ -314,7 +325,6 @@ Instructions:
 - Use proper column names from the schema
 - Handle synonyms appropriately (e.g., "auto" -> "automatic")
 - Apply appropriate filters for price, origin, features, etc.
-- Use LIMIT for reasonable result counts (default 10 unless specified)
 - For price ranges, use appropriate comparison operators
 - For "non-Chinese", use Origin_Country != 'china'
 - For body types, use exact values: sedan, hatchback, crossover/suv, coupe, convertible, van
@@ -322,17 +332,17 @@ Instructions:
 - Order by Price_EGP ASC for budget-conscious results
 
 Examples:
-- "crossovers under 2M EGP" → SELECT * FROM cars WHERE body_type = 'crossover/suv' AND Price_EGP < 2000000 ORDER BY Price_EGP ASC LIMIT 10
-- "non-Chinese automatic cars with ESP" → SELECT * FROM cars WHERE Origin_Country != 'china' AND Transmission_Type = 'automatic' AND ESP = 1 ORDER BY Price_EGP ASC LIMIT 10"""
+- "crossovers under 2M EGP" → SELECT * FROM cars WHERE body_type = 'crossover/suv' AND Price_EGP < 2000000 ORDER BY Price_EGP ASC
+- "non-Chinese automatic cars with ESP" → SELECT * FROM cars WHERE Origin_Country != 'china' AND Transmission_Type = 'automatic' AND ESP = 1 ORDER BY Price_EGP ASC"""
 
             response = self.openai_client.chat.completions.create(
-                model="gpt-4",
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
                 messages=[
                     {"role": "system", "content": "You are an expert SQL generator for automotive databases. Generate only valid SQL queries."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.1,
-                max_tokens=500
+                max_tokens=2000
             )
 
             sql_query = response.choices[0].message.content.strip()

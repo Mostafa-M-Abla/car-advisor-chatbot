@@ -28,12 +28,12 @@ class CarChatbot:
 
         # Initialize components
         self.db_handler = DatabaseHandler()
-        self.query_processor = QueryProcessor()
+        self.query_processor = QueryProcessor(config_path=config_path)
         self.response_generator = ResponseGenerator(config_path)
         self.conversation_manager = ConversationManager(
             max_history=self.config.get('conversation', {}).get('max_history', 10)
         )
-        self.web_search_handler = WebSearchHandler()
+        self.web_search_handler = WebSearchHandler(config_path=config_path)
 
         self.logger = logging.getLogger(__name__)
 

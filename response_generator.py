@@ -188,7 +188,7 @@ class ResponseGenerator:
             )
 
             response = self.openai_client.chat.completions.create(
-                model=self.config.get('openai', {}).get('model', 'gpt-4'),
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
@@ -301,7 +301,7 @@ class ResponseGenerator:
             )
 
             response = self.openai_client.chat.completions.create(
-                model=self.config.get('openai', {}).get('model', 'gpt-4'),
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
                 messages=[
                     {"role": "system", "content": "You are a helpful car advisor asking for clarification."},
                     {"role": "user", "content": user_prompt}
@@ -356,7 +356,7 @@ class ResponseGenerator:
             about automotive topics. Focus on information relevant to the Egyptian automotive market when applicable."""
 
             response = self.openai_client.chat.completions.create(
-                model=self.config.get('openai', {}).get('model', 'gpt-4'),
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": question}

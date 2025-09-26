@@ -59,7 +59,7 @@ Please be accurate and only include the country name without any additional text
 
         # Make API call to OpenAI using GPT-4
         response = openai_client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4.1",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that provides accurate information about car brand origins. Always respond in the exact format requested."},
                 {"role": "user", "content": prompt}
@@ -143,7 +143,7 @@ If uncertain, choose the most appropriate from the allowed list."""
 
         # Make API call to OpenAI using GPT-4
         response = openai_client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4.1",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that provides accurate information about car body types. Always respond in the exact format requested using only the allowed body types: sedan, hatchback, crossover/suv, coupe, convertible, van."},
                 {"role": "user", "content": prompt}

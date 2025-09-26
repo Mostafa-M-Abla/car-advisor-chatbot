@@ -2,15 +2,27 @@ import requests
 from typing import Dict, Any, List, Optional
 import logging
 import os
+import yaml
 from openai import OpenAI
 
 class WebSearchHandler:
     """Handles web searches for information not available in the database."""
 
-    def __init__(self, timeout: int = 10):
+    def __init__(self, timeout: int = 10, config_path: str = "chatbot_config.yaml"):
         self.timeout = timeout
+        self.config_path = config_path
+        self.config = self._load_config()
         self.openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
         self.logger = logging.getLogger(__name__)
+
+    def _load_config(self) -> Dict[str, Any]:
+        """Load chatbot configuration from YAML file."""
+        try:
+            with open(self.config_path, 'r', encoding='utf-8') as file:
+                return yaml.safe_load(file)
+        except Exception as e:
+            self.logger.error(f"Failed to load config: {e}")
+            return {}
 
     def search_car_information(self, query: str, car_info: Dict[str, Any] = None) -> str:
         """
@@ -54,7 +66,7 @@ class WebSearchHandler:
             user_prompt = f"{context}Question: {query}"
 
             response = self.openai_client.chat.completions.create(
-                model="gpt-4",
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
@@ -102,7 +114,7 @@ class WebSearchHandler:
             Please provide factual, balanced information based on automotive industry knowledge."""
 
             response = self.openai_client.chat.completions.create(
-                model="gpt-4",
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
                 messages=[
                     {"role": "system", "content": "You are an automotive expert providing balanced, factual car reviews."},
                     {"role": "user", "content": prompt}
@@ -140,7 +152,7 @@ class WebSearchHandler:
             Focus on factual, practical information that would help a potential buyer."""
 
             response = self.openai_client.chat.completions.create(
-                model="gpt-4",
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
                 messages=[
                     {"role": "system", "content": "You are an automotive reliability expert with extensive knowledge of car reliability patterns and issues."},
                     {"role": "user", "content": prompt}
@@ -213,7 +225,7 @@ class WebSearchHandler:
             Be balanced and consider the Egyptian market context."""
 
             response = self.openai_client.chat.completions.create(
-                model="gpt-4",
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
                 messages=[
                     {"role": "system", "content": "You are an automotive expert providing detailed car comparisons for the Egyptian market."},
                     {"role": "user", "content": prompt}
@@ -253,7 +265,7 @@ class WebSearchHandler:
             Provide practical, market-focused information."""
 
             response = self.openai_client.chat.completions.create(
-                model="gpt-4",
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
                 messages=[
                     {"role": "system", "content": "You are an automotive market analyst with knowledge of the Egyptian automotive market trends and consumer preferences."},
                     {"role": "user", "content": prompt}
