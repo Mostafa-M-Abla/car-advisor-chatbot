@@ -1,0 +1,116 @@
+version: 1.0
+database:
+  path: "cars.db"
+  table: "cars"
+
+openai:
+  model: "gpt-4"
+  temperature: 0.1
+  max_tokens: 1000
+
+web_search:
+  enabled: true
+  timeout: 10
+
+conversation:
+  max_history: 10
+  greeting: |
+    Hello! I'm your AI car advisor for the Egyptian market. I have access to detailed information about 886 cars with comprehensive specs, prices, and features.
+
+    I can help you find the perfect car based on your preferences like:
+    • Budget range (in EGP)
+    • Body type (sedan, hatchback, crossover/SUV, coupe, convertible, van)
+    • Brand preferences or exclusions (e.g., "non-Chinese")
+    • Features (automatic transmission, ESP, ABS, sunroof, etc.)
+    • Engine specs, fuel efficiency, and more!
+
+    What kind of car are you looking for today?
+
+prompts:
+  system_prompt: |
+    You are an expert car advisor for the Egyptian automotive market. You have access to a comprehensive database with 886 cars containing detailed specifications, prices (in EGP), and features.
+
+    Your capabilities:
+    1. Parse user queries and convert them to SQL queries for the cars database
+    2. Interpret results and provide helpful, conversational responses
+    3. Handle follow-up questions and maintain conversation context
+    4. Suggest alternatives when no matches are found
+    5. Use your general automotive knowledge for questions beyond the database
+
+    Database schema includes: car_brand, car_model, car_trim, Price_EGP, body_type, electric_vehicle, Engine_CC, Engine_Turbo, Transmission_Type, Origin_Country, safety features (ABS, ESP, airbags), comfort features, and much more.
+
+    Guidelines:
+    - Always explain your filtering process clearly
+    - Format prices with commas (e.g., "1,500,000 EGP")
+    - Be conversational and helpful
+    - Ask clarifying questions when user intent is unclear
+    - Suggest relaxing constraints when no results found
+    - Use automotive expertise for general questions
+
+  query_generation_prompt: |
+    Based on the user's request, generate a SQL query for the cars database.
+
+    Database schema: {schema}
+    Available synonyms: {synonyms}
+
+    User request: {user_input}
+    Conversation context: {context}
+
+    Instructions:
+    - Generate ONLY the SQL query, no explanations
+    - Use proper column names from the schema
+    - Handle synonyms appropriately (e.g., "auto" -> "automatic")
+    - Apply appropriate filters for price, origin, features, etc.
+    - Use LIMIT for reasonable result counts
+    - For price ranges, use appropriate comparison operators
+    - For "non-Chinese", use Origin_Country != 'china'
+
+  response_generation_prompt: |
+    Generate a helpful, conversational response based on the user's query and database results.
+
+    User query: {user_input}
+    SQL query used: {sql_query}
+    Database results: {results}
+    Result count: {count}
+
+    Guidelines:
+    - Start with a brief explanation of your filtering process
+    - Present results in a clear, organized format
+    - Include key specs (brand, model, price, key features)
+    - Use Egyptian Pound formatting with commas
+    - If no results, suggest specific alternatives (increase budget, relax origin constraints, etc.)
+    - Be conversational and helpful
+    - Ask follow-up questions to refine search
+
+  clarification_prompt: |
+    The user's request needs clarification. Ask specific questions to understand their requirements better.
+
+    User input: {user_input}
+    Unclear aspects: {unclear_aspects}
+
+    Ask 1-2 specific questions to clarify their needs regarding budget, body type, features, or brand preferences.
+
+error_messages:
+  no_results: |
+    I couldn't find any cars matching your exact criteria. Here are some suggestions:
+    • Consider increasing your budget
+    • Relax origin country restrictions
+    • Look at similar body types
+    • Consider manual transmission if you specified automatic
+
+    Would you like me to try one of these alternatives?
+
+  database_error: "Sorry, I'm having trouble accessing the car database. Please try again in a moment."
+
+  general_error: "I encountered an unexpected error. Could you please rephrase your question?"
+
+features:
+  price_formatting: true
+  conversation_memory: true
+  web_search_fallback: true
+  suggestion_system: true
+
+limits:
+  max_results: 10
+  min_price: 100000
+  max_price: 30000000
