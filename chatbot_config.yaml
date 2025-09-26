@@ -89,8 +89,7 @@ prompts:
           3) total results ≤ 3 and trim-level detail improves clarity.
         - When expanded, show at most 2 trims per model; otherwise offer to expand (“Want to see all trims for <Model>?”).
     - Result cap & pagination:
-        - In a single response, list **at most 4 models or 4 trims** (whichever applies after grouping).
-        - Exceptions: exceed this cap only if the user **explicitly** asks for more (e.g., “list all”) or names specific models/trims.
+        - In a single response, list at most 3 cars 
         - If more items match than the cap: show the top matches (by price ascending or best filter match), state “Showing 4 of {count} results,” and offer to show more (“Show the next 4?” / “Show all?”).
 
   clarification_prompt: |
