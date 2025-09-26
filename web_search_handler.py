@@ -321,13 +321,12 @@ class WebSearchHandler:
         external_keywords = {
             'reliability': ['reliable', 'problems', 'issues', 'quality', 'durability'],
             'reviews': ['review', 'rating', 'opinion', 'experience', 'reputation'],
-            'performance': ['fast', 'slow', 'acceleration', 'handling', 'ride quality'],
+            'performance': ['fast', 'slow', 'handling', 'ride quality'],
             'maintenance': ['maintenance', 'service', 'repair', 'parts', 'cost to own'],
             'comparison': ['better', 'worse', 'compare', 'vs', 'versus', 'difference'],
-            'market': ['market', 'trend', 'popular', 'demand', 'price trend'],
+            'market': ['trend', 'popular', 'demand', 'price trend'],
             'history': ['history', 'first introduced', 'when launched', 'background', 'story'],
-            'safety': ['safe', 'safety', 'crash test', 'airbag', 'stability'],
-            'fuel': ['fuel economy', 'mpg', 'consumption', 'efficient', 'gas mileage']
+            'safety': ['safe', 'safety', 'crash test', 'stability']
         }
 
         query_lower = query.lower()
