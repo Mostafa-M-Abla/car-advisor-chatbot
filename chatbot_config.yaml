@@ -15,14 +15,14 @@ web_search:
 conversation:
   max_history: 20
   greeting: |
-    Hello! I'm your AI car advisor for the Egyptian market. I have access to detailed information about 886 cars with comprehensive specs, prices, and features.
+    Hi! I'm your AI car advisor for the Egyptian market. I have access to detailed information about new cars in Egypt with comprehensive specs, prices, and features.
 
     I can help you find the perfect car based on your preferences like:
     • Budget range (in EGP)
     • Body type (sedan, hatchback, crossover/SUV, coupe, convertible, van)
     • Brand preferences or exclusions (e.g., "non-Chinese")
     • Features (automatic transmission, ESP, ABS, sunroof, etc.)
-    • Engine specs, fuel efficiency, and more!
+    • Engine specs, fuel consumption, and more!
 
     What kind of car are you looking for today?
 
@@ -61,7 +61,6 @@ prompts:
     - Use proper column names from the schema
     - Handle synonyms appropriately (e.g., "auto" -> "automatic")
     - Apply appropriate filters for price, origin, features, etc.
-    - Use LIMIT for reasonable result counts
     - For price ranges, use appropriate comparison operators
     - For "non-Chinese", use Origin_Country != 'china'
 
@@ -81,6 +80,14 @@ prompts:
     - If no results, suggest specific alternatives (increase budget, relax origin constraints, etc.)
     - Be conversational and helpful
     - Ask follow-up questions to refine search
+    - Grouping & deduping:
+        - Group results by (brand, model).
+        - Default: show one entry per model with a price range "EGP min–max".
+        - Expand to multiple trims only when:
+          1) the user explicitly asks for trims or for that model,
+          2) trims differ on a required feature from the query (e.g., only some have ESP)
+          3) total results ≤ 3 and trim-level detail improves clarity.
+        - When expanded, show at most 2 trims per model; otherwise offer to expand (“Want to see all trims for <Model>?”).
 
   clarification_prompt: |
     The user's request needs clarification. Ask specific questions to understand their requirements better.
@@ -92,13 +99,7 @@ prompts:
 
 error_messages:
   no_results: |
-    I couldn't find any cars matching your exact criteria. Here are some suggestions:
-    • Consider increasing your budget
-    • Relax origin country restrictions
-    • Look at similar body types
-    • Consider manual transmission if you specified automatic
-
-    Would you like me to try one of these alternatives?
+    I couldn't find any cars matching your exact criteria. Would you like to increase the budget or remove some of the specifications?
 
   database_error: "Sorry, I'm having trouble accessing the car database. Please try again in a moment."
 
