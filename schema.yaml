@@ -175,8 +175,6 @@ columns:
     doc_type: BOOLEAN
   - name: Off_Road_Tyres
     doc_type: BOOLEAN
-units:
-  Price_EGP: EGP
 null_policy: "Treat NULL as unknown;"
 disambiguation_rules:
   country_mentions_default: "Origin_Country"
@@ -189,3 +187,4 @@ hints:
   car_brand: "Brand/manufacturer (TEXT)."
   car_model: "Model name (TEXT)."
   car_trim: "Trim/variant (TEXT)."
+  body_type: "Body style/segment. Allowed values: coupe, crossover/suv, hatchback, sedan, van."

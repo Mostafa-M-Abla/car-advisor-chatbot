@@ -1,12 +1,20 @@
 version: 1
 columns:
-  Transmission_Type:
-    - auto
-    - automatic gearbox
-    - at
-    - manual
-    - dsg
-    - cvt
+  Engine_Turbo:
+    - turbo
+    - turbocharged
+    - t-gdi
+    - tsi
+    - tce
+    - boosted
+  Number_transmission_Speeds:
+    - gears
+    - speeds
+    - number of speeds
+    - N-speed
+  body_type:
+    - hatch
+    - saloon
   ESP:
     - esc
     - stability control
@@ -14,16 +22,70 @@ columns:
   ABS:
     - anti lock
     - anti-lock brakes
+  EBD:
+    - electronic brakeforce distribution
+    - brakeforce distribution
+  Air_Conditioning:
+    - ac
+    - air conditioning
+  Front_Power_Windows:
+    - front power windows
+    - front electric windows
+  Back_Power_Windows:
+    - rear power windows
+    - back electric windows
+  Electric_Mirrors:
+    - power mirrors
+    - electric mirrors
+  Remote_Keyless:
+    - remote keyless
+    - keyless entry
+  Central_Locking:
+    - central locking
+    - remote locking
 predicates:
   non_chinese:
     column: Origin_Country
     op: '!='
     value: china
+  american:
+    column: Origin_Country
+    op: '='
+    value: usa
+  german:
+    column: Origin_Country
+    op: '='
+    value: germany
+  japanese:
+    column: Origin_Country
+    op: '='
+    value: japan
+  korean:
+    column: Origin_Country
+    op: '='
+    value: korea
+  french:
+    column: Origin_Country
+    op: '='
+    value: france
+  british:
+    column: Origin_Country
+    op: '='
+    value: uk
+  italian:
+    column: Origin_Country
+    op: '='
+    value: italy
+value_aliases:
+  Transmission:
+    automatic: [auto, at, اوتوماتيك]
+    manual: [manual, man, مانيوال]
+    dsg: [dsg, dual clutch, dct]
+    cvt: [cvt]
+  body_type:
+    hatchback: [hatchback, hatch]
+    sedan: [sedan, saloon]
 ranges:
   price:
     column: Price_EGP
-    aliases:
-      - under
-      - below
-      - budget
-      - max
+    aliases: [under, below, budget, max, up to]
