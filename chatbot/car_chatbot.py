@@ -2,15 +2,15 @@ import os
 import yaml
 import logging
 import sys
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from dotenv import load_dotenv
 
 # Import our custom modules
-from database_handler import DatabaseHandler
-from query_processor import QueryProcessor
-from response_generator import ResponseGenerator
-from conversation_manager import ConversationManager
-from knowledge_handler import KnowledgeHandler
+from database.database_handler import DatabaseHandler
+from chatbot.query_processor import QueryProcessor
+from chatbot.response_generator import ResponseGenerator
+from chatbot.conversation_manager import ConversationManager
+from chatbot.knowledge_handler import KnowledgeHandler
 
 class CarChatbot:
     """Main chatbot class that orchestrates all components."""
@@ -48,7 +48,7 @@ class CarChatbot:
             level=logging.INFO,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[
-                logging.FileHandler('chatbot.log'),
+                logging.FileHandler('../chatbot.log'),
                 logging.StreamHandler(sys.stdout)
             ]
         )

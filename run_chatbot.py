@@ -10,7 +10,7 @@ import os
 # Add current directory to path to ensure imports work
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from car_chatbot import main
+from chatbot.car_chatbot import main
 
 if __name__ == "__main__":
     print("Starting the Egyptian Car Market Chatbot...")
