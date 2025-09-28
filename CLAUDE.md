@@ -8,25 +8,31 @@ An advanced AI-powered conversational assistant for the Egyptian automotive mark
 ```
 car-selection-chatbot/
 ├── web_scrapper/                    # Web scraping module
-│   └── scrapped_data.csv           # Raw scraped car data
+│   ├── car_scraper.py              # Universal web scraper (62+ brands)
+│   ├── features_mapping.csv        # Field mapping configuration
+│   ├── scrapped_data.csv           # Raw scraped car data
+│   ├── scrapper_error_log.txt      # Scraper error logging
+│   └── claude.md                   # Scraper documentation
+│
+├── chatbot/                        # Core chatbot system components
+│   ├── car_chatbot.py              # Main orchestrator and conversation manager
+│   ├── query_processor.py          # Natural language to SQL conversion
+│   ├── response_generator.py       # GPT-4.1 powered response generation
+│   ├── conversation_manager.py     # Memory, context, and user preferences
+│   ├── knowledge_handler.py        # External automotive knowledge via LLM
+│   └── chatbot_config.yaml         # Comprehensive chatbot configuration
+│
+├── database/                       # Database system
+│   ├── database_creator.py         # SQLite database creation with indexing
+│   ├── database_handler.py         # Database operations and result formatting
+│   ├── database_tester.py          # Database validation and testing
+│   ├── cars.db                     # SQLite database (886 cars with full specs)
+│   ├── schema.yaml                 # Database schema definition
+│   └── synonyms.yaml               # Natural language synonym mappings
+│
 ├── scrapped_data_postprocessing.py # AI-enhanced data processing pipeline
-├── database_creator.py             # SQLite database creation with indexing
-├── database_tester.py              # Database validation and testing
-├── cars.db                         # SQLite database (886 cars with full specs)
 ├── processed_data.csv              # Clean, AI-enhanced car data
-├── schema.yaml                     # Database schema definition
-├── synonyms.yaml                   # Natural language synonym mappings
-├── chatbot_config.yaml             # Comprehensive chatbot configuration
-│
-├── # Core Chatbot System Components
-├── car_chatbot.py                  # Main orchestrator and conversation manager
 ├── run_chatbot.py                  # Entry point and launcher script
-├── query_processor.py              # Natural language to SQL conversion
-├── database_handler.py             # Database operations and result formatting
-├── response_generator.py           # GPT-4.1 powered response generation
-├── conversation_manager.py         # Memory, context, and user preferences
-├── knowledge_handler.py            # External automotive knowledge via LLM
-│
 ├── .env                           # Environment variables (API keys)
 ├── requirements.txt               # Python dependencies
 ├── chatbot.log                    # Runtime logs and debugging
@@ -78,7 +84,7 @@ Conversational Response → User
 
 ## Core Components
 
-### 1. CarChatbot (`car_chatbot.py`)
+### 1. CarChatbot (`chatbot/car_chatbot.py`)
 **Main orchestrator and conversation manager**
 - **Initialization**: Loads configuration, validates database, initializes all components
 - **Message Routing**: Determines query type (database search vs. external knowledge)
@@ -92,7 +98,7 @@ Conversational Response → User
 - `_handle_database_query()`: Routes database search queries
 - `_handle_external_knowledge_query()`: Routes knowledge-based queries
 
-### 2. QueryProcessor (`query_processor.py`)
+### 2. QueryProcessor (`chatbot/query_processor.py`)
 **Natural language to SQL conversion engine**
 - **Pattern Matching**: Extracts price ranges, body types, features, brands from natural language
 - **GPT-4.1 Integration**: Uses LLM for complex query understanding and SQL generation
@@ -105,7 +111,7 @@ Conversational Response → User
 - Origin preferences: "non-Chinese cars", "German or Japanese"
 - Complex queries: "crossovers under 2M, automatic, non-Chinese, with ESP"
 
-### 3. DatabaseHandler (`database_handler.py`)
+### 3. DatabaseHandler (`database/database_handler.py`)
 **Database operations and result management**
 - **Query Execution**: Safe SQL execution with parameterized queries
 - **Result Formatting**: Converts raw database results to user-friendly summaries
@@ -118,7 +124,7 @@ Conversational Response → User
 - Car comparison utilities
 - Database validation and health checks
 
-### 4. ResponseGenerator (`response_generator.py`)
+### 4. ResponseGenerator (`chatbot/response_generator.py`)
 **GPT-4.1 powered conversational response creation**
 - **Intelligent Clarification**: LLM-based decision making for when to ask questions
 - **Result Presentation**: Formats search results with Egyptian market context
@@ -131,7 +137,7 @@ Conversational Response → User
 - Context-aware follow-up questions
 - Egyptian market-specific recommendations
 
-### 5. ConversationManager (`conversation_manager.py`)
+### 5. ConversationManager (`chatbot/conversation_manager.py`)
 **Memory, context, and user preference tracking**
 - **Conversation History**: Maintains structured conversation turns
 - **User Preferences**: Learns and adapts to user preferences over time
@@ -144,7 +150,7 @@ Conversational Response → User
 - Feature requirements (safety, luxury, technology)
 - Brand preferences and exclusions
 
-### 6. KnowledgeHandler (`knowledge_handler.py`)
+### 6. KnowledgeHandler (`chatbot/knowledge_handler.py`)
 **External automotive knowledge via LLM**
 - **Query Classification**: Determines if query needs external knowledge
 - **Automotive Expertise**: Provides reliability, reviews, market insights
@@ -170,7 +176,7 @@ Conversational Response → User
 
 ## Configuration System
 
-### Centralized Configuration (`chatbot_config.yaml`)
+### Centralized Configuration (`chatbot/chatbot_config.yaml`)
 The entire chatbot behavior is controlled through a comprehensive YAML configuration file that enables easy customization without code changes.
 
 #### OpenAI Configuration
@@ -210,14 +216,14 @@ Customizable error messages for different scenarios:
 - General error handling
 
 ### Database System
-#### Database Creator (`database_creator.py`)
+#### Database Creator (`database/database_creator.py`)
 - Creates SQLite database with comprehensive schema
 - Imports processed CSV data with 886 vehicles
 - Creates performance indexes on key columns:
   - car_brand, car_model, car_trim, body_type
   - Price_EGP, Transmission_Type, Origin_Country, Engine_Turbo
 
-#### Database Tester (`database_tester.py`)
+#### Database Tester (`database/database_tester.py`)
 - Comprehensive test suite for database validation
 - Sample queries for data exploration
 - Performance testing for indexed columns
@@ -321,21 +327,21 @@ The system leverages OpenAI GPT-4.1 across multiple layers for comprehensive AI 
 - **Origin Country Completion**: AI-powered brand origin identification
 - **Batch Processing**: 50 combinations per API call with intelligent error handling
 
-#### 2. Query Understanding Layer (`query_processor.py`)
+#### 2. Query Understanding Layer (`chatbot/query_processor.py`)
 **Natural Language to SQL Conversion:**
 - **Complex Query Processing**: Converts user intent to precise SQL queries
 - **Schema Integration**: Uses database schema and synonyms for accurate mapping
 - **Validation**: Ensures generated SQL is safe and properly formatted
 - **Pattern Recognition**: Extracts prices, features, and preferences from natural language
 
-#### 3. Response Generation Layer (`response_generator.py`)
+#### 3. Response Generation Layer (`chatbot/response_generator.py`)
 **Conversational AI Responses:**
 - **Intelligent Clarification**: LLM-based decision making for user interaction
 - **Result Presentation**: Formats database results with Egyptian market context
 - **Alternative Suggestions**: AI-powered recommendations when no results found
 - **Context Integration**: Uses conversation history for personalized responses
 
-#### 4. Knowledge Integration Layer (`knowledge_handler.py`)
+#### 4. Knowledge Integration Layer (`chatbot/knowledge_handler.py`)
 **External Automotive Knowledge:**
 - **Automotive Expertise**: Reliability, reviews, market insights beyond database
 - **Comparative Analysis**: AI-powered car comparisons with recommendations
@@ -343,7 +349,7 @@ The system leverages OpenAI GPT-4.1 across multiple layers for comprehensive AI 
 - **Technical Knowledge**: Maintenance, ownership costs, historical information
 
 ### Centralized Model Management
-- **Single Configuration Point**: All components use `chatbot_config.yaml` for model settings
+- **Single Configuration Point**: All components use `chatbot/chatbot_config.yaml` for model settings
 - **GPT-4.1 Consistency**: Uniform model usage across all AI components
 - **Fallback Handling**: Graceful degradation if AI services are unavailable
 - **Performance Optimization**: Intelligent batching and token management
@@ -414,10 +420,10 @@ OPENAI_API_KEY=your-openai-api-key-here
 python scrapped_data_postprocessing.py
 
 # 2. Create SQLite database from processed data
-python database_creator.py
+python database/database_creator.py
 
 # 3. Validate database integrity (optional)
-python database_tester.py
+python database/database_tester.py
 ```
 
 ### Running the Chatbot
@@ -426,7 +432,7 @@ python database_tester.py
 python run_chatbot.py
 
 # Alternative: Direct module execution
-python car_chatbot.py
+python chatbot/car_chatbot.py
 ```
 
 ### Interactive Commands
@@ -464,10 +470,10 @@ Once the chatbot starts, you have access to these commands:
 OPENAI_API_KEY=your-openai-api-key-here
 ```
 
-### Schema Configuration (`schema.yaml`)
+### Schema Configuration (`database/schema.yaml`)
 Defines the complete database structure with column types and constraints.
 
-### Synonym Configuration (`synonyms.yaml`)
+### Synonym Configuration (`database/synonyms.yaml`)
 Maps user input variations to standardized terms for better chatbot understanding.
 
 ## Data Quality Metrics
@@ -512,7 +518,7 @@ Maps user input variations to standardized terms for better chatbot understandin
 
 1. **Chatbot Won't Start**:
    - Check OPENAI_API_KEY in `.env` file
-   - Ensure `cars.db` exists (run `python database_creator.py`)
+   - Ensure `database/cars.db` exists (run `python database/database_creator.py`)
    - Verify all dependencies installed (`pip install -r requirements.txt`)
 
 2. **Unicode/Encoding Errors**:
@@ -521,7 +527,7 @@ Maps user input variations to standardized terms for better chatbot understandin
 
 3. **Database Issues**:
    - Permission denied: Close any database viewers
-   - Missing table: Recreate database with `python database_creator.py`
+   - Missing table: Recreate database with `python database/database_creator.py`
    - No results: Check if processed_data.csv contains valid data
 
 4. **GPT-4.1 API Issues**:
@@ -532,10 +538,13 @@ Maps user input variations to standardized terms for better chatbot understandin
 ### Debugging Commands
 ```bash
 # Check database contents
-python -c "import sqlite3; conn = sqlite3.connect('cars.db'); print(conn.execute('SELECT COUNT(*) FROM cars').fetchone())"
+python -c "import sqlite3; conn = sqlite3.connect('database/cars.db'); print(conn.execute('SELECT COUNT(*) FROM cars').fetchone())"
 
 # Verify processed data
 python -c "import pandas as pd; print(pd.read_csv('processed_data.csv').info())"
+
+# Test web scraper
+python web_scrapper/car_scraper.py --test-brands hyundai
 ```
 
 ## Future Enhancements
