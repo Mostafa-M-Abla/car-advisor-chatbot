@@ -12,11 +12,11 @@ class QueryProcessor:
         self.schema_path = schema_path
         self.synonyms_path = synonyms_path
         self.config_path = config_path
+        self.logger = logging.getLogger(__name__)
         self.schema = self._load_schema()
         self.synonyms = self._load_synonyms()
         self.config = self._load_config()
         self.openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-        self.logger = logging.getLogger(__name__)
 
     def _load_config(self) -> Dict[str, Any]:
         """Load chatbot configuration from YAML file."""

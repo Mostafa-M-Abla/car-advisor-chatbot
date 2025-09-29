@@ -1,8 +1,7 @@
 import os
+import sys
 from langsmith import Client
 from typing_extensions import Annotated, TypedDict
-from langchain_openai import ChatOpenAI
-import os
 from langchain_openai import ChatOpenAI
 from langsmith import traceable
 
@@ -16,23 +15,41 @@ llm = ChatOpenAI(model="gpt-4o", temperature=1)
 # Add decorator so this function is traced in LangSmith
 @traceable()
 def rag_bot(question: str) -> dict:
-    # LangChain retriever will be automatically traced
-    docs = retriever.invoke(question)
-    docs_string = "".join(doc.page_content for doc in docs)
-    instructions = f"""You are a helpful assistant who is good at analyzing source information and answering questions.
-       Use the following source documents to answer the user's questions.
-       If you don't know the answer, just say that you don't know.
-       Use three sentences maximum and keep the answer concise.
+    """
+    Integrates with the existing car chatbot system to answer questions.
 
-Documents:
-{docs_string}"""
-    # langchain ChatModel will be automatically traced
-    ai_msg = llm.invoke([
-            {"role": "system", "content": instructions},
-            {"role": "user", "content": question},
-        ],
-    )
-    return {"answer": ai_msg.content, "documents": docs}
+    Args:
+        question: User's question about cars
+
+    Returns:
+        dict: Contains 'answer' and 'documents' (empty list for compatibility)
+    """
+    import sys
+    import os
+
+    # Add the project root to the path so we can import the chatbot modules
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
+
+    try:
+        # Import the CarChatbot class
+        from chatbot.car_chatbot import CarChatbot
+
+        # Initialize the chatbot with the correct config path
+        config_path = os.path.join(project_root, "chatbot", "chatbot_config.yaml")
+        chatbot = CarChatbot(config_path=config_path)
+
+        # Process the question and get the response
+        answer = chatbot.process_message(question)
+
+        # Return in the expected format
+        return {"answer": answer, "documents": []}
+
+    except Exception as e:
+        # Fallback response in case of errors
+        error_message = f"I encountered an error while processing your question: {str(e)}"
+        return {"answer": error_message, "documents": []}
 
 
 
@@ -65,7 +82,7 @@ examples = [
 
 
 # Create the dataset and examples in LangSmith
-dataset_name = "Car Selector Chatbot Evaluation Dataset"
+dataset_name = "Car Selector Chatbot Evaluation Dataset - 1"
 dataset = client.create_dataset(dataset_name=dataset_name)
 client.create_examples(
     dataset_id=dataset.id,

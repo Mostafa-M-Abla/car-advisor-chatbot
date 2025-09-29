@@ -10,9 +10,9 @@ class KnowledgeHandler:
     def __init__(self, timeout: int = 10, config_path: str = "chatbot_config.yaml"):
         self.timeout = timeout
         self.config_path = config_path
+        self.logger = logging.getLogger(__name__)
         self.config = self._load_config()
         self.openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-        self.logger = logging.getLogger(__name__)
 
     def _load_config(self) -> Dict[str, Any]:
         """Load chatbot configuration from YAML file."""

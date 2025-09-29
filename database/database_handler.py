@@ -9,8 +9,8 @@ class DatabaseHandler:
     def __init__(self, db_path: str = "cars.db", schema_path: str = "schema.yaml"):
         self.db_path = db_path
         self.schema_path = schema_path
-        self.schema = self._load_schema()
         self.logger = logging.getLogger(__name__)
+        self.schema = self._load_schema()
 
     def _load_schema(self) -> Dict[str, Any]:
         """Load database schema from YAML file."""

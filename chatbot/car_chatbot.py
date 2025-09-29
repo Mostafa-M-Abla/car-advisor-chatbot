@@ -26,9 +26,14 @@ class CarChatbot:
         self.config_path = config_path
         self.config = self._load_config()
 
-        # Initialize components
-        self.db_handler = DatabaseHandler()
-        self.query_processor = QueryProcessor(config_path=config_path)
+        # Initialize components with correct paths
+        import os
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        db_path = os.path.join(project_root, "database", "cars.db")
+        schema_path = os.path.join(project_root, "database", "schema.yaml")
+        self.db_handler = DatabaseHandler(db_path=db_path, schema_path=schema_path)
+        synonyms_path = os.path.join(project_root, "database", "synonyms.yaml")
+        self.query_processor = QueryProcessor(schema_path=schema_path, synonyms_path=synonyms_path, config_path=config_path)
         self.response_generator = ResponseGenerator(config_path)
         self.conversation_manager = ConversationManager(
             max_history=self.config.get('conversation', {}).get('max_history', 10)
