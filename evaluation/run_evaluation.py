@@ -7,11 +7,10 @@ from langchain_openai import ChatOpenAI
 from langsmith import traceable
 
 os.environ["LANGSMITH_TRACING"] = "true"
-os.environ["LANGSMITH_API_KEY"] = "YOUR LANGSMITH API KEY"   #TODO
-os.environ["OPENAI_API_KEY"] = "YOUR OPENAI API KEY"  #TODO
+os.environ["LANGSMITH_API_KEY"] = "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"  #TODO
+os.environ["OPENAI_API_KEY"] = "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"  #TODO
 
 
-#TODO #TODO #TODO    #TODO
 llm = ChatOpenAI(model="gpt-4o", temperature=1)
 
 # Add decorator so this function is traced in LangSmith
