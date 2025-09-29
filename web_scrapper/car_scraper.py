@@ -468,7 +468,7 @@ class CarScraper:
             row_data = {
                 'car_brand': brand,
                 'car_model': model_name,
-                'car_trim': trim['full_name']
+                'car_trim': trim['name']
             }
 
             # Scrape basic info (prices, etc.) from listing
