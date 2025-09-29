@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:eg.hatla2ee.com)"
+      "WebFetch(domain:eg.hatla2ee.com)",
+      "Bash(python:*)",
+      "Read(//d/git/**)"
     ],
     "deny": [],
     "ask": []
