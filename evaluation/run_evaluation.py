@@ -76,8 +76,13 @@ examples = [
     },
     {
         "inputs": {"question": "table"},
-        "outputs": {"answer": "Sorry I didn't understand your request. I am AI chatbot that can help you select a car in the egyptian market, Could you tell me about yopur budget and the type of car you are looking for?"},
-    }
+        "outputs": {"answer": "Sorry I didn't understand your request. I am an AI chatbot that can help you select a car in the egyptian market, Could you tell me about your budget and the type of car you are looking for?"},
+    },
+    {
+        "inputs": {"question": "What is the cheapest crossover with panoramic sunroof"},
+        "outputs": {
+            "answer": "The cheapest crossover with panoramic sunroof is the Opel Crossland A/T / Top Line"},
+    },
 ]
 
 
