@@ -91,3 +91,5 @@ Alarm,Alarm,bool
 Touch_Screen,Touch Screen,bool
 Multimedia_Touch_Screen,Multimedia touch screen,bool
 Off_Road_Tyres,Off-Road Tyres,bool
+Battery_Capacity_kWh,Battery Capacity (kWH),float
+Battery_Range_km,Battery Range (KM),int
