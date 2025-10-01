@@ -1,0 +1,938 @@
+car_trim,powertrain_type
+Hyundai Accent RB 2026 A/T / GL,Internal_Combustion_Engine
+Hyundai Accent RB 2026 A/T / SR,Internal_Combustion_Engine
+Hyundai Accent RB 2026 A/T / DAB ABS,Internal_Combustion_Engine
+Hyundai Accent RB 2026 A/T / DAB ABS PLUS,Internal_Combustion_Engine
+Hyundai Accent RB 2026 A/T / Highline,Internal_Combustion_Engine
+Hyundai Accent RB 2025 A/T / GL,Internal_Combustion_Engine
+Hyundai Accent RB 2025 A/T / SR,Internal_Combustion_Engine
+Hyundai Accent RB 2025 A/T / DAB ABS,Internal_Combustion_Engine
+Hyundai Accent RB 2025 A/T / DAB ABS PLUS,Internal_Combustion_Engine
+Hyundai Accent RB 2025 A/T / Highline,Internal_Combustion_Engine
+Hyundai Accent RB A/T / GL 2025,Internal_Combustion_Engine
+Hyundai Accent RB A/T / SR 2025,Internal_Combustion_Engine
+Hyundai Accent RB A/T / DAB ABS 2025,Internal_Combustion_Engine
+Hyundai Accent RB A/T / DAB ABS PLUS 2025,Internal_Combustion_Engine
+Hyundai Accent RB A/T / Highline 2025,Internal_Combustion_Engine
+Hyundai Elantra AD 2026 A/T / Smart,Internal_Combustion_Engine
+Hyundai Elantra AD 2026 A/T / Modern,Internal_Combustion_Engine
+Hyundai Elantra AD 2026 A/T / Top Line,Internal_Combustion_Engine
+Hyundai Elantra AD 2025 A/T / Smart,Internal_Combustion_Engine
+Hyundai Elantra AD 2025 A/T / Modern,Internal_Combustion_Engine
+Hyundai Elantra AD 2025 A/T / Top Line,Internal_Combustion_Engine
+Hyundai Elantra AD A/T / Top Line,Internal_Combustion_Engine
+Hyundai Elantra AD A/T / Top Line 2025,Internal_Combustion_Engine
+Hyundai Elantra AD A/T / Modern 2025,Internal_Combustion_Engine
+Hyundai Elantra AD A/T / Smart 2025,Internal_Combustion_Engine
+Hyundai Elantra AD A/T / Top Line 2026,Internal_Combustion_Engine
+Hyundai Elantra AD A/T / Modern 2026,Internal_Combustion_Engine
+Hyundai Elantra AD A/T / Smart 2026,Internal_Combustion_Engine
+Hyundai I30 2026 A/T / Blaze,Internal_Combustion_Engine
+Hyundai I30 2026 A/T / Blaze (fastback),Internal_Combustion_Engine
+Hyundai I30 2026 A/T / Redline,Internal_Combustion_Engine
+Hyundai I30 2026 A/T / Redline (fastback),Internal_Combustion_Engine
+Hyundai Elantra CN7 2025 A/T / Shadow,Internal_Combustion_Engine
+Hyundai Elantra CN7 2025 A/T / Blaze,Internal_Combustion_Engine
+Hyundai Elantra CN7 2025 A/T / Redline,Internal_Combustion_Engine
+Hyundai Elantra CN7 2025 A/T / BLACK DIAMOND,Internal_Combustion_Engine
+Hyundai Tucson 2026 A/T / SHADOW,Internal_Combustion_Engine
+Hyundai Tucson 2026 A/T / Blaze,Internal_Combustion_Engine
+Hyundai Tucson 2026 A/T / Redine,Internal_Combustion_Engine
+Hyundai Tucson 2026 A/T / NIGHT,Internal_Combustion_Engine
+Hyundai Tucson 2026 A/T / BLACK DIAMOND,Internal_Combustion_Engine
+Hyundai Tucson 2026 A/T / N-Line,Internal_Combustion_Engine
+Hyundai Tucson 2025 A/T / SHADOW,Internal_Combustion_Engine
+Hyundai Tucson 2025 A/T / Blaze,Internal_Combustion_Engine
+Hyundai Tucson 2025 A/T / Redine,Internal_Combustion_Engine
+Hyundai Tucson 2025 A/T / NIGHT,Internal_Combustion_Engine
+Hyundai Tucson 2025 A/T / BLACK DIAMOND,Internal_Combustion_Engine
+Hyundai Tucson 2025 A/T / N-Line,Internal_Combustion_Engine
+Hyundai Tucson A/T / Blaze 2026,Internal_Combustion_Engine
+Hyundai Tucson A/T / Redine 2025,Internal_Combustion_Engine
+Hyundai Tucson A/T / SHADOW 2025,Internal_Combustion_Engine
+Hyundai Tucson A/T / N-Line 2025,Internal_Combustion_Engine
+Hyundai Tucson A/T / BLACK DIAMOND 2025,Internal_Combustion_Engine
+Hyundai Tucson A/T / NIGHT 2025,Internal_Combustion_Engine
+Hyundai Tucson A/T / Blaze 2025,Internal_Combustion_Engine
+Hyundai Ioniq 6 2025 A/T / CONNECT PLUS,Electric
+Hyundai Ioniq 6 2025 A/T / EXTREME RWD,Electric
+Hyundai Ioniq 6 2025 A/T / EXTREME AWD,Electric
+Hyundai Ioniq 6 A/T / EXTREME AWD 2025,Electric
+Hyundai Ioniq 6 A/T / EXTREME RWD 2025,Electric
+Hyundai Ioniq 6 A/T / CONNECT PLUS 2025,Electric
+Hyundai Ioniq 5 2025 A/T /  CONNECT PLUS,Electric
+Hyundai Ioniq 5 2025 A/T / EXTREME,Electric
+Hyundai Ioniq 5 2025 A/T / EXTREME AWD,Electric
+Hyundai Ioniq 5 2025 A/T / N BOOST (AWD),Electric
+Hyundai Ioniq 5 A/T / EXTREME AWD 2025,Electric
+Hyundai Ioniq 5 A/T / EXTREME 2025,Electric
+Hyundai Ioniq 5 A/T /  CONNECT PLUS 2025,Electric
+Hyundai Santa Fe 2025 Automtic,Electric
+Hyundai Santa Fe 2025 A/T / 4w,Electric
+Hyundai Santa Fe A/T / 4w,Electric
+Hyundai Santa Fe A/T / 4w 2025,Electric
+Hyundai Santa Fe Automtic 2025,Electric
+Kia Seltos 2025 A/T / EX,Internal_Combustion_Engine
+Kia Seltos 2025 A/T / Highline,Internal_Combustion_Engine
+Kia Seltos 2025 A/T / Top Line,Internal_Combustion_Engine
+Kia K4 2026 A/T / Highline,Internal_Combustion_Engine
+Kia K4 2026 A/T / GT-line,Internal_Combustion_Engine
+Kia K4 2026 A/T / GT-line Black Edition,Internal_Combustion_Engine
+Kia Xceed 2025 A/T / Highline,Internal_Combustion_Engine
+Kia Xceed 2025 A/T / Highline / Panorama,Internal_Combustion_Engine
+Kia Xceed 2025 A/T / Top Line / Panorama,Internal_Combustion_Engine
+Kia Xceed A/T / Top Line / Panorama 2025,Internal_Combustion_Engine
+Kia Xceed A/T / Highline / Panorama 2025,Internal_Combustion_Engine
+Kia Xceed A/T / Highline 2025,Internal_Combustion_Engine
+Kia Sportage 2026 A/T / LX,Internal_Combustion_Engine
+Kia Sportage 2026 A/T / EX,Internal_Combustion_Engine
+Kia Sportage 2026 A/T / Highline,Internal_Combustion_Engine
+Kia Sportage 2026 A/T / Premium,Internal_Combustion_Engine
+Kia Sportage 2026 A/T / GT-line,Internal_Combustion_Engine
+Kia Sportage 2025 A/T / LX,Internal_Combustion_Engine
+Kia Sportage 2025 A/T / EX,Internal_Combustion_Engine
+Kia Sportage 2025 A/T / Highline,Internal_Combustion_Engine
+Kia Sportage 2025 A/T / Top Line,Internal_Combustion_Engine
+Kia Sportage 2025 A/T /  GT-Line,Internal_Combustion_Engine
+Kia Sportage A/T / Top Line 2025,Internal_Combustion_Engine
+Kia Sportage A/T / Highline 2025,Internal_Combustion_Engine
+Kia Sportage A/T /  GT-Line 2025,Internal_Combustion_Engine
+Kia Sportage A/T / EX 2025,Internal_Combustion_Engine
+Kia Sportage A/T / LX 2025,Internal_Combustion_Engine
+Kia Sorento 2025 A/T / Topline,Internal_Combustion_Engine
+Fiat Tipo 2025 manual / Entry‏,Internal_Combustion_Engine
+Fiat Tipo 2025 manual / Entry‏ Plus‏,Internal_Combustion_Engine
+Fiat Tipo 2025 Manual  / MID,Internal_Combustion_Engine
+Fiat Tipo manual / Entry‏ Plus‏ 2025,Internal_Combustion_Engine
+Fiat Tipo manual / Entry‏ 2025,Internal_Combustion_Engine
+Fiat 500 X 2025 A/T / Cross,Internal_Combustion_Engine
+Fiat 500 X A/T / Cross 2025,Internal_Combustion_Engine
+Chevrolet Optra 2026 A/T / Ls,Internal_Combustion_Engine
+Chevrolet Optra 2026 A/T / Lt,Internal_Combustion_Engine
+Chevrolet Optra 2025 A/T / Ls,Internal_Combustion_Engine
+Chevrolet Optra 2025 A/T / Lt,Internal_Combustion_Engine
+Chevrolet Optra A/T / Lt 2026,Internal_Combustion_Engine
+Chevrolet Optra A/T / Ls 2026,Internal_Combustion_Engine
+Chevrolet Optra A/T / Lt 2025,Internal_Combustion_Engine
+Chevrolet Optra A/T / Ls 2025,Internal_Combustion_Engine
+Chevrolet Captiva 2025 A/T / LV3,Internal_Combustion_Engine
+Chevrolet Captiva 2025 A/T / LV3 (7seats),Internal_Combustion_Engine
+Chevrolet Captiva A/T / LV3 (7seats) 2025,Internal_Combustion_Engine
+Chevrolet Captiva A/T / LV3 2025,Internal_Combustion_Engine
+Toyota Corolla 2026 Automatic / Active,Internal_Combustion_Engine
+Toyota Corolla 2026 AT / Comfort,Internal_Combustion_Engine
+Toyota Corolla 2026 A/T / SMART,Internal_Combustion_Engine
+Toyota Corolla 2026 A/T / Elegance,Internal_Combustion_Engine
+Toyota Corolla 2025 Automatic / Active,Internal_Combustion_Engine
+Toyota Corolla 2025 Automatic / Comfort,Internal_Combustion_Engine
+Toyota Corolla 2025 Automtic / SMART,Internal_Combustion_Engine
+Toyota Corolla 2025 Automatic /  SMART /  Sun Roof,Internal_Combustion_Engine
+Toyota Corolla 2025 A/T / Elegance,Internal_Combustion_Engine
+Toyota Corolla A/T / Elegance 2025,Internal_Combustion_Engine
+Toyota Corolla Automatic /  SMART /  Sun Roof 2025,Internal_Combustion_Engine
+Toyota Corolla Automtic / SMART 2025,Internal_Combustion_Engine
+Toyota Corolla Automatic / Comfort 2025,Internal_Combustion_Engine
+Toyota Corolla Automatic / Active 2025,Internal_Combustion_Engine
+Toyota Urban Cruiser 2025 A/T / Active,Internal_Combustion_Engine
+Toyota Urban Cruiser 2025 A/T / Comfort,Internal_Combustion_Engine
+Toyota Fortuner 2025 A/T / SMART,Internal_Combustion_Engine
+Toyota Fortuner 2025 Automtic / ELEGANCE,Internal_Combustion_Engine
+Toyota Fortuner 2025 A/T / Sport,Internal_Combustion_Engine
+Toyota Fortuner Automtic / ELEGANCE,Internal_Combustion_Engine
+Toyota Fortuner A/T / Sport 2025,Internal_Combustion_Engine
+Toyota Fortuner Automtic / ELEGANCE 2025,Internal_Combustion_Engine
+Toyota Fortuner A/T / SMART 2025,Internal_Combustion_Engine
+Nissan Sunny 2026 Manual‏ / Baseline,Internal_Combustion_Engine
+Nissan Sunny 2026 A/T / Baseline,Internal_Combustion_Engine
+Nissan Sunny 2026 A/T / plus,Internal_Combustion_Engine
+Nissan Sunny 2026 A/T / Super Saloon,Internal_Combustion_Engine
+Nissan Sunny 2025 Automatic / Baseline,Internal_Combustion_Engine
+Nissan Sunny 2025 A/T / plus,Internal_Combustion_Engine
+Nissan Sunny 2025 A/T / Super Saloon,Internal_Combustion_Engine
+Nissan Sunny A/T / Super Saloon 2026,Internal_Combustion_Engine
+Nissan Sunny A/T / plus 2026,Internal_Combustion_Engine
+Nissan Sunny A/T / Baseline 2026,Internal_Combustion_Engine
+Nissan Sunny Automatic / Baseline 2025,Internal_Combustion_Engine
+Nissan Sunny A/T / Super Saloon 2025,Internal_Combustion_Engine
+Nissan Sunny A/T / plus 2025,Internal_Combustion_Engine
+Nissan Sentra 2026 A/T / Highline,Internal_Combustion_Engine
+Nissan Sentra 2025 A/T / Highline,Internal_Combustion_Engine
+Nissan Sentra 2025 A/T / Premium,Internal_Combustion_Engine
+Nissan Sentra A/T / Highline 2026,Internal_Combustion_Engine
+Nissan Sentra A/T / Premium 2025,Internal_Combustion_Engine
+Nissan Sentra A/T / Highline 2025,Internal_Combustion_Engine
+Nissan Juke 2025 A/T / Accenta,Internal_Combustion_Engine
+Nissan Juke 2025 A/T / Tekna,Internal_Combustion_Engine
+Nissan Juke 2025 A/T / Tekna Perso,Internal_Combustion_Engine
+Nissan Juke 2025 AT / N-Design,Internal_Combustion_Engine
+Nissan Juke A/T / Tekna,Internal_Combustion_Engine
+Nissan Juke A/T / Tekna Perso 2025,Internal_Combustion_Engine
+Nissan Juke A/T / Tekna 2025,Internal_Combustion_Engine
+Nissan Juke A/T / Accenta 2025,Internal_Combustion_Engine
+Nissan Juke 2025 AT / ACCENTA,Internal_Combustion_Engine
+Nissan Juke 2025 AT / Tekna,Internal_Combustion_Engine
+Nissan Qashqai 2025 AT / ACCENTA,Internal_Combustion_Engine
+Nissan Qashqai 2025 AT / ACCENTA  2T,Internal_Combustion_Engine
+Nissan Qashqai 2025 AT / TEKNA,Internal_Combustion_Engine
+Nissan Qashqai 2025 AT / TEKNA  2T,Internal_Combustion_Engine
+Nissan Qashqai AT / TEKNA  2T,Internal_Combustion_Engine
+Nissan Qashqai AT / TEKNA  2T 2025,Internal_Combustion_Engine
+Nissan Qashqai AT / TEKNA 2025,Internal_Combustion_Engine
+Nissan Qashqai AT / ACCENTA  2T 2025,Internal_Combustion_Engine
+Nissan Qashqai AT / ACCENTA 2025,Internal_Combustion_Engine
+Nissan Qashqai 2025 AT / N-Connecta,Internal_Combustion_Engine
+Nissan Qashqai 2025 AT / N-Connecta +,Internal_Combustion_Engine
+Nissan Qashqai 2025 AT / TEKNA,Internal_Combustion_Engine
+Nissan Qashqai 2025 AT / N-Design e-PWR,Internal_Combustion_Engine
+Nissan Qashqai 2025 AT / TEKNA 4WD,Internal_Combustion_Engine
+Nissan XTrail 2026 A/T / Acenta 2WD,Internal_Combustion_Engine
+Nissan XTrail 2026 A/T / N-Terk,Internal_Combustion_Engine
+Nissan XTrail 2026 A/T / E-4orce Tekna,Internal_Combustion_Engine
+Nissan Patrol 2025 A/T / XE,Internal_Combustion_Engine
+Nissan Patrol 2025 A/T / SE T2,Internal_Combustion_Engine
+Nissan Patrol 2025 A/T / SE Titanium,Internal_Combustion_Engine
+Nissan Patrol 2025 A/T / LE T1,Internal_Combustion_Engine
+Nissan Patrol 2025 A/T / SE PLT City,Internal_Combustion_Engine
+Nissan Patrol 2025 A/T / LE T2 SR RSE,Internal_Combustion_Engine
+Nissan Patrol 2025 A/T /  LE Titanium,Internal_Combustion_Engine
+Nissan Patrol 2025 A/T / LE PLT City,Internal_Combustion_Engine
+Renault Taliant 2026 A/T / Evolution,Internal_Combustion_Engine
+Renault Taliant 2026 A/T / Techno,Internal_Combustion_Engine
+Renault Taliant 2025 A/T / Evolution,Internal_Combustion_Engine
+Renault Taliant 2025 A/T / Techno,Internal_Combustion_Engine
+Renault Taliant A/T / Techno 2025,Internal_Combustion_Engine
+Renault Taliant A/T / Evolution 2025,Internal_Combustion_Engine
+Renault Kardian 2026 A/T / Evolution,Internal_Combustion_Engine
+Renault Kardian 2026 A/T / Techno,Internal_Combustion_Engine
+Renault Kardian 2026 A/T / Iconic,Internal_Combustion_Engine
+Renault Kardian 2025 A/T / Evolution,Internal_Combustion_Engine
+Renault Kardian 2025 A/T / Techno,Internal_Combustion_Engine
+Renault Kardian 2025 A/T / Iconic,Internal_Combustion_Engine
+Renault Kardian A/T / Iconic,Internal_Combustion_Engine
+Renault Megane 2026 A/T / Dynamic,Internal_Combustion_Engine
+Renault Megane 2026 A/T / Signature,Internal_Combustion_Engine
+Renault Megane 2026 A/T / Signature Turbo,Internal_Combustion_Engine
+Renault Megane 2025 A/T / Dynamic,Internal_Combustion_Engine
+Renault Megane 2025 A/T / Signature,Internal_Combustion_Engine
+Renault Megane 2025 A/T / Signature Turbo,Internal_Combustion_Engine
+Renault Megane A/T / Signature Turbo 2026,Internal_Combustion_Engine
+Renault Megane A/T / Signature 2026,Internal_Combustion_Engine
+Renault Megane A/T / Dynamic 2026,Internal_Combustion_Engine
+Renault Megane A/T / Signature 2025,Internal_Combustion_Engine
+Renault Megane A/T / Dynamic 2025,Internal_Combustion_Engine
+Renault Megane A/T / Signature Turbo 2025,Internal_Combustion_Engine
+Renault Duster 2026 A/T / H1,Internal_Combustion_Engine
+Renault Duster 2026 A/T / H2,Internal_Combustion_Engine
+Renault Duster 2026 A/T / H3,Internal_Combustion_Engine
+Renault Duster A/T / H3 2026,Internal_Combustion_Engine
+Renault Duster A/T / H2 2026,Internal_Combustion_Engine
+Renault Duster A/T / H1 2026,Internal_Combustion_Engine
+Renault Duster 2025 A/T / H1,Internal_Combustion_Engine
+Renault Duster 2025 A/T / H2,Internal_Combustion_Engine
+Renault Duster 2025 A/T / H3,Internal_Combustion_Engine
+Renault Austral 2026 A/T / Evolution,Internal_Combustion_Engine
+Renault Austral 2026 A/T / Techno,Internal_Combustion_Engine
+Renault Austral 2026 A/T / Iconic,Internal_Combustion_Engine
+Renault Austral 2026 A/T /  Esprit Alpine,Internal_Combustion_Engine
+Renault Austral 2026 A/T / Esprit Alpine / B/E,Internal_Combustion_Engine
+Renault Austral 2025 A/T / Evolution,Internal_Combustion_Engine
+Renault Austral 2025 A/T / Techno,Internal_Combustion_Engine
+Renault Austral 2025 A/T / Iconic,Internal_Combustion_Engine
+Renault Austral 2025 A/T /  Esprit Alpine,Internal_Combustion_Engine
+Renault Austral 2025 A/T / Esprit Alpine / B/E,Internal_Combustion_Engine
+MG 5 2026 A/T / Luxury,Internal_Combustion_Engine
+MG 5 2025 A/T / Standard,Internal_Combustion_Engine
+MG 5 2025 A/T / Luxury,Internal_Combustion_Engine
+MG 5 A/T / Luxury 2025,Internal_Combustion_Engine
+MG 5 A/T / Standard 2025,Internal_Combustion_Engine
+MG ZS 2026 Automatic / Comfort,Internal_Combustion_Engine
+MG ZS 2026 Automatic / Comfort / ACC,Internal_Combustion_Engine
+MG ZS 2026 A/T / Luxury,Internal_Combustion_Engine
+MG ZS 2025 Automatic / Comfort,Internal_Combustion_Engine
+MG ZS 2025 Automatic / Comfort / ACC,Internal_Combustion_Engine
+MG ZS 2025 A/T / Luxury,Internal_Combustion_Engine
+MG ZS A/T / Luxury 2025,Internal_Combustion_Engine
+MG ZS Automatic / Comfort / ACC 2025,Internal_Combustion_Engine
+MG ZS Automatic / Comfort 2025,Internal_Combustion_Engine
+MG ZS 2026 A/T / Luxury,Internal_Combustion_Engine
+MG MG 4 2026 AT / Standard,Electric
+MG MG 4 2026 A/T / Luxury,Electric
+MG MG 4 2025 AT / Standard,Electric
+MG MG 4 2025 A/T / Luxury,Electric
+MG MG 4 A/T / Luxury 2025,Electric
+MG MG 4 AT / Standard 2025,Electric
+MG 6 2026 A/T / LUX / Black interior,Internal_Combustion_Engine
+MG 6 2026 A/T / LUX / Red Interior,Internal_Combustion_Engine
+MG 6 2025 A/T / LUX / Black interior,Internal_Combustion_Engine
+MG 6 2025 A/T / LUX / Red Interior,Internal_Combustion_Engine
+MG 6 A/T / LUX / Red Interior 2025,Internal_Combustion_Engine
+MG 6 A/T / LUX / Black interior 2025,Internal_Combustion_Engine
+MG RX5 Plus 2026 A/T / Luxury,Internal_Combustion_Engine
+MG RX5 Plus 2025 A/T / Comfort,Internal_Combustion_Engine
+MG RX5 Plus 2025 A/T / Luxury,Internal_Combustion_Engine
+MG RX5 Plus A/T / Luxury 2026,Internal_Combustion_Engine
+MG RX5 Plus A/T / Luxury 2025,Internal_Combustion_Engine
+MG RX5 Plus A/T / Comfort 2025,Internal_Combustion_Engine
+MG HS 2026 A/T / Luxury,Internal_Combustion_Engine
+MG HS 2026 A/T /  HEV,Hybrid
+MG 7 2026 A/T / luxury,Internal_Combustion_Engine
+MG 7 2026 A/T / Trophy,Internal_Combustion_Engine
+MG 7 2025 Automtic /luxury,Internal_Combustion_Engine
+MG 7 A/T / Trophy 2026,Internal_Combustion_Engine
+MG 7 Automtic /luxury 2025,Internal_Combustion_Engine
+MG HS 2026 A/T / Luxury,Internal_Combustion_Engine
+MG HS 2025 A/T / Luxury,Internal_Combustion_Engine
+MG HS A/T / Luxury 2026,Internal_Combustion_Engine
+MG HS A/T / Luxury 2025,Internal_Combustion_Engine
+BMW 118 2025 A/T / M SPORT,Internal_Combustion_Engine
+BMW 218 i 2025 A/T /  M SPORT,Internal_Combustion_Engine
+BMW X1 2025 A/T / X Line,Internal_Combustion_Engine
+BMW X1 2025 A/T / M Sport,Internal_Combustion_Engine
+BMW X1 A/T / M Sport 2025,Internal_Combustion_Engine
+BMW X1 A/T / X Line 2025,Internal_Combustion_Engine
+BMW X2 2025 A/T / sDrive18i M Sport,Internal_Combustion_Engine
+BMW X2 2025 A/T / M 35I,Internal_Combustion_Engine
+BMW X2 A/T / M 35I 2025,Internal_Combustion_Engine
+BMW X2 A/T / sDrive18i M Sport 2025,Internal_Combustion_Engine
+BMW IX1 2025 A/T / Elc,Electric
+BMW IX1 A/T / Elc 2025,Electric
+BMW IX2 2025 Automtic,Electric
+BMW IX2 Automtic 2025,Electric
+BMW 520 2025 A/T / Luxury,Internal_Combustion_Engine
+BMW 520 2025 A/T / M Sport,Internal_Combustion_Engine
+BMW 520 2025 A/T / Luxury line,Internal_Combustion_Engine
+BMW 520 2025 A/T / Luxury Bronze,Internal_Combustion_Engine
+BMW 420 2025 A/T / M SPORT,Internal_Combustion_Engine
+BMW 420 2025 A/T / Convertible,Internal_Combustion_Engine
+BMW 420 A/T / M SPORT 2025,Internal_Combustion_Engine
+BMW I4 2025 A/T / i4 e40 GC,Electric
+BMW X4 2025 A/T / xDrive 30i xLine,Internal_Combustion_Engine
+BMW I5 2025 A/T / Luxury,Electric
+BMW I5 2025 A/T / Luxury Bronze,Electric
+BMW I5 2025 A/T /  M Sport,Electric
+BMW X5 2025 A/T / xDrive40i xLine,Internal_Combustion_Engine
+BMW X5 2025 A/T / M60i,Internal_Combustion_Engine
+BMW IX 2025 A/T / XDrive 50,Electric
+BMW IX A/T / XDrive 50 2025,Electric
+BMW X6 2025 A/T / X6 xDrive40i,Internal_Combustion_Engine
+BMW X6 2025 A/T / M60i xDrive,Internal_Combustion_Engine
+BMW X6 A/T / X6 xDrive40i,Internal_Combustion_Engine
+BMW X6 A/T / M60i xDrive,Internal_Combustion_Engine
+BMW X6 A/T / M60i xDrive 2025,Internal_Combustion_Engine
+BMW X6 A/T / X6 xDrive40i 2025,Internal_Combustion_Engine
+BMW 7 Series 2025 A/T /  i7 XDrive60,Electric
+BMW 7 Series 2025 A/T / 740i,Internal_Combustion_Engine
+BMW 7 Series 2025 A/T / 760i xDrive,Internal_Combustion_Engine
+BMW 7 Series A/T /  i7 XDrive60 2025,Electric
+BMW 7 Series A/T / 760i xDrive 2025,Internal_Combustion_Engine
+BMW 7 Series A/T / 740i 2025,Internal_Combustion_Engine
+BMW X7 2025 A/T / M60i,Internal_Combustion_Engine
+Mitsubishi Attrage 2025 A/T / Highline,Internal_Combustion_Engine
+Mitsubishi Attrage A/T / Highline 2025,Internal_Combustion_Engine
+Mitsubishi Mirage 2025 A/T / Highline,Internal_Combustion_Engine
+Mitsubishi Mirage A/T / Highline 2025,Internal_Combustion_Engine
+Mitsubishi Outlander Sport 2025 A/T / Midline,Internal_Combustion_Engine
+Mitsubishi Outlander Sport 2025 Automtic / HIGH LINE,Internal_Combustion_Engine
+Mitsubishi Outlander Sport 2025 Automtic / PREMIUM LINE,Internal_Combustion_Engine
+Mitsubishi Outlander Sport Automtic / PREMIUM LINE 2025,Internal_Combustion_Engine
+Mitsubishi Outlander Sport Automtic / HIGH LINE 2025,Internal_Combustion_Engine
+Mitsubishi Outlander Sport A/T / Midline 2025,Internal_Combustion_Engine
+Mitsubishi Xpander 2026 A/T / Ignite - ML,Internal_Combustion_Engine
+Mitsubishi Xpander 2026 A/T / Spark - HL,Internal_Combustion_Engine
+Mitsubishi Xpander 2026 A/T / Premium - PL,Internal_Combustion_Engine
+Mitsubishi Xpander 2025 A/T / Midline,Internal_Combustion_Engine
+Mitsubishi Xpander 2025 A/T / Highline,Internal_Combustion_Engine
+Mitsubishi Xpander 2025 A/T / Premium line,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross 2025 A/T / Insport BL,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross 2025 A/T / Insport PLUS - ML PLUS,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross 2025 A/T / Inspire - HL,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross 2025 A/T / Instyle TL,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross 2025 A/T / INFINITY - PL AWD,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross A/T / INFINITY - PL AWD 2025,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross A/T / Instyle TL 2025,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross A/T / Inspire - HL 2025,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross A/T / Insport PLUS - ML PLUS 2025,Internal_Combustion_Engine
+Mitsubishi Eclipse Cross A/T / Insport BL 2025,Internal_Combustion_Engine
+Skoda Octavia A8 2026 A/T / Loft,Internal_Combustion_Engine
+Skoda Octavia A8 2026 A/T / Lounge,Internal_Combustion_Engine
+Skoda Octavia A8 2026 A/T / Suite,Internal_Combustion_Engine
+Skoda Octavia A8 2025 A/T / Loft,Internal_Combustion_Engine
+Skoda Octavia A8 2025 A/T / Lounge,Internal_Combustion_Engine
+Skoda Octavia A8 2025 A/T / Suite,Internal_Combustion_Engine
+Skoda Octavia A8 A/T / Suite 2025,Internal_Combustion_Engine
+Skoda Octavia A8 A/T / Lounge 2025,Internal_Combustion_Engine
+Skoda Octavia A8 A/T / Loft 2025,Internal_Combustion_Engine
+Skoda Karoq 2026 A/T / Suite,Internal_Combustion_Engine
+Skoda Karoq 2025 A/T / Luxury,Internal_Combustion_Engine
+Skoda Karoq A/T / Luxury 2025,Internal_Combustion_Engine
+Skoda Kodiaq 2026 A/T / Loft,Internal_Combustion_Engine
+Skoda Kodiaq 2026 A/T / Suite,Internal_Combustion_Engine
+Skoda Kodiaq 2026 A/T / Sportline,Internal_Combustion_Engine
+Skoda Kodiaq 2025 A/T / Loft,Internal_Combustion_Engine
+Skoda Kodiaq 2025 A/T / Lounge,Internal_Combustion_Engine
+Skoda Kodiaq 2025 A/T / Suite,Internal_Combustion_Engine
+Skoda Kodiaq 2025 A/T / Sportline,Internal_Combustion_Engine
+Skoda Kodiaq A/T / Loft 2025,Internal_Combustion_Engine
+Skoda Kodiaq A/T / Sportline 2025,Internal_Combustion_Engine
+Skoda Kodiaq A/T / Suite 2025,Internal_Combustion_Engine
+Skoda Kodiaq A/T / Lounge 2025,Internal_Combustion_Engine
+Skoda Superb 2026 A/T / Selection,Internal_Combustion_Engine
+Skoda Superb 2026 A/T / L&K,Internal_Combustion_Engine
+Jac S2 2025 A/T / Smart,Internal_Combustion_Engine
+Jac JS4 2025 A/T / Deluxe,Internal_Combustion_Engine
+Jac J7 2025 A/T / Deluxe,Internal_Combustion_Engine
+Jac JS6 2026 A/T / LIMITED,Internal_Combustion_Engine
+Jac JS6 2026 A/T / Flagship,Internal_Combustion_Engine
+Jac JS6 A/T / LIMITED 2026,Internal_Combustion_Engine
+Exeed RX 2025 Automtic,Internal_Combustion_Engine
+Exeed RX 2025 A/T / Flagship,Internal_Combustion_Engine
+Exeed RX A/T / Flagship 2025,Internal_Combustion_Engine
+Exeed RX Automtic 2025,Internal_Combustion_Engine
+Exeed VX 2025 A/T / Luxury,Internal_Combustion_Engine
+Exeed VX 2025 A/T / flagship,Internal_Combustion_Engine
+Exeed VX A/T / flagship 2025,Internal_Combustion_Engine
+Exeed VX A/T / Luxury 2025,Internal_Combustion_Engine
+Mini Cooper 2026 A/T /  JCW  Convertible,Internal_Combustion_Engine
+Mini Cooper 2025 A/T / C - Classic,Internal_Combustion_Engine
+Mini Cooper 2025 A/T  / C,Internal_Combustion_Engine
+Mini Cooper 2025 A/T / C- JCW,Internal_Combustion_Engine
+Mini Cooper 2025 A/T / S - JWC,Internal_Combustion_Engine
+Mini Cooper 2025 A/T / Se - Favoured,Electric
+Mini Cooper A/T  / C 2025,Internal_Combustion_Engine
+Mini Cooper A/T / S - JWC 2025,Internal_Combustion_Engine
+Mini Cooper A/T / C- JCW 2025,Internal_Combustion_Engine
+Mini Cooper A/T / C - Classic 2025,Internal_Combustion_Engine
+Mini Country man 2025 A/T / C,Internal_Combustion_Engine
+Mini Country man 2025 A/T / JCW ALL 4,Internal_Combustion_Engine
+Mini Country man 2025 A/T / E-Favoured,Electric
+Mini Country man 2025 A/T / E-JWC,Electric
+Mini Country man 2025 A/T / E,Electric
+Mini Country man A/T / JCW ALL 4 2025,Internal_Combustion_Engine
+Mini Country man A/T / C 2025,Internal_Combustion_Engine
+Opel Corsa 2026 A/T / Sport Topline Plus,Internal_Combustion_Engine
+Opel Corsa 2025 A/T / Gs line,Internal_Combustion_Engine
+Opel Crossland 2025 A/T / Top Line,Internal_Combustion_Engine
+Opel Mokka 2026 A/T / Black Edition,Internal_Combustion_Engine
+Opel Mokka 2025 A/T / Black Edition,Internal_Combustion_Engine
+Opel Mokka A/T / Black Edition 2026,Internal_Combustion_Engine
+Opel Grandland 2026 A/T / Highline+,Internal_Combustion_Engine
+Opel Grandland 2026 A/T / Top Line,Internal_Combustion_Engine
+Opel Grandland 2026 A/T / Top Line+,Internal_Combustion_Engine
+Opel Grandland 2025 A/T / Top Line,Internal_Combustion_Engine
+Opel Grandland 2025 A/T / Highline,Internal_Combustion_Engine
+Opel Grandland 2025 A/T / Top Line,Internal_Combustion_Engine
+Opel Grandland 2025 A/T / Top Line+,Internal_Combustion_Engine
+Opel Grandland A/T / Top Line+ 2025,Internal_Combustion_Engine
+Opel Grandland A/T / Top Line 2025,Internal_Combustion_Engine
+Opel Grandland A/T / Highline 2025,Internal_Combustion_Engine
+Dongfeng Box 2026 Automtic,Electric
+Dongfeng Box 2026 A/T / Highline,Electric
+Dongfeng Shine 2026 A/T / Advance,Internal_Combustion_Engine
+Dongfeng Shine 2026 A/T / Sport,Internal_Combustion_Engine
+Dongfeng Mage 2026 A/T / Highline,Internal_Combustion_Engine
+Dongfeng Mage 2026 A/T / Elite,Internal_Combustion_Engine
+Dongfeng Huge 2025 A/T / HUGE-Hybrid,Hybrid
+Dongfeng Huge 2025 A/T / (Special Color),Internal_Combustion_Engine
+Dongfeng Voyah Free 2026 A/T / Luxury,Internal_Combustion_Engine
+Audi Q2 2026 A/T / S Line,Internal_Combustion_Engine
+Audi Q2 2025 A/T / S Line,Internal_Combustion_Engine
+Audi A3 2026 A/T / Sportback,Internal_Combustion_Engine
+Audi A3 2026 A/T / S-Line,Internal_Combustion_Engine
+Audi A3 2025 A/T / Sport back,Internal_Combustion_Engine
+Audi A3 2025 A/T / S-Line,Internal_Combustion_Engine
+Audi Q3 2026 A/T / Advanced,Internal_Combustion_Engine
+Audi Q3 2026 A/T / S-Line,Internal_Combustion_Engine
+Audi Q3 2026 A/T / Sport back,Internal_Combustion_Engine
+Audi Q3 2026 A/T / Sport back B/L,Internal_Combustion_Engine
+Audi Q3 2025 A/T / Advanced,Internal_Combustion_Engine
+Audi Q3 2025 A/T / S-Line,Internal_Combustion_Engine
+Audi Q3 2025 A/T / Sport back,Internal_Combustion_Engine
+Audi Q3 2025 A/T / Sport back B/L,Internal_Combustion_Engine
+Audi Q3 2025 A/T / Sport back (2.0L),Internal_Combustion_Engine
+Audi A5 2026 A/T / Advanced,Internal_Combustion_Engine
+Audi A5 2026 A/T / S-Line,Internal_Combustion_Engine
+Audi A5 2026 A/T / S-Line PLUS,Internal_Combustion_Engine
+Audi A5 2025 A/T / Advanced,Internal_Combustion_Engine
+Audi Q7 2026 A/T / S Line,Internal_Combustion_Engine
+Audi Q7 2026 A/T / S Line Plus,Internal_Combustion_Engine
+Audi Q7 2025 A/T / S Line,Internal_Combustion_Engine
+Audi Q7 2025 A/T / S Line Plus,Internal_Combustion_Engine
+Audi Q7 2025 A/T / S Line (3.0 L),Internal_Combustion_Engine
+Audi Q7 A/T / S Line 2025,Internal_Combustion_Engine
+Audi RS e-Tron 2025 A/T / S Line,Electric
+Audi Q8 2026 A/T / S Line,Internal_Combustion_Engine
+Audi Q8 2026 A/T / S Line Plus,Internal_Combustion_Engine
+Audi Q8 2025 A/T / S Line,Internal_Combustion_Engine
+Audi Q8 2025 A/T / S Line Plus,Internal_Combustion_Engine
+Audi A8 2025 A/T / S-Line Long,Internal_Combustion_Engine
+Lynkco 06 2025 A/T / Core Plus,Internal_Combustion_Engine
+Lynkco 06 2025 A/T / Hyper Pro,Internal_Combustion_Engine
+Lynkco 06 2025 A/T / Hyper Halo,Internal_Combustion_Engine
+Lynkco 06 A/T / Hyper Halo 2025,Internal_Combustion_Engine
+Lynkco 06 A/T / Hyper Pro 2025,Internal_Combustion_Engine
+Lynkco 06 A/T / Core Plus 2025,Internal_Combustion_Engine
+Porsche Macan 2025 Automtic,Internal_Combustion_Engine
+Porsche Macan 2025 A/T / T,Internal_Combustion_Engine
+Porsche Macan 2025 A/T / S,Internal_Combustion_Engine
+Porsche Macan 2025 A/T / GTS,Internal_Combustion_Engine
+Porsche Macan Electric 2025 Automtic,Electric
+Porsche Macan Electric 2025 A/T / 4,Electric
+Porsche Macan Electric 2025 A/T / 4S Electric,Electric
+Porsche Macan Electric 2025 A/T / Turbo,Electric
+Porsche 718 2025 A/T / Cayman,Internal_Combustion_Engine
+Porsche 718 2025 A/T / Boxster,Internal_Combustion_Engine
+Porsche 718 2025 A/T / Cayman Style Edition,Internal_Combustion_Engine
+Porsche 718 2025 A/T / Boxster Style Edition,Internal_Combustion_Engine
+Porsche 718 2025 A/T / Cayman S,Internal_Combustion_Engine
+Porsche 718 2025 A/T / Boxster S,Internal_Combustion_Engine
+Porsche 718 2025 A/T /  Cayman GTS 4.0,Internal_Combustion_Engine
+Porsche 718 2025 A/T / Boxster GTS 4.0,Internal_Combustion_Engine
+Porsche 718 2025 A/T / Cayman GT4 RS,Internal_Combustion_Engine
+Porsche 718 2025 A/T / Spyder RS,Internal_Combustion_Engine
+Porsche Taycan 2025 Automtic,Electric
+Porsche Taycan 2025 A/T / 4 Cross Turismo,Electric
+Porsche Taycan 2025 A/T / Taycan 4S,Electric
+Porsche Taycan 2025 A/T / 4S Cross Turismo,Electric
+Porsche Taycan 2025 A/T / Turbo,Electric
+Porsche Taycan 2025 A/T / Turbo Cross Turismo,Electric
+Porsche Taycan 2025 A/T / Turbo S,Electric
+Porsche Taycan 2025 A/T / Turbo GT,Electric
+Porsche Taycan 2025 A/T / Highli Turbo GT with Weissach Packagene,Electric
+Porsche Cayenne 2025 Automatic,Internal_Combustion_Engine
+Porsche Cayenne 2025 A/T / Coupé,Internal_Combustion_Engine
+Porsche Cayenne 2025 Automtic / s,Internal_Combustion_Engine
+Porsche Cayenne 2025 A/T /  S Coupé,Internal_Combustion_Engine
+Porsche Cayenne 2025 A/T / GTS,Internal_Combustion_Engine
+Porsche Cayenne 2025 A/T / GTS Coupé,Internal_Combustion_Engine
+Porsche Cayenne 2025 A/T / Coupe Turbo GT,Internal_Combustion_Engine
+Porsche Panamera 2025 Automtic,Internal_Combustion_Engine
+Porsche Panamera 2025 A/T / 4,Internal_Combustion_Engine
+Porsche Panamera 2025 A/T / 4 E-Hybrid,Hybrid
+Porsche Panamera 2025 A/T / 4 E-Hybrid Executive,Hybrid
+Porsche Panamera 2025 A/T / 4S E-Hybrid,Hybrid
+Porsche Panamera 2025 A/T / GTS,Internal_Combustion_Engine
+Porsche Panamera 2025 A/T / Turbo E-Hybrid,Hybrid
+Porsche Panamera 2025 A/T / Turbo S E-Hybrid,Hybrid
+Porsche 911 2025 A/T / Carrera,Internal_Combustion_Engine
+Porsche 911 2025 manual‏,Internal_Combustion_Engine
+Porsche 911 2025 A/T /  Carrera Cabriolet,Internal_Combustion_Engine
+Porsche 911 2025 manual‏ / Cabriolet,Internal_Combustion_Engine
+Porsche 911 2025 A/T / Carrera GTS,Internal_Combustion_Engine
+Porsche 911 2025 A/T / Carrera 4 GTS,Internal_Combustion_Engine
+Porsche 911 2025 A/T / Carrera GTS Cabriolet,Internal_Combustion_Engine
+Porsche 911 2025 A/T / Carrera 4 GTS Cabriolet,Internal_Combustion_Engine
+Zeekr X 2025 A/T / Long Range,Electric
+Zeekr X 2025 A/T / Performance,Electric
+Zeekr 001 2025 A/T / Long Range,Electric
+Zeekr 001 2025 A/T / Privilege AWD,Electric
+Zeekr 001 2025 A/T / Performance AWD,Electric
+Proton Saga 2026 A/T / Premium,Internal_Combustion_Engine
+Proton Saga 2025 Automatic,Internal_Combustion_Engine
+Proton Saga Automatic 2025,Internal_Combustion_Engine
+Changan CS 35 Plus 2025 A/T / ELITE,Internal_Combustion_Engine
+Changan CS 35 Plus 2025 A/T / PREMIUM,Internal_Combustion_Engine
+Changan CS 35 Plus 2025 A/T / FLAGSHIP,Internal_Combustion_Engine
+Changan CS 35 Plus A/T / FLAGSHIP 2025,Internal_Combustion_Engine
+Changan CS 35 Plus A/T / PREMIUM 2025,Internal_Combustion_Engine
+Changan CS 35 Plus A/T / ELITE 2025,Internal_Combustion_Engine
+Changan Eado plus 2026 A/T / Elite,Internal_Combustion_Engine
+Changan Eado plus 2026 A/T / Premium,Internal_Combustion_Engine
+Changan Eado plus 2026 A/T / Flagship,Internal_Combustion_Engine
+Changan Eado plus A/T / Flagship 2026,Internal_Combustion_Engine
+Changan Eado plus A/T / Premium 2026,Internal_Combustion_Engine
+Changan Eado plus A/T / Elite 2026,Internal_Combustion_Engine
+Changan CS55 Plus 2026 A/T / Elite ( Local ),Internal_Combustion_Engine
+Changan CS55 Plus 2026 A/T / Premium ( Local),Internal_Combustion_Engine
+Changan CS55 Plus 2025 A/T / Elite,Internal_Combustion_Engine
+Changan CS55 Plus 2025 A/T / Premium,Internal_Combustion_Engine
+Changan CS55 Plus 2025 A/T / Flagship,Internal_Combustion_Engine
+Changan CS55 Plus A/T / Flagship 2025,Internal_Combustion_Engine
+Changan CS55 Plus A/T / Premium 2025,Internal_Combustion_Engine
+Changan CS55 Plus A/T / Elite 2025,Internal_Combustion_Engine
+Changan UNI-V 2026 A/T / Flagship,Internal_Combustion_Engine
+Changan UNI-V A/T / Flagship 2026,Internal_Combustion_Engine
+Changan UNI-T 2025 A/T / Elite,Internal_Combustion_Engine
+Changan UNI-T 2025 A/T / Premium,Internal_Combustion_Engine
+Changan UNI-T 2025 A/T / Flagship,Internal_Combustion_Engine
+Changan UNI-T A/T / Flagship 2025,Internal_Combustion_Engine
+Changan UNI-T A/T / Premium 2025,Internal_Combustion_Engine
+Changan UNI-T A/T / Elite 2025,Internal_Combustion_Engine
+Jeep Grand Cherokee L 2025 Automtic,Internal_Combustion_Engine
+Jeep Grand Cherokee L Automtic,Internal_Combustion_Engine
+Jeep Grand Cherokee L Automtic 2025,Internal_Combustion_Engine
+Ds Ds4 2025 A/T / Trocadero,Internal_Combustion_Engine
+Ds Ds4 2025 A/T / Performance Line,Internal_Combustion_Engine
+Ds DS7 2025 A/T / pallas,Internal_Combustion_Engine
+Ds DS7 2025 A/T / Etoile,Internal_Combustion_Engine
+Vgv U70P Plus 2025 A/T / Highline,Internal_Combustion_Engine
+Vgv U70P Plus A/T / Highline 2025,Internal_Combustion_Engine
+Vgv U70Pro Plus 2025 A/T / Top Line,Internal_Combustion_Engine
+Vgv U70Pro Plus 2025 A/T / Flagship,Internal_Combustion_Engine
+Vgv U70Pro Plus A/T / Top Line 2025,Internal_Combustion_Engine
+Vgv U70Pro Plus A/T / Flagship 2025,Internal_Combustion_Engine
+Byd F3 2025 Manual,Internal_Combustion_Engine
+Byd F3 2025 Automtic,Internal_Combustion_Engine
+Byd F3 Automtic 2025,Internal_Combustion_Engine
+Byd F3 Manual 2025,Internal_Combustion_Engine
+Jetour T2 2026 A/T / Luxury,Internal_Combustion_Engine
+Jetour T2 A/T / Luxury 2026,Internal_Combustion_Engine
+Jetour T2 Automtic 2025,Internal_Combustion_Engine
+Jetour X70 2026 A/T / Comfort,Internal_Combustion_Engine
+Jetour X70 2026 A/T / Luxury,Internal_Combustion_Engine
+Jetour Dashing 2026 A/T / Comfort,Internal_Combustion_Engine
+Jetour Dashing 2026 A/T / Luxury,Internal_Combustion_Engine
+Jetour Dashing 2025 A/T / Comfort,Internal_Combustion_Engine
+Jetour Dashing 2025 A/T / Luxury,Internal_Combustion_Engine
+Jetour Dashing A/T / Luxury 2025,Internal_Combustion_Engine
+Jetour X70 Plus 2026 A/T / Luxury local,Internal_Combustion_Engine
+Jetour X70 Plus 2025 A/T / Luxury local,Internal_Combustion_Engine
+Jetour X70 Plus A/T / Luxury local 2025,Internal_Combustion_Engine
+Jetour X90 Plus 2026 A/T / Luxury,Internal_Combustion_Engine
+Jetour X90 Plus 2025 A/T / Luxury,Internal_Combustion_Engine
+Jetour X90 Plus A/T / Luxury 2025,Internal_Combustion_Engine
+Jetour T1 2026 A/T / Luxury,Internal_Combustion_Engine
+Jetour T1 2025 Automatic,Internal_Combustion_Engine
+Jetour T1 A/T / Luxury 2026,Internal_Combustion_Engine
+KGM Torres 2025 Automtic /comfort,Internal_Combustion_Engine
+KGM Torres 2025 Automtic /advanced,Internal_Combustion_Engine
+KGM Torres 2025 A/T / Premium,Internal_Combustion_Engine
+KGM Torres 2025 A/T / Luxury,Internal_Combustion_Engine
+KGM Torres 2025 Automtic /adventure plus 4*4,Internal_Combustion_Engine
+KGM Torres Automtic /adventure plus 4*4 2025,Internal_Combustion_Engine
+KGM Torres A/T / Luxury 2025,Internal_Combustion_Engine
+KGM Torres A/T / Premium 2025,Internal_Combustion_Engine
+KGM Torres Automtic /advanced 2025,Internal_Combustion_Engine
+KGM Torres Automtic /comfort 2025,Internal_Combustion_Engine
+Seat Ibiza 2026 A/T / Reference,Internal_Combustion_Engine
+Seat Ibiza 2026 A/T / FR,Internal_Combustion_Engine
+Seat Ibiza 2026 A/T / Black Series,Internal_Combustion_Engine
+Seat Ibiza 2025 A/T / Reference,Internal_Combustion_Engine
+Seat Ibiza 2025 A/T / FR,Internal_Combustion_Engine
+Seat Ibiza 2025 A/T / Black Series,Internal_Combustion_Engine
+Seat Ibiza A/T / Black Series 2025,Internal_Combustion_Engine
+Seat Ibiza A/T / FR 2025,Internal_Combustion_Engine
+Seat Ibiza A/T / Reference 2025,Internal_Combustion_Engine
+Seat Arona 2026 A/T / FR / Black,Internal_Combustion_Engine
+Seat Arona 2025 A/T / FR / Black,Internal_Combustion_Engine
+Seat Arona A/T / FR / Black 2025,Internal_Combustion_Engine
+Seat Leon 2026 A/T / Advance,Internal_Combustion_Engine
+Seat Leon 2025 A/T / Advance,Internal_Combustion_Engine
+Seat Leon A/T / Advance 2025,Internal_Combustion_Engine
+Seat Ateca 2026 A/T / Style Plus,Internal_Combustion_Engine
+Seat Ateca 2025 A/T / Style Plus,Internal_Combustion_Engine
+Seat Ateca 2025 A/T / FR,Internal_Combustion_Engine
+Seat Ateca A/T / FR 2025,Internal_Combustion_Engine
+Seat Ateca A/T / Style Plus 2025,Internal_Combustion_Engine
+Suzuki Swift Dzire 2025 A/T / GLX,Internal_Combustion_Engine
+Suzuki Swift 2025 A/T / GLX,Internal_Combustion_Engine
+Hongqi Ousado 2026 A/T / Comfort,Internal_Combustion_Engine
+Hongqi Ousado 2026 A/T / Luxury,Internal_Combustion_Engine
+Hongqi Ousado A/T / Comfort 2026,Internal_Combustion_Engine
+Hongqi HS3 2026 A/T / Luxury,Internal_Combustion_Engine
+Hongqi E-HS9 2026 A/T / Luxury,Electric
+Xpeng P7 2025 A/T /  Long Range,Electric
+Xpeng P7 2025 A/T / Long Range + Nappa,Electric
+Xpeng P7 A/T / Long Range + Nappa 2025,Electric
+Xpeng P7 A/T /  Long Range 2025,Electric
+Xpeng G6 2025 A/T / STANDARD RANGE,Electric
+Xpeng G6 2025 A/T / LONG RANGE,Electric
+Xpeng G6 A/T / STANDARD RANGE 2025,Electric
+Xpeng G6 A/T / LONG RANGE 2025,Electric
+Xpeng G9 2025 A/T / Long Range,Electric
+Xpeng G9 2025 A/T /  Long Range + Nappa,Electric
+Xpeng G9 2025 A/T / Performance,Electric
+Xpeng G9 A/T /  Long Range + Nappa 2025,Electric
+Xpeng G9 A/T / Performance 2025,Electric
+Xpeng G9 A/T / Long Range 2025,Electric
+Alfa Romeo Tonale 2025 AT / sprint,Internal_Combustion_Engine
+Alfa Romeo Tonale 2025 A/T / Veloce,Internal_Combustion_Engine
+Alfa Romeo Tonale AT / sprint 2025,Internal_Combustion_Engine
+Alfa Romeo Giulia 2025 AT / sprint,Internal_Combustion_Engine
+Alfa Romeo Giulia 2025 A/T / Veloce,Internal_Combustion_Engine
+Alfa Romeo Giulia A/T / Veloce 2025,Internal_Combustion_Engine
+Alfa Romeo Giulia AT / sprint 2025,Internal_Combustion_Engine
+Alfa Romeo Stelvio 2025 A/T / Sprint,Internal_Combustion_Engine
+Alfa Romeo Stelvio 2025 A/T / Veloce,Internal_Combustion_Engine
+Alfa Romeo Stelvio A/T / Veloce 2025,Internal_Combustion_Engine
+Alfa Romeo Stelvio A/T / Sprint 2025,Internal_Combustion_Engine
+Citroën C3 2025 A/T / Feel,Internal_Combustion_Engine
+Citroën C3 2025 A/T / Shine,Internal_Combustion_Engine
+Citroën C3 Aircross 2025 A/T / Feel,Internal_Combustion_Engine
+Citroën C3 Aircross 2025 A/T / Shine,Internal_Combustion_Engine
+Citroën C4X 2026 A/T / Feel,Internal_Combustion_Engine
+Citroën C4X 2026 A/T / Shine,Internal_Combustion_Engine
+Citroën C4X 2025 A/T / Feel,Internal_Combustion_Engine
+Citroën C4X 2025 A/T / Shine,Internal_Combustion_Engine
+Citroën C4X 2025 A/T / Feel,Internal_Combustion_Engine
+Citroën C4X 2025 A/T / Shine,Internal_Combustion_Engine
+Citroën C4 2026 A/T / Shine Two Tone,Internal_Combustion_Engine
+Citroën C4 2025 A/T / Feel,Internal_Combustion_Engine
+Citroën C4 2025 A/T / Shine,Internal_Combustion_Engine
+Citroën C4 A/T / Shine Two Tone 2026,Internal_Combustion_Engine
+Citroën C5 Aircross 2026 A/T / Shine Entry,Internal_Combustion_Engine
+Citroën C5 Aircross 2026 A/T / Shine,Internal_Combustion_Engine
+Citroën C5 Aircross 2025 A/T / FEEL / with out sunroof,Internal_Combustion_Engine
+Citroën C5 Aircross 2025 A/T / Feel with sunroof,Internal_Combustion_Engine
+Citroën C5 Aircross 2025 A/T / SHINE,Internal_Combustion_Engine
+Citroën C5 Aircross A/T / Shine 2026,Internal_Combustion_Engine
+Citroën C5 Aircross A/T / Shine Entry 2026,Internal_Combustion_Engine
+Citroën C5 Aircross A/T / FEEL / with out sunroof 2025,Internal_Combustion_Engine
+Citroën C5 Aircross A/T / SHINE 2025,Internal_Combustion_Engine
+Citroën C5 Aircross A/T / Feel with sunroof 2025,Internal_Combustion_Engine
+Volvo EX30 2025 A/T / Single Core,Electric
+Volvo EX30 2025 A/T / Single PLUS Extended Range,Electric
+Volvo EX30 2025 A/T / Single Ultra Extended Range,Electric
+Volvo EX30 2025 A/T / Twin Plus Performance,Electric
+Volvo EX30 2025 A/T /  Twin Ultra Performance,Electric
+Volvo EX30 A/T /  Twin Ultra Performance 2025,Electric
+Volvo EX30 A/T / Twin Plus Performance 2025,Electric
+Volvo EX30 A/T / Single Ultra Extended Range 2025,Electric
+Volvo EX30 A/T / Single PLUS Extended Range 2025,Electric
+Volvo XC90 2025 A/T / Ultimate,Internal_Combustion_Engine
+Bestune T55 2025 A/T / PREMIUM PLUS,Internal_Combustion_Engine
+Bestune T55 A/T / PREMIUM PLUS 2025,Internal_Combustion_Engine
+Bestune B70S 2025 A/T / Premium,Internal_Combustion_Engine
+Bestune B70S 2025 A/T / Limousine,Internal_Combustion_Engine
+Bestune B70S A/T / Limousine 2025,Internal_Combustion_Engine
+Bestune B70S A/T / Premium 2025,Internal_Combustion_Engine
+Bestune T77 Pro 2025 A/T / Premium,Internal_Combustion_Engine
+Bestune T77 Pro A/T / Premium 2025,Internal_Combustion_Engine
+Rox 01 2025 A/T / Family 7 seats,Electric
+Rox 01 2025 A/T / Aviation 6 seats,Electric
+Chery Arrizo 5 2026 Manual / Base Line  / Leather,Internal_Combustion_Engine
+Chery Arrizo 5 2026 AT / BASELINE Leather,Internal_Combustion_Engine
+Chery Arrizo 5 2026 AT / HIGHLINE,Internal_Combustion_Engine
+Chery Arrizo 5 2025 Manual / Base Line  / Leather,Internal_Combustion_Engine
+Chery Arrizo 5 2025 AT / BASELINE Leather,Internal_Combustion_Engine
+Chery Arrizo 5 2025 AT / HIGHLINE,Internal_Combustion_Engine
+Chery Arrizo 5 AT / HIGHLINE 2026,Internal_Combustion_Engine
+Chery Arrizo 5 AT / BASELINE Leather 2026,Internal_Combustion_Engine
+Chery Arrizo 5 Manual / Base Line  / Leather 2026,Internal_Combustion_Engine
+Chery Arrizo 5 AT / HIGHLINE 2025,Internal_Combustion_Engine
+Chery Arrizo 5 AT / BASELINE Leather 2025,Internal_Combustion_Engine
+Chery Arrizo 5 Manual / Base Line  / Leather 2025,Internal_Combustion_Engine
+Chery Arrizo 5 2026 Manual / Base Line / Leather,Internal_Combustion_Engine
+Chery Arrizo 5 2026 AT / Baseline Leather,Internal_Combustion_Engine
+Chery Arrizo 5 2026 AT / Comfort,Internal_Combustion_Engine
+Chery Tiggo 4 Pro 2026 A/T / Comfort,Internal_Combustion_Engine
+Chery Tiggo 4 Pro 2026 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 4 Pro 2026 A/T / Highline / Turbo,Internal_Combustion_Engine
+Chery Tiggo 4 Pro 2025 A/T / Comfort,Internal_Combustion_Engine
+Chery Tiggo 4 Pro 2025 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 4 Pro 2025 A/T / Highline / Turbo,Internal_Combustion_Engine
+Chery Tiggo 4 Pro A/T / Highline / Turbo 2026,Internal_Combustion_Engine
+Chery Tiggo 4 Pro A/T / Luxury 2026,Internal_Combustion_Engine
+Chery Tiggo 4 Pro A/T / Comfort 2026,Internal_Combustion_Engine
+Chery Tiggo 4 Pro A/T / Highline / Turbo 2025,Internal_Combustion_Engine
+Chery Tiggo 4 Pro A/T / Luxury 2025,Internal_Combustion_Engine
+Chery Tiggo 4 Pro A/T / Comfort 2025,Internal_Combustion_Engine
+Chery Tiggo 7 2026 A/T /  Baseline,Internal_Combustion_Engine
+Chery Tiggo 7 2026 A/T / Highline,Internal_Combustion_Engine
+Chery Tiggo 7 2025 A/T /  Baseline,Internal_Combustion_Engine
+Chery Tiggo 7 2025 A/T / Highline,Internal_Combustion_Engine
+Chery Tiggo 7 A/T / Highline 2026,Internal_Combustion_Engine
+Chery Tiggo 7 A/T /  Baseline 2026,Internal_Combustion_Engine
+Chery Tiggo 7 A/T / Highline 2025,Internal_Combustion_Engine
+Chery Tiggo 7 A/T /  Baseline 2025,Internal_Combustion_Engine
+Chery Tiggo 8 2026 A/T / Comfort 7 Seats,Internal_Combustion_Engine
+Chery Tiggo 8 2026 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 8 2026 A/T / Luxury 7 Seats,Internal_Combustion_Engine
+Chery Tiggo 8 2025 A/T / Comfort 7 Seats,Internal_Combustion_Engine
+Chery Tiggo 8 2025 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 8 2025 A/T / Luxury 7 Seats,Internal_Combustion_Engine
+Chery Tiggo 8 A/T / Luxury 7 Seats 2026,Internal_Combustion_Engine
+Chery Tiggo 8 A/T / Comfort 7 Seats 2026,Internal_Combustion_Engine
+Chery Tiggo 8 A/T / Luxury 2026,Internal_Combustion_Engine
+Chery Tiggo 8 A/T / Luxury 7 Seats 2025,Internal_Combustion_Engine
+Chery Tiggo 8 A/T / Comfort 7 Seats 2025,Internal_Combustion_Engine
+Chery Tiggo 8 A/T / Luxury 2025,Internal_Combustion_Engine
+Chery Tiggo 7 pro 2026 A/T / Comfort,Internal_Combustion_Engine
+Chery Tiggo 7 pro 2026 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 7 pro 2025 A/T / Comfort,Internal_Combustion_Engine
+Chery Tiggo 7 pro 2025 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 7 pro A/T / Luxury 2025,Internal_Combustion_Engine
+Chery Tiggo 7 pro A/T / Comfort 2025,Internal_Combustion_Engine
+Chery Tiggo 7 pro A/T / Luxury 2026,Internal_Combustion_Engine
+Chery Tiggo 7 pro A/T / Comfort 2026,Internal_Combustion_Engine
+Chery Tiggo 7 pro max 2026 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 7 pro max 2026 A/T / Flagship,Internal_Combustion_Engine
+Chery Arrizo 8 2026 A/T / Luxury,Internal_Combustion_Engine
+Chery Arrizo 8 2026 A/T / Flagship,Internal_Combustion_Engine
+Chery Tiggo 8 Pro 2026 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 8 Pro 2026 A/T / Flagship,Internal_Combustion_Engine
+Chery Tiggo 8 Pro 2025 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 8 Pro 2025 A/T / Flagship,Internal_Combustion_Engine
+Chery Tiggo 8 Pro A/T / Flagship 2025,Internal_Combustion_Engine
+Chery Tiggo 8 Pro A/T / Luxury 2025,Internal_Combustion_Engine
+Chery Tiggo 8 Pro A/T / Flagship 2026,Internal_Combustion_Engine
+Chery Tiggo 8 Pro A/T / Luxury 2026,Internal_Combustion_Engine
+Chery Tiggo 8 Pro Max 2025 A/T / Luxury,Internal_Combustion_Engine
+Chery Tiggo 8 Pro Max 2025 A/T / Flagship,Internal_Combustion_Engine
+Chery EQ7 2026 Automtic,Electric
+Chery EQ7 2025 Automtic,Electric
+Chery EQ7 Automtic 2026,Electric
+Chery EQ7 Automtic 2025,Electric
+Chery Tiggo 9 2026 A/T / Luxury,Electric
+Peugeot 2008 2026 A/T / ALLURE,Internal_Combustion_Engine
+Peugeot 2008 2026 A/T / GT,Internal_Combustion_Engine
+Peugeot 2008 2025 A/T / ALLURE,Internal_Combustion_Engine
+Peugeot 2008 2025 A/T / GT,Internal_Combustion_Engine
+Peugeot 2008 A/T / GT 2025,Internal_Combustion_Engine
+Peugeot 2008 A/T / ALLURE 2025,Internal_Combustion_Engine
+Peugeot 408 2026 A/T / ALLURE PACK,Internal_Combustion_Engine
+Peugeot 408 2026 A/T / GT,Internal_Combustion_Engine
+Peugeot 408 2025 A/T / ALLURE PACK,Internal_Combustion_Engine
+Peugeot 408 2025 A/T  / GT pack,Internal_Combustion_Engine
+Peugeot 408 2025 A/T / GT,Internal_Combustion_Engine
+Peugeot 408 A/T / GT 2025,Internal_Combustion_Engine
+Peugeot 3008 2026 A/T / Allure,Internal_Combustion_Engine
+Peugeot 3008 2026 A/T / GT,Internal_Combustion_Engine
+Peugeot 3008 2025 A/T / Allure,Internal_Combustion_Engine
+Peugeot 3008 2025 A/T / GT,Internal_Combustion_Engine
+Peugeot 3008 A/T / GT 2026,Internal_Combustion_Engine
+Peugeot 3008 A/T / Allure 2026,Internal_Combustion_Engine
+Peugeot 5008 2026 A/T / Allure,Internal_Combustion_Engine
+Peugeot 5008 2026 A/T / GT,Internal_Combustion_Engine
+Peugeot 5008 A/T / GT 2026,Internal_Combustion_Engine
+Peugeot 5008 A/T / Allure 2026,Internal_Combustion_Engine
+Peugeot 508 2025 A/T /  Allure,Internal_Combustion_Engine
+Peugeot 508 2025 A/T / GT,Internal_Combustion_Engine
+Volkswagen Golf 2025 A/T / Highline,Internal_Combustion_Engine
+Volkswagen Golf A/T / Highline 2025,Internal_Combustion_Engine
+Volkswagen T-Roc 2025 A/T / R-Line,Internal_Combustion_Engine
+Volkswagen Tiguan 2025 A/T / R-Line,Internal_Combustion_Engine
+Volkswagen Tiguan A/T / R-Line 2025,Internal_Combustion_Engine
+Volkswagen Touareg 2025 A/T / R-Line,Internal_Combustion_Engine
+Volkswagen Touareg A/T / R-Line 2025,Internal_Combustion_Engine
+Kaiyi X3 Pro 2026 A/T / Top Line,Internal_Combustion_Engine
+Kaiyi X3 Pro 2026 A/T / Flagship,Internal_Combustion_Engine
+Kaiyi X3 Pro A/T / Flagship 2026,Internal_Combustion_Engine
+Kaiyi X3 Pro A/T / Top Line 2026,Internal_Combustion_Engine
+Kaiyi X7 2026 A/T / Flagship,Internal_Combustion_Engine
+Deepal S 05 2026 A/T / REEV,Range_Extended_Electric_Vehicle_REEV_EREV
+Deepal S 05 2026 A/T / BEV,Electric
+Deepal S 07 2026 A/T / REEV,Range_Extended_Electric_Vehicle_REEV_EREV
+Deepal S 07 2026 A/T / BEV,Electric
+Genesis GV70 2026 A/T / Dynamic,Electric
+Genesis GV70 2026 A/T / Advanced,Electric
+Genesis G80 2026 A/T / Dynamic,Electric
+Genesis G80 2026 A/T / Advanced,Electric
+Genesis G80 2026 A/T / Performance,Electric
+Geely Emgrand 2025 Automatic / Comfort /  ,Internal_Combustion_Engine
+Geely Emgrand 2025 A/T / Comfort / ,Internal_Combustion_Engine
+Geely Emgrand 2025 Automtic / Luxury /  ,Internal_Combustion_Engine
+Geely Emgrand 2025 A/T / Luxury / ,Internal_Combustion_Engine
+Geely Emgrand A/T / Luxury /  2025,Internal_Combustion_Engine
+Geely Emgrand A/T / Comfort /  2025,Internal_Combustion_Engine
+Geely Emgrand Automtic / Luxury /   2025,Internal_Combustion_Engine
+Geely Emgrand Automatic / Comfort /   2025,Internal_Combustion_Engine
+Geely GX3 Pro 2025 A/T / Premium ,Internal_Combustion_Engine
+Geely GX3 Pro 2025 A/T / Premium (AUTO MOBILITY),Internal_Combustion_Engine
+Geely GX3 Pro A/T / Premium ,Internal_Combustion_Engine
+Geely GX3 Pro A/T / Premium (AUTO MOBILITY) 2025,Internal_Combustion_Engine
+Geely GX3 Pro A/T / Premium  2025,Internal_Combustion_Engine
+Geely Cool Ray 2025 A/T / Comfort ,Internal_Combustion_Engine
+Geely Cool Ray 2025 A/T / GL / ,Internal_Combustion_Engine
+Geely Cool Ray 2025 A/T / Premium  ,Internal_Combustion_Engine
+Geely Cool Ray 2025 A/T / Comfort / ,Internal_Combustion_Engine
+Geely Cool Ray 2025 A/T / Premium / ,Internal_Combustion_Engine
+Geely Cool Ray 2025 A/T / Sport (AUTO MOBILITY) ,Internal_Combustion_Engine
+Geely Cool Ray 2025 A/T / Premium ,Internal_Combustion_Engine
+Geely Cool Ray 2025 A/T / sport / ,Internal_Combustion_Engine
+Geely Cool Ray 2025 A/T / sport ,Internal_Combustion_Engine
+Geely Cool Ray A/T / sport /  2025,Internal_Combustion_Engine
+Geely Cool Ray A/T / Premium /  2025,Internal_Combustion_Engine
+Geely Cool Ray A/T / GL /  2025,Internal_Combustion_Engine
+Geely Cool Ray A/T / Sport (AUTO MOBILITY)  2025,Internal_Combustion_Engine
+Geely Cool Ray A/T / Premium   2025,Internal_Combustion_Engine
+Geely Cool Ray A/T / Comfort  2025,Internal_Combustion_Engine
+Geely City Ray 2026 A/T / Comfort,Internal_Combustion_Engine
+Geely City Ray 2026 A/T / Premium,Internal_Combustion_Engine
+Geely City Ray 2026 A/T / Sport,Internal_Combustion_Engine
+Geely Starray 2025 A/T / Comfort ,Internal_Combustion_Engine
+Geely Starray 2025 A/T / Comfort / ,Internal_Combustion_Engine
+Geely Starray 2025 A/T / Premium ,Internal_Combustion_Engine
+Geely Starray 2025 A/T / Sport ,Internal_Combustion_Engine
+Geely Starray 2025 A/T / Sport +,Internal_Combustion_Engine
+Geely Starray 2025 A/T / Sport + ,Internal_Combustion_Engine
+Geely Starray A/T / Sport +  2025,Internal_Combustion_Engine
+Geely Starray A/T / Sport  2025,Internal_Combustion_Engine
+Geely Starray A/T / Premium  2025,Internal_Combustion_Engine
+Geely Starray A/T / Comfort /  2025,Internal_Combustion_Engine
+Geely Starray A/T / Sport + 2025,Internal_Combustion_Engine
+Geely Starray A/T / Comfort  2025,Internal_Combustion_Engine
+Geely Okavango 2025 A/T / Premium ,Internal_Combustion_Engine
+Geely Okavango 2025 A/T /Premium / ,Internal_Combustion_Engine
+Geely Okavango A/T /Premium /  2025,Internal_Combustion_Engine
+Cupra Leon 2026 Automatic,Internal_Combustion_Engine
+Cupra Leon 2025 Automatic,Internal_Combustion_Engine
+Cupra Leon Automatic 2025,Internal_Combustion_Engine
+Cupra Terramar 2026 A/T / IMPULSE,Internal_Combustion_Engine
+Cupra Terramar 2026 AT / CONTROL,Internal_Combustion_Engine
+Cupra Terramar 2025 A/T / IMPULSE,Internal_Combustion_Engine
+Cupra Terramar 2025 AT / CONTROL,Internal_Combustion_Engine
+Cupra Terramar AT / CONTROL 2025,Internal_Combustion_Engine
+Cupra Terramar A/T / IMPULSE 2025,Internal_Combustion_Engine
+Baic U5 plus 2025 A/T / Highline,Internal_Combustion_Engine
+Baic U5 plus 2025 A/T / Top Line,Internal_Combustion_Engine
+Baic U5 plus A/T / Top Line 2025,Internal_Combustion_Engine
+Baic U5 plus A/T / Highline 2025,Internal_Combustion_Engine
+Baic X55 2025 A/T / Highline,Internal_Combustion_Engine
+Baic X55 2025 A/T / Top Line,Internal_Combustion_Engine
+Baic X55 2025 A/T / Premium,Internal_Combustion_Engine
+Baic X55 A/T / Premium 2025,Internal_Combustion_Engine
+Baic X55 A/T / Top Line 2025,Internal_Combustion_Engine
+Baic X55 A/T / Highline 2025,Internal_Combustion_Engine
+Baic BJ30 2025 A/T / PRO,Internal_Combustion_Engine
+Baic BJ30 2025 A/T / ULTRA,Internal_Combustion_Engine
+Baic BJ30 2025 A/T / Off-Road,Internal_Combustion_Engine
+Baic BJ30 A/T / ULTRA 2025,Internal_Combustion_Engine
+Baic BJ30 A/T / PRO 2025,Internal_Combustion_Engine
+Baic X7 2025 A/T / Highline,Internal_Combustion_Engine
+Baic X7 2025 A/T / Top Line,Internal_Combustion_Engine
+Baic X7 2025 A/T / Premium,Internal_Combustion_Engine
+Baic X7 A/T / Premium 2025,Internal_Combustion_Engine
+Baic X7 A/T / Top Line 2025,Internal_Combustion_Engine
+Baic X7 A/T / Highline 2025,Internal_Combustion_Engine
+Smart 1 2025 A/T / Pure+,Electric
+Smart 1 2025 A/T / Pro+,Electric
+Smart 1 2025 A/T / Premium,Electric
+Smart 1 2025 A/T / BRABUS,Electric
+Smart 3 2025 A/T / Pro+,Electric
+Smart 3 2025 A/T / Premium,Electric
+Smart 3 2025 A/T / BRABUS,Electric
+Haval Jolion 2025 A/T / Deluxe SR,Internal_Combustion_Engine
+Haval Jolion 2025 A/T / High Deluxe,Internal_Combustion_Engine
+Haval Jolion A/T / High Deluxe 2025,Internal_Combustion_Engine
+Haval Jolion A/T / Deluxe SR 2025,Internal_Combustion_Engine
+Haval H6 2026 A/T / Luxury,Internal_Combustion_Engine
+Haval H6 2026 A/T / Premium,Internal_Combustion_Engine
+Haval H6 2025 A/T / Standard,Internal_Combustion_Engine
+Haval H6 2025 A/T / Deluxe,Internal_Combustion_Engine
+Haval H6 2025 A/T / Deluxe SR,Internal_Combustion_Engine
+Haval H6 2025 A/T / Top Line,Internal_Combustion_Engine
+Haval H6 A/T / Top Line 2025,Internal_Combustion_Engine
+Haval H6 A/T / Deluxe SR 2025,Internal_Combustion_Engine
+Haval H6 A/T / Deluxe 2025,Internal_Combustion_Engine
+Haval H6 A/T / Standard 2025,Internal_Combustion_Engine
+Haval Jolion Pro 2025 A/T / High Deluxe,Internal_Combustion_Engine
+Haval Jolion Pro A/T / High Deluxe 2025,Internal_Combustion_Engine
+Haval H6 HEV 2026 A/T / High Deluxe,Hybrid
+Haval H6 HEV 2025 A/T / High Deluxe,Hybrid
+Haval H6 HEV A/T / High Deluxe 2026,Hybrid
+Haval H6 HEV A/T / High Deluxe 2025,Hybrid
+GAC Empow 2025 A/T / GS,Internal_Combustion_Engine
+GAC Empow 2025 A/T / GB,Internal_Combustion_Engine
+GAC Empow 2025 A/T / GE S-Style,Internal_Combustion_Engine
+GAC Empow A/T / GE S-Style 2025,Internal_Combustion_Engine
+GAC Empow A/T / GB 2025,Internal_Combustion_Engine
+GAC Empow A/T / GS 2025,Internal_Combustion_Engine
+GAC GS4 2025 Automtic / GS,Internal_Combustion_Engine
+GAC GS4 2025 Automtic / GB,Internal_Combustion_Engine
+GAC GS4 2025 Automtic / GE,Internal_Combustion_Engine
+GAC GS4 Automtic / GE 2025,Internal_Combustion_Engine
+GAC GS4 Automtic / GB 2025,Internal_Combustion_Engine
+GAC GS4 Automtic / GS 2025,Internal_Combustion_Engine
+GAC Emkoo 2025 Automtic / Gs,Internal_Combustion_Engine
+GAC Emkoo 2025 Automtic / GE,Internal_Combustion_Engine
+GAC Emkoo 2025 Automtic / GL,Internal_Combustion_Engine
