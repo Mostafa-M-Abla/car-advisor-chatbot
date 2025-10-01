@@ -12,7 +12,9 @@ columns:
   - name: Price_EGP
     doc_type: INTEGER
   - name: body_type
-    doc_type: TEXT 
+    doc_type: TEXT
+  - name: powertrain_type
+    doc_type: TEXT
   - name: Insurance_Price_EGP
     doc_type: INTEGER
   - name: Register_Price_EGP
@@ -175,6 +177,10 @@ columns:
     doc_type: BOOLEAN
   - name: Off_Road_Tyres
     doc_type: BOOLEAN
+  - name: Battery_Capacity_kWh
+    doc_type: REAL
+  - name: Battery_Range_km
+    doc_type: INTEGER
 null_policy: "Treat NULL as unknown;"
 disambiguation_rules:
   country_mentions_default: "Origin_Country"
@@ -188,3 +194,4 @@ hints:
   car_model: "Model name (TEXT)."
   car_trim: "Trim/variant (TEXT)."
   body_type: "Body style/segment. Allowed values: coupe, crossover/suv, hatchback, sedan, van."
+  powertrain_type: "Allowed values: Internal_Combustion_Engine, Electric, Hybrid, Plug_in_Hybrid_PHEV, Mild_Hybrid_MHEV, Range_Extended_Electric_Vehicle_REEV_EREV."

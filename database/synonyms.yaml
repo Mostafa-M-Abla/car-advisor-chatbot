@@ -43,6 +43,25 @@ columns:
   Central_Locking:
     - central locking
     - remote locking
+  powertrain_type:
+    - powertrain
+    - propulsion
+    - engine type
+    - hybrid
+    - plug-in hybrid
+    - phev
+    - mild hybrid
+    - mhev
+    - electric
+    - ev
+    - bev
+    - petrol
+    - gasoline
+    - diesel
+  Battery_Capacity_kWh:
+    - battery capacity
+    - kwh
+    - battery size
 predicates:
   non_chinese:
     column: Origin_Country
@@ -85,7 +104,20 @@ value_aliases:
   body_type:
     hatchback: [hatchback, hatch]
     sedan: [sedan, saloon]
+  powertrain_type:
+    electric: [electric, ev, bev, كهرباء]
+    hybrid: [hybrid, hev, هجين]
+    plug_in_hybrid: [plug-in hybrid, phev, هجينة قابلة للشحن]
+    mild_hybrid: [mild hybrid, mhev]
+    petrol: [petrol, gasoline, بنزين]
+    diesel: [diesel, ديزل]
 ranges:
   price:
     column: Price_EGP
     aliases: [under, below, budget, max, up to]
+  battery_capacity_kwh:
+    column: Battery_Capacity_kWh
+    aliases: [minimum capacity, at least, over, capacity]
+  battery_range_km:
+    column: Battery_Range_km
+    aliases: [range, up to, at least, WLTP range]
