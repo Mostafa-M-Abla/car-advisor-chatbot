@@ -760,14 +760,14 @@ def main():
                 print(f"Set {santa_fe_count} santa-fe models to Plug_in_Hybrid_PHEV")
 
             # Set MG-4 models to Internal_Combustion_Engine
-            mg4_mask = df["car_model"] == "mg-4"
+            mg4_mask = df["car_model"] == "MG-4"
             mg4_count = mg4_mask.sum()
             if mg4_count > 0:
                 df.loc[mg4_mask, "powertrain_type"] = "Internal_Combustion_Engine"
                 print(f"Set {mg4_count} MG-4 models to Internal_Combustion_Engine")
 
             # Set x-trail models to Plug_in_Hybrid_PHEV
-            xtrail_mask = df["car_model"] == "x-trail"
+            xtrail_mask = df["car_model"] == "x-Trail"
             xtrail_count = xtrail_mask.sum()
             if xtrail_count > 0:
                 df.loc[xtrail_mask, "powertrain_type"] = "Plug_in_Hybrid_PHEV"
