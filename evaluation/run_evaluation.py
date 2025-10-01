@@ -60,7 +60,7 @@ client = Client()
 examples = [
     {
         "inputs": {"question": "What is the cheapest car?"},
-        "outputs": {"answer": "the cheapest car in Egypt would be the Nissan sunny Manual/ Baseline. It costs 645000 EGP"},
+        "outputs": {"answer": "The cheapest car in Egypt would be the Nissan sunny Manual/ Baseline. It costs 645000 EGP"},
     },
     {
         "inputs": {"question": "Is BMW a korean brand?"},
@@ -68,7 +68,7 @@ examples = [
     },
     {
         "inputs": {"question": "I want to buy a good car"},
-        "outputs": {"answer": "Great! i can help you with that, could you please tell me more about the car you need. e.g. budget, body type or other features that you are looking for?"},
+        "outputs": {"answer": "Great! I can help you with that, could you please tell me more about the car you need. e.g. budget, body type or other features that you are looking for?"},
     },
     {
         "inputs": {"question": "What is the cheapest non chinese car with automatic transmission and ESP?"},
@@ -83,6 +83,47 @@ examples = [
         "outputs": {
             "answer": "The cheapest crossover with panoramic sunroof is the Opel Crossland A/T / Top Line"},
     },
+    {
+        "inputs": {"question": ""},
+        "outputs": {
+            "answer": ""},
+    },
+    {
+        "inputs": {"question": ""},
+        "outputs": {
+            "answer": ""},
+    },
+    {
+        "inputs": {"question": ""},
+        "outputs": {
+            "answer": ""},
+    },
+    {
+        "inputs": {"question": ""},
+        "outputs": {
+            "answer": ""},
+    },
+    {
+        "inputs": {"question": ""},
+        "outputs": {
+            "answer": ""},
+    },
+    {
+        "inputs": {"question": ""},
+        "outputs": {
+            "answer": ""},
+    },
+    {
+        "inputs": {"question": ""},
+        "outputs": {
+            "answer": ""},
+    },
+    {
+        "inputs": {"question": ""},
+        "outputs": {
+            "answer": ""},
+    },
+
 ]
 
 
