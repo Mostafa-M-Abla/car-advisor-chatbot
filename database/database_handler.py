@@ -21,6 +21,33 @@ class DatabaseHandler:
             self.logger.error(f"Failed to load schema: {e}")
             return {}
 
+    def _get_boolean_columns(self) -> List[str]:
+        """Extract list of boolean columns from schema."""
+        boolean_cols = []
+        for col in self.schema.get('columns', []):
+            if col['doc_type'] == 'BOOLEAN':
+                boolean_cols.append(col['name'])
+        return boolean_cols
+
+    def _get_feature_columns(self) -> List[str]:
+        """
+        Get commonly used feature columns from schema.
+        Returns boolean columns that are typically used as search criteria.
+        """
+        # Get all boolean columns
+        all_boolean = self._get_boolean_columns()
+
+        # Define priority features (most commonly searched)
+        priority_features = [
+            'ABS', 'ESP', 'Engine_Turbo', 'Air_Conditioning',
+            'Sunroof', 'Bluetooth', 'GPS', 'Cruise_Control',
+            'EBD', 'Driver_Airbag', 'Passenger_Airbag',
+            'Rear_Camera', 'Front_Sensors', 'Rear_Sensors'
+        ]
+
+        # Return priority features that exist in schema
+        return [feat for feat in priority_features if feat in all_boolean]
+
     def get_connection(self) -> sqlite3.Connection:
         """Get database connection with proper configuration."""
         try:
@@ -138,11 +165,8 @@ class DatabaseHandler:
             query_parts.append("AND Transmission_Type = ?")
             params.append(criteria['transmission'])
 
-        # Note: electric_vehicle column removed from schema
-
-        # Features (boolean columns)
-        feature_columns = ['ABS', 'ESP', 'Engine_Turbo', 'Air_Conditioning',
-                          'Sunroof', 'Bluetooth', 'GPS', 'Cruise_Control']
+        # Features (boolean columns) - dynamically loaded from schema
+        feature_columns = self._get_feature_columns()
 
         for feature in feature_columns:
             if feature.lower() in criteria or feature in criteria:

@@ -1,11 +1,34 @@
 import sqlite3
 import pandas as pd
+import yaml
+import os
 
 class DatabaseTester:
     """Class for testing and querying the cars database."""
 
-    def __init__(self, db_path='cars.db'):
+    def __init__(self, db_path='cars.db', schema_path='schema.yaml'):
         self.db_path = db_path
+        self.schema_path = schema_path
+        self.schema = self._load_schema()
+
+    def _load_schema(self):
+        """Load and parse schema.yaml file."""
+        if not os.path.exists(self.schema_path):
+            print(f"Warning: Schema file not found at {self.schema_path}")
+            return {}
+
+        with open(self.schema_path, 'r', encoding='utf-8') as f:
+            schema = yaml.safe_load(f)
+
+        return schema
+
+    def _get_boolean_columns(self):
+        """Extract list of boolean columns from schema."""
+        boolean_cols = []
+        for col in self.schema.get('columns', []):
+            if col['doc_type'] == 'BOOLEAN':
+                boolean_cols.append(col['name'])
+        return boolean_cols
 
     def run_all_tests(self):
         """Run all database tests."""
@@ -87,22 +110,10 @@ class DatabaseTester:
     def test_null_values_in_boolean_columns(self, conn):
         """Test 8: Check for NULL values in boolean columns."""
         print("\n\nTest 8: Checking for NULL values in boolean columns:")
-        boolean_columns = [
-            'Engine_Turbo', 'ABS', 'EBD', 'Driver_Airbag', 'Passenger_Airbag',
-            'Rear_Sensors', 'Air_Conditioning', 'Power_Steering', 'Electric_Mirrors',
-            'Remote_Keyless', 'Central_Locking', 'Cruise_Control', 'Sunroof',
-            'Tinted_Glass', 'Front_Power_Windows', 'Back_Power_Windows', 'Bluetooth',
-            'USB_Port', 'AUX', 'Alloy_Wheels', 'Fog_Light', 'Multifunction',
-            'Side_Airbag', 'Power_Seats', 'CD_Player', 'Closing_Mirrors',
-            'Leather_Seats', 'EPS', 'Rear_Camera', 'GPS', 'Front_Sensors',
-            'Intelligent_Parking_System', 'Rear_Spoiler', 'Electric_Chairs',
-            'Start_Engine', 'ESP', 'Steptronic', 'Panoramic_Sunroof',
-            'Touch_Activated_Door_Lock', 'Heated_Seats', 'Cool_Box',
-            'Rear_Seat_Entertainment', 'Daytime_Running_Lights', 'Start_Stop_System',
-            'Tyre_Pressure_Sensor', 'Xenon_Headlights', 'Front_Camera',
-            'Immobilizer_Key', 'Roof_Rack', 'Anti_Theft_System', 'Alarm',
-            'Multimedia_Touch_Screen', 'Off_Road_Tyres'
-        ]
+
+        # Get boolean columns dynamically from schema
+        boolean_columns = self._get_boolean_columns()
+        print(f"Testing {len(boolean_columns)} boolean columns from schema.yaml")
 
         columns_with_nulls = []
         for col in boolean_columns:
