@@ -749,6 +749,30 @@ def main():
             for powertrain_type, count in powertrain_counts.items():
                 print(f"  {powertrain_type}: {count}")
 
+            # Make powertrain type adjustments
+            print("\nMaking powertrain type adjustments...")
+
+            # Set santa-fe models to Plug_in_Hybrid_PHEV
+            santa_fe_mask = df["car_model"] == "santa-fe"
+            santa_fe_count = santa_fe_mask.sum()
+            if santa_fe_count > 0:
+                df.loc[santa_fe_mask, "powertrain_type"] = "Plug_in_Hybrid_PHEV"
+                print(f"Set {santa_fe_count} santa-fe models to Plug_in_Hybrid_PHEV")
+
+            # Set MG-4 models to Internal_Combustion_Engine
+            mg4_mask = df["car_model"] == "mg-4"
+            mg4_count = mg4_mask.sum()
+            if mg4_count > 0:
+                df.loc[mg4_mask, "powertrain_type"] = "Internal_Combustion_Engine"
+                print(f"Set {mg4_count} MG-4 models to Internal_Combustion_Engine")
+
+            # Set x-trail models to Plug_in_Hybrid_PHEV
+            xtrail_mask = df["car_model"] == "x-trail"
+            xtrail_count = xtrail_mask.sum()
+            if xtrail_count > 0:
+                df.loc[xtrail_mask, "powertrain_type"] = "Plug_in_Hybrid_PHEV"
+                print(f"Set {xtrail_count} x-trail models to Plug_in_Hybrid_PHEV")
+
         except FileNotFoundError:
             # Create empty powertrain_type column if file not found
             df.insert(body_type_pos + 1, "powertrain_type", pd.NA)
@@ -759,6 +783,21 @@ def main():
             print(f"Error loading powertrain types: {e}. Created empty 'powertrain_type' column.")
     else:
         print("Required columns for powertrain classification not found, skipping powertrain type creation.")
+
+    # Fix car_brand values
+    print("\nFixing car_brand values...")
+    if "car_brand" in df.columns:
+        # Replace moris-garage with MG
+        moris_count = (df["car_brand"] == "moris-garage").sum()
+        if moris_count > 0:
+            df["car_brand"] = df["car_brand"].replace("moris-garage", "MG")
+            print(f"Replaced 'moris-garage' with 'MG' in {moris_count} rows")
+
+        # Replace Citroën with Citroen
+        citroen_count = (df["car_brand"] == "CitroÃ«n").sum()
+        if citroen_count > 0:
+            df["car_brand"] = df["car_brand"].replace("CitroÃ«n", "Citroen")
+            print(f"Replaced 'CitroÃ«n' with 'Citroen' in {citroen_count} rows")
 
     # Add id column as the first column
     df.insert(0, 'id', range(1, len(df) + 1))
