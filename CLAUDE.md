@@ -166,13 +166,15 @@ Conversational Response → User
 
 ### 2. Data Processing Pipeline (`scrapped_data_postprocessing.py`)
 - **Data Cleaning**: Removes invalid entries, normalizes columns
-- **AI Enhancement**: Uses OpenAI GPT-4.1 for:
+- **AI Enhancement**: Uses OpenAI GPT-5 for:
   - Body type classification (sedan, hatchback, crossover/suv, coupe, convertible, van)
   - Origin country completion for missing brands
+  - Powertrain type classification (Internal Combustion Engine, Hybrid, Plug-in Hybrid, Battery Electric Vehicle, Mild Hybrid)
 - **Warranty Parsing**: Splits warranty strings into km and years columns
 - **Price Filtering**: Removes entries with invalid pricing
 - **Year Filtering**: Keeps only recent model years based on current date
 - **Column Standardization**: Renames and reorganizes columns
+- **Duplicate Removal**: Eliminates duplicate entries based on car_trim
 
 ## Configuration System
 
@@ -273,8 +275,11 @@ Customizable error messages for different scenarios:
 - `id`: Primary key (auto-increment)
 - `car_brand`: Vehicle manufacturer
 - `car_model`: Model name
-- `car_trim`: Specific variant/trim level
-- `Price_EGP`: Price in Egyptian Pounds
+- `car_trim`: Specific variant/trim level (deduplicated)
+- `Official_Price_EGP`: Official price in Egyptian Pounds
+- `Market_Price_EGP`: Market price in Egyptian Pounds
+- `Insurance_Price_EGP`: Insurance cost
+- `Register_Price_EGP`: Registration fee
 - `body_type`: AI-classified body style (sedan, hatchback, crossover/suv, coupe, convertible, van)
 
 ### Engine & Performance
@@ -284,10 +289,18 @@ Customizable error messages for different scenarios:
 - `Max_Speed_kmh`: Maximum speed
 - `Acceleration_0_100_sec`: 0-100 km/h acceleration time
 - `Torque_Newton_Meter`: Engine torque
+- `Fuel_Type`: Type of fuel (petrol, diesel, etc.)
+- `Number_of_Cylinders`: Number of engine cylinders
+- `Fuel_Consumption_l_100_km`: Fuel efficiency
+
+### Powertrain & Electrification
+- `powertrain_type`: AI-classified powertrain (Internal_Combustion_Engine, Hybrid, Plug-in_Hybrid, Battery_Electric_Vehicle, Mild_Hybrid)
+- `Battery_Capacity_kWh`: Battery capacity for electric/hybrid vehicles
+- `Battery_Range_km`: Electric range for electric/hybrid vehicles
 
 ### Transmission & Drivetrain
-- `Transmission_Type`: Type of transmission
-- `Number_transmission_Speeds`: Number of gears
+- `Transmission`: Type of transmission
+- `Speeds`: Number of gears
 - `Traction_Type`: Drive type (FWD, RWD, AWD)
 
 ### Dimensions & Capacity
@@ -318,14 +331,16 @@ Customizable error messages for different scenarios:
 
 ## AI Integration & Architecture
 
-### Multi-Layer GPT-4.1 Integration
-The system leverages OpenAI GPT-4.1 across multiple layers for comprehensive AI functionality:
+### Multi-Layer AI Integration
+The system leverages OpenAI's latest AI models across multiple layers for comprehensive functionality:
 
 #### 1. Data Processing Layer (`scrapped_data_postprocessing.py`)
-**GPT-4.1 for Data Enhancement:**
-- **Body Type Classification**: Batch processing of brand-model combinations
+**GPT-5 for Data Enhancement:**
+- **Body Type Classification**: Batch processing of brand-model combinations into 6 standard categories
 - **Origin Country Completion**: AI-powered brand origin identification
+- **Powertrain Type Classification**: Accurate classification into 5 powertrain categories (Internal_Combustion_Engine, Hybrid, Plug-in_Hybrid, Battery_Electric_Vehicle, Mild_Hybrid)
 - **Batch Processing**: 50 combinations per API call with intelligent error handling
+- **Duplicate Detection**: Removes duplicate entries based on car_trim
 
 #### 2. Query Understanding Layer (`chatbot/query_processor.py`)
 **Natural Language to SQL Conversion:**
