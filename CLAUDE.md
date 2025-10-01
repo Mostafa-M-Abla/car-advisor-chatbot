@@ -26,7 +26,7 @@ car-selection-chatbot/
 │   ├── database_creator.py         # SQLite database creation with indexing
 │   ├── database_handler.py         # Database operations and result formatting
 │   ├── database_tester.py          # Database validation and testing
-│   ├── cars.db                     # SQLite database (886 cars with full specs)
+│   ├── cars.db                     # SQLite database (937 cars with full specs)
 │   ├── schema.yaml                 # Database schema definition
 │   └── synonyms.yaml               # Natural language synonym mappings
 │
@@ -166,14 +166,17 @@ Conversational Response → User
 
 ### 2. Data Processing Pipeline (`scrapped_data_postprocessing.py`)
 - **Data Cleaning**: Removes invalid entries, normalizes columns
-- **AI Enhancement**: Uses OpenAI GPT-5 for:
+- **AI Enhancement**: Uses OpenAI GPT-4 for:
   - Body type classification (sedan, hatchback, crossover/suv, coupe, convertible, van)
   - Origin country completion for missing brands
-  - Powertrain type classification (Internal Combustion Engine, Hybrid, Plug-in Hybrid, Battery Electric Vehicle, Mild Hybrid)
+- **Powertrain Classification**: Loads powertrain types from `power_train.csv` file
+  - Categories: Internal_Combustion_Engine, Electric, Hybrid, Plug_in_Hybrid_PHEV, Mild_Hybrid_MHEV, Range_Extended_Electric_Vehicle_REEV_EREV
+  - Manual adjustments applied for specific models (santa-fe, MG-4, x-Trail)
 - **Warranty Parsing**: Splits warranty strings into km and years columns
 - **Price Filtering**: Removes entries with invalid pricing
 - **Year Filtering**: Keeps only recent model years based on current date
 - **Column Standardization**: Renames and reorganizes columns
+- **Brand Name Normalization**: Fixes brand names (moris-garage → MG, CitroÃ«n → Citroen)
 - **Duplicate Removal**: Eliminates duplicate entries based on car_trim
 
 ## Configuration System
@@ -273,13 +276,10 @@ Customizable error messages for different scenarios:
 
 ### Core Vehicle Information
 - `id`: Primary key (auto-increment)
-- `car_brand`: Vehicle manufacturer
+- `car_brand`: Vehicle manufacturer (normalized: MG, Citroen)
 - `car_model`: Model name
 - `car_trim`: Specific variant/trim level (deduplicated)
-- `Official_Price_EGP`: Official price in Egyptian Pounds
-- `Market_Price_EGP`: Market price in Egyptian Pounds
-- `Insurance_Price_EGP`: Insurance cost
-- `Register_Price_EGP`: Registration fee
+- `Price_EGP`: Price in Egyptian Pounds
 - `body_type`: AI-classified body style (sedan, hatchback, crossover/suv, coupe, convertible, van)
 
 ### Engine & Performance
@@ -294,13 +294,15 @@ Customizable error messages for different scenarios:
 - `Fuel_Consumption_l_100_km`: Fuel efficiency
 
 ### Powertrain & Electrification
-- `powertrain_type`: AI-classified powertrain (Internal_Combustion_Engine, Hybrid, Plug-in_Hybrid, Battery_Electric_Vehicle, Mild_Hybrid)
+- `powertrain_type`: Powertrain classification loaded from power_train.csv with manual adjustments
+  - Categories: Internal_Combustion_Engine, Electric, Hybrid, Plug_in_Hybrid_PHEV, Mild_Hybrid_MHEV, Range_Extended_Electric_Vehicle_REEV_EREV
+  - Special cases: santa-fe (Plug_in_Hybrid_PHEV), MG-4 (Internal_Combustion_Engine), x-Trail (Plug_in_Hybrid_PHEV)
 - `Battery_Capacity_kWh`: Battery capacity for electric/hybrid vehicles
 - `Battery_Range_km`: Electric range for electric/hybrid vehicles
 
 ### Transmission & Drivetrain
-- `Transmission`: Type of transmission
-- `Speeds`: Number of gears
+- `Transmission_Type`: Type of transmission
+- `Number_transmission_Speeds`: Number of gears
 - `Traction_Type`: Drive type (FWD, RWD, AWD)
 
 ### Dimensions & Capacity
@@ -332,15 +334,15 @@ Customizable error messages for different scenarios:
 ## AI Integration & Architecture
 
 ### Multi-Layer AI Integration
-The system leverages OpenAI's latest AI models across multiple layers for comprehensive functionality:
+The system leverages OpenAI GPT-4 across multiple layers for comprehensive functionality:
 
 #### 1. Data Processing Layer (`scrapped_data_postprocessing.py`)
-**GPT-5 for Data Enhancement:**
+**GPT-4 for Data Enhancement:**
 - **Body Type Classification**: Batch processing of brand-model combinations into 6 standard categories
-- **Origin Country Completion**: AI-powered brand origin identification
-- **Powertrain Type Classification**: Accurate classification into 5 powertrain categories (Internal_Combustion_Engine, Hybrid, Plug-in_Hybrid, Battery_Electric_Vehicle, Mild_Hybrid)
+- **Origin Country Completion**: AI-powered brand origin identification using automotive knowledge
 - **Batch Processing**: 50 combinations per API call with intelligent error handling
 - **Duplicate Detection**: Removes duplicate entries based on car_trim
+- **Powertrain Loading**: Loads pre-classified powertrain types from power_train.csv with model-specific adjustments
 
 #### 2. Query Understanding Layer (`chatbot/query_processor.py`)
 **Natural Language to SQL Conversion:**
@@ -494,10 +496,12 @@ Maps user input variations to standardized terms for better chatbot understandin
 ## Data Quality Metrics
 
 ### Processing Results
-- **Total Records**: 886 vehicles with comprehensive specifications
+- **Total Records**: 937 vehicles with comprehensive specifications (after deduplication)
 - **Data Completeness**: 100% for all AI-enhanced columns
 - **Body Type Coverage**: 100% classification into 6 standardized categories
-- **Origin Country**: 100% completion using GPT-4.1 automotive knowledge
+- **Origin Country**: 100% completion using GPT-4 automotive knowledge
+- **Powertrain Classification**: 100% coverage from power_train.csv with manual adjustments
+- **Brand Normalization**: All brand names standardized (MG, Citroen)
 - **Schema Consistency**: All boolean features standardized and validated
 
 ### Quality Assurance
@@ -515,11 +519,12 @@ Maps user input variations to standardized terms for better chatbot understandin
 - **Intelligent Query Routing**: Reduces unnecessary processing through smart categorization
 - **Conversation Memory**: Efficient context management without redundant storage
 
-### GPT-4.1 API Optimization
-- **Unified Model Usage**: All components use same model for consistency
+### GPT-4 API Optimization
+- **Unified Model Usage**: Data processing uses GPT-4, chatbot uses GPT-4.1
 - **Smart Prompt Engineering**: Optimized prompts for faster, more accurate responses
 - **Context Management**: Selective context inclusion to minimize token usage
 - **Fallback Handling**: Graceful degradation when API limits reached
+- **Batch Processing**: Efficient batch processing for body type and origin country classification
 
 ### Database Optimization
 - **Strategic Indexing**: 8 optimized indexes on frequently queried columns
