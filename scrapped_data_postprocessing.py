@@ -95,6 +95,108 @@ Please be accurate and only include the country name without any additional text
         print("Please make sure you have set your OpenAI API key in .env file and have sufficient credits.")
         return {}
 
+def get_powertrain_types_with_openai(trim_list):
+    """
+    Use OpenAI API to get powertrain types for car trims using GPT-4.
+
+    Args:
+        trim_list: List of car trim names
+
+    Returns:
+        dict: Mapping of trim name to powertrain type
+    """
+    if not OPENAI_AVAILABLE:
+        print("OpenAI library not available. Please install it with: pip install openai")
+        return {}
+
+    if not openai_client:
+        print("OpenAI client not available. Please check your .env file.")
+        return {}
+
+    powertrain_mapping = {}
+
+    try:
+        # Create a prompt asking for powertrain types
+        trims_text = "\n".join(trim_list)
+
+        prompt = f"""For each of the following car trim names, classify the powertrain type.
+You must respond ONLY with one of these exact powertrain types:
+- Internal_Combustion_Engine (for traditional gasoline, diesel, or other fuel engines)
+- Electric (for pure battery electric vehicles with no combustion engine)
+- Hybrid (for vehicles that combine combustion engine with electric motor, non-pluggable)
+- Plug_in_Hybrid_PHEV (for vehicles that can be plugged in to charge and have both combustion engine and electric motor)
+- Mild_Hybrid_MHEV (for vehicles with small electric motor that assists combustion engine but cannot drive alone)
+- Range_Extended_Electric_Vehicle_REEV_EREV (for electric vehicles with small combustion engine used only to charge battery)
+
+Please respond in the format: trim_name:powertrain_type (use exact type names from above)
+
+Car trims:
+{trims_text}
+
+Example format:
+2026 A/T / GL:Internal_Combustion_Engine
+2025 A/T / CONNECT PLUS:Electric
+XLE AWD Hybrid:Hybrid
+330e M Sport:Plug_in_Hybrid_PHEV
+A3 40 TFSI S Line:Mild_Hybrid_MHEV
+i3 REx:Range_Extended_Electric_Vehicle_REEV_EREV
+
+IMPORTANT: Only use these exact powertrain type names. Be accurate based on the vehicle trim specifications."""
+
+        print(f"Querying OpenAI GPT-5 for powertrain types of {len(trim_list)} trims...")
+
+        # Make API call to OpenAI using GPT-4
+        response = openai_client.chat.completions.create(
+            model="gpt-5",
+            messages=[
+                {"role": "system", "content": "You are an automotive expert that accurately classifies vehicle powertrains. Always respond in the exact format requested using only the allowed powertrain types."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=2000,
+            temperature=0.1
+        )
+
+        # Parse the response
+        response_text = response.choices[0].message.content.strip()
+        print(f"OpenAI GPT-5 Response for powertrain types (showing first 500 chars):\n{response_text[:500]}...")
+
+        # Parse the response to extract trim:powertrain_type mappings
+        lines = response_text.split('\n')
+        for line in lines:
+            line = line.strip()
+            if ':' in line:
+                parts = line.split(':', 1)
+                if len(parts) == 2:
+                    trim_text = parts[0].strip().lower()
+                    powertrain_type = parts[1].strip()
+
+                    # Validate powertrain type
+                    allowed_types = [
+                        'Internal_Combustion_Engine',
+                        'Electric',
+                        'Hybrid',
+                        'Plug_in_Hybrid_PHEV',
+                        'Mild_Hybrid_MHEV',
+                        'Range_Extended_Electric_Vehicle_REEV_EREV'
+                    ]
+                    if powertrain_type not in allowed_types:
+                        print(f"Warning: Invalid powertrain type '{powertrain_type}' for '{trim_text}', skipping...")
+                        continue
+
+                    # Match the trim from our original list (case insensitive)
+                    for original_trim in trim_list:
+                        if original_trim.lower() == trim_text:
+                            powertrain_mapping[original_trim] = powertrain_type
+                            break
+
+        print(f"Successfully extracted {len(powertrain_mapping)} powertrain types from OpenAI GPT-4")
+        return powertrain_mapping
+
+    except Exception as e:
+        print(f"Error calling OpenAI API for powertrain types: {e}")
+        print("Please make sure you have set your OpenAI API key in .env file and have sufficient credits.")
+        return {}
+
 def get_car_body_types_with_openai(brand_model_combinations):
     """
     Use OpenAI API to get body types for car brand-model combinations using GPT-4.
@@ -578,6 +680,95 @@ def main():
             print("No missing Origin_Country values found")
     else:
         print("Columns 'Origin_Country' or 'car_brand' not found, skipping origin country filling.")
+
+    # Remove duplicate rows (keep first occurrence)
+    rows_before_dedup = len(df)
+    df = df.drop_duplicates(keep='first')
+    rows_after_dedup = len(df)
+    duplicates_removed = rows_before_dedup - rows_after_dedup
+
+    if duplicates_removed > 0:
+        print(f"\nRemoved {duplicates_removed} duplicate rows")
+        print(f"Rows before deduplication: {rows_before_dedup}")
+        print(f"Rows after deduplication: {rows_after_dedup}")
+    else:
+        print("\nNo duplicate rows found")
+
+    # Create powertrain_type column after body_type using OpenAI
+    if "body_type" in df.columns and "car_trim" in df.columns:
+        # Find the position of body_type column
+        body_type_pos = df.columns.get_loc("body_type")
+
+        # Get unique trims (trims are unique)
+        unique_trims = df["car_trim"].unique().tolist()
+
+        print(f"\nFound {len(unique_trims)} unique trims for powertrain classification")
+
+        # Use OpenAI to get powertrain types for all trims (in batches)
+        if OPENAI_AVAILABLE:
+            print("Using OpenAI GPT-5 to determine powertrain types for all trims...")
+
+            # Process trims in batches to avoid token limits
+            batch_size = 30  # Process 30 trims at a time
+            powertrain_mapping = {}
+
+            for i in range(0, len(unique_trims), batch_size):
+                batch = unique_trims[i:i + batch_size]
+                batch_num = (i // batch_size) + 1
+                total_batches = (len(unique_trims) + batch_size - 1) // batch_size
+
+                print(f"Processing batch {batch_num}/{total_batches} ({len(batch)} trims)...")
+                batch_mapping = get_powertrain_types_with_openai(batch)
+
+                if batch_mapping:
+                    powertrain_mapping.update(batch_mapping)
+                    print(f"Batch {batch_num} completed successfully: {len(batch_mapping)} powertrain types extracted")
+                else:
+                    print(f"Batch {batch_num} failed - no powertrain types extracted")
+
+            print(f"Batch processing completed. Total powertrain types extracted: {len(powertrain_mapping)}")
+
+            if powertrain_mapping:
+                # Create powertrain_type column and fill it
+                df["powertrain_type"] = pd.NA
+
+                for trim, powertrain_type in powertrain_mapping.items():
+                    mask = df["car_trim"] == trim
+                    df.loc[mask, "powertrain_type"] = powertrain_type
+
+                # Move the powertrain_type column to be right after body_type
+                powertrain_type_column = df.pop("powertrain_type")
+                df.insert(body_type_pos + 1, "powertrain_type", powertrain_type_column)
+
+                # Count successful mappings
+                filled_count = df["powertrain_type"].notna().sum()
+                total_count = len(df)
+                unfilled_count = total_count - filled_count
+
+                print(f"Successfully added 'powertrain_type' column after 'body_type'")
+                print(f"Filled powertrain type for {filled_count} out of {total_count} cars")
+                if unfilled_count > 0:
+                    unfilled_trims = df[df["powertrain_type"].isna()]["car_trim"].unique()
+                    print(f"Could not determine powertrain type for {unfilled_count} cars from {len(unfilled_trims)} trims")
+                    print(f"First 5 missing trims:")
+                    for trim in list(unfilled_trims)[:5]:
+                        print(f"  - {trim}")
+
+                # Show powertrain type distribution
+                powertrain_counts = df["powertrain_type"].value_counts()
+                print(f"Powertrain type distribution:")
+                for powertrain_type, count in powertrain_counts.items():
+                    print(f"  {powertrain_type}: {count}")
+            else:
+                # Create empty powertrain_type column if OpenAI fails
+                df.insert(body_type_pos + 1, "powertrain_type", pd.NA)
+                print("Failed to get powertrain types from OpenAI. Created empty 'powertrain_type' column.")
+        else:
+            # Create empty powertrain_type column if OpenAI not available
+            df.insert(body_type_pos + 1, "powertrain_type", pd.NA)
+            print("OpenAI not available. Created empty 'powertrain_type' column after 'body_type'")
+    else:
+        print("Required columns for powertrain classification not found, skipping powertrain type creation.")
 
     # Add id column as the first column
     df.insert(0, 'id', range(1, len(df) + 1))
