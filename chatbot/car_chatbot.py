@@ -84,9 +84,10 @@ class CarChatbot:
 
     def start_conversation(self):
         """Start the interactive chat interface."""
-        # Display greeting
-        greeting = self.config.get('conversation', {}).get('greeting',
-                                                           "Hello! I'm your AI car advisor. How can I help you today?")
+        # Display greeting - require it from config
+        greeting = self.config.get('conversation', {}).get('greeting')
+        if not greeting:
+            raise ValueError("Greeting message not found in configuration file")
         print("\n" + "="*80)
         print("Welcome to the Egyptian Car Market Chatbot!")
         print("="*80)
@@ -372,7 +373,10 @@ Just ask naturally - I'll understand! 🤖
 def main():
     """Main entry point for the chatbot."""
     try:
-        chatbot = CarChatbot()
+        # Determine correct config path relative to project root
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        config_path = os.path.join(project_root, "chatbot", "chatbot_config.yaml")
+        chatbot = CarChatbot(config_path=config_path)
         chatbot.start_conversation()
     except ValueError as e:
         print(f"Setup Error: {e}")
