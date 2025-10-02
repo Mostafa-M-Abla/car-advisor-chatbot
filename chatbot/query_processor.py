@@ -355,6 +355,9 @@ Examples:
 
             sql_query = sql_query.strip()
 
+            # Validate and clean the SQL query for security
+            sql_query = self.validate_and_clean_sql(sql_query)
+
             self.logger.info(f"Generated SQL: {sql_query}")
             return sql_query
 

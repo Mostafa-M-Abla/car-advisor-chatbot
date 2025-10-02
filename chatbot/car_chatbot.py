@@ -93,7 +93,7 @@ class CarChatbot:
         print("="*80)
         print(greeting)
         print("\n" + "-"*80)
-        print("Commands: 'help' for assistance, 'stats' for session info, 'clear' to reset, 'quit' to exit")
+        print("Commands: 'help' for assistance, 'stats' for session info, 'clear' to reset, 'export' to save, 'quit' to exit")
         print("-"*80 + "\n")
 
         while True:
@@ -116,6 +116,9 @@ class CarChatbot:
                     continue
                 elif user_input.lower() == 'clear':
                     self._clear_conversation()
+                    continue
+                elif user_input.lower() == 'export':
+                    self._export_conversation()
                     continue
 
                 # Process the user's message
@@ -317,6 +320,7 @@ BY BODY TYPE:
    • 'help' - Show this help
    • 'stats' - Show session statistics
    • 'clear' - Clear conversation history
+   • 'export' - Export conversation to JSON file
    • 'quit' - Exit the chatbot
 
 Just ask naturally - I'll understand! 🤖
@@ -354,6 +358,17 @@ Just ask naturally - I'll understand! 🤖
         """Clear conversation history."""
         self.conversation_manager.clear_conversation()
         print("✨ Conversation history cleared! Starting fresh.")
+
+    def _export_conversation(self):
+        """Export conversation history to a JSON file."""
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"conversation_export_{timestamp}.json"
+
+        if self.conversation_manager.export_conversation(filename):
+            print(f"✅ Conversation exported successfully to: {filename}")
+        else:
+            print("❌ Failed to export conversation. Please try again.")
 
     def _handle_goodbye(self):
         """Handle goodbye and show session summary."""
