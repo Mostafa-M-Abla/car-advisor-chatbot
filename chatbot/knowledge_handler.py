@@ -279,34 +279,6 @@ class KnowledgeHandler:
             self.logger.error(f"Error getting market insights: {e}")
             return "I'm unable to provide market insights at the moment. Please try again later."
 
-    def get_information_by_category(self, category: str, user_query: str) -> str:
-        """
-        Get information by category (reliability, reviews, specifications, etc.).
-
-        Args:
-            category: Type of information requested
-            user_query: Original user query
-
-        Returns:
-            Category-specific response
-        """
-        category_handlers = {
-            'reliability': lambda: self.get_car_information(f"reliability information: {user_query}"),
-            'reviews': lambda: self.get_car_information(f"reviews and ratings: {user_query}"),
-            'specifications': lambda: self.get_car_information(f"technical specifications: {user_query}"),
-            'performance': lambda: self.get_car_information(f"performance and driving experience: {user_query}"),
-            'maintenance': lambda: self.get_car_information(f"maintenance costs and service: {user_query}"),
-            'comparison': lambda: self.get_car_information(f"car comparison: {user_query}"),
-            'market': lambda: self.get_market_insights(user_query),
-            'history': lambda: self.get_car_information(f"history and background: {user_query}")
-        }
-
-        handler = category_handlers.get(category.lower())
-        if handler:
-            return handler()
-        else:
-            return self.get_car_information(user_query)
-
     def is_external_knowledge_query(self, query: str) -> tuple[bool, str]:
         """
         Determine if a query requires external knowledge beyond database specs.
