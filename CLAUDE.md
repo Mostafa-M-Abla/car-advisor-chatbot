@@ -10,14 +10,12 @@ car-selection-chatbot/
 ├── web_scrapper/                    # Web scraping module
 │   ├── car_scraper.py              # Universal web scraper (62+ brands)
 │   ├── features_mapping.csv        # Field mapping configuration
-│   ├── scrapped_data.csv           # Raw scraped car data
-│   ├── scrapper_error_log.txt      # Scraper error logging
-│   └── claude.md                   # Scraper documentation
+│   └── scrapped_data.csv           # Raw scraped car data
 │
 ├── chatbot/                        # Core chatbot system components
 │   ├── car_chatbot.py              # Main orchestrator and conversation manager
 │   ├── query_processor.py          # Natural language to SQL conversion
-│   ├── response_generator.py       # GPT-4.1 powered response generation
+│   ├── response_generator.py       # GPT-4o powered response generation
 │   ├── conversation_manager.py     # Memory, context, and user preferences
 │   ├── knowledge_handler.py        # External automotive knowledge via LLM
 │   └── chatbot_config.yaml         # Comprehensive chatbot configuration
@@ -30,11 +28,16 @@ car-selection-chatbot/
 │   ├── schema.yaml                 # Database schema definition
 │   └── synonyms.yaml               # Natural language synonym mappings
 │
+├── evaluation/                     # Evaluation and testing module
+│   └── run_evaluation.py           # Chatbot performance evaluation script
+│
 ├── scrapped_data_postprocessing.py # AI-enhanced data processing pipeline
+├── power_train.csv                 # Powertrain type classifications
 ├── processed_data.csv              # Clean, AI-enhanced car data
 ├── run_chatbot.py                  # Entry point and launcher script
 ├── .env                           # Environment variables (API keys)
 ├── requirements.txt               # Python dependencies
+├── postprocessing_output.log      # Data processing logs
 ├── chatbot.log                    # Runtime logs and debugging
 └── CLAUDE.md                      # This comprehensive documentation
 ```
@@ -125,7 +128,7 @@ Conversational Response → User
 - Database validation and health checks
 
 ### 4. ResponseGenerator (`chatbot/response_generator.py`)
-**GPT-4.1 powered conversational response creation**
+**GPT-4o powered conversational response creation**
 - **Intelligent Clarification**: LLM-based decision making for when to ask questions
 - **Result Presentation**: Formats search results with Egyptian market context
 - **Alternative Suggestions**: Provides helpful alternatives when no results found
@@ -164,7 +167,7 @@ Conversational Response → User
 - **Market Insights**: Egyptian market trends, popular segments, buying patterns
 - **Safety**: Crash test ratings, safety features analysis
 
-### 2. Data Processing Pipeline (`scrapped_data_postprocessing.py`)
+### 7. Data Processing Pipeline (`scrapped_data_postprocessing.py`)
 - **Data Cleaning**: Removes invalid entries, normalizes columns
 - **AI Enhancement**: Uses OpenAI GPT-4 for:
   - Body type classification (sedan, hatchback, crossover/suv, coupe, convertible, van)
@@ -178,6 +181,14 @@ Conversational Response → User
 - **Column Standardization**: Renames and reorganizes columns
 - **Brand Name Normalization**: Fixes brand names (moris-garage → MG, CitroÃ«n → Citroen)
 - **Duplicate Removal**: Eliminates duplicate entries based on car_trim
+
+### 8. Evaluation Module (`evaluation/run_evaluation.py`)
+**Chatbot performance evaluation and testing**
+- **Automated Testing**: Runs predefined test cases to evaluate chatbot responses
+- **Performance Metrics**: Measures response quality, accuracy, and consistency
+- **Regression Testing**: Ensures updates don't break existing functionality
+- **Query Validation**: Tests various query types (price ranges, features, complex filters)
+- **Output Analysis**: Evaluates response format, clarity, and helpfulness
 
 ## Configuration System
 
@@ -450,6 +461,18 @@ python run_chatbot.py
 
 # Alternative: Direct module execution
 python chatbot/car_chatbot.py
+```
+
+### Running Evaluation Tests
+```bash
+# Run chatbot evaluation tests
+python evaluation/run_evaluation.py
+
+# This will test various query types and report on:
+# - Query understanding accuracy
+# - Response quality and format
+# - Feature extraction correctness
+# - Edge case handling
 ```
 
 ### Interactive Commands
