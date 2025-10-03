@@ -79,56 +79,50 @@ examples = [
         "outputs": {"answer": "Sorry I didn't understand your request. I am an AI chatbot that can help you select a car in the egyptian market, Could you tell me about your budget and the type of car you are looking for?"},
     },
     {
-        "inputs": {"question": "What is the cheapest crossover with panoramic sunroof"},
+        "inputs": {"question": "What is the cheapest german crossover with panoramic sunroof"},
         "outputs": {
             "answer": "The cheapest crossover with panoramic sunroof is the Opel Crossland A/T / Top Line"},
     },
     {
-        "inputs": {"question": ""},
+        "inputs": {"question": "In one sentence tell me which is a more reliable car, corolla or elantra?"},
         "outputs": {
-            "answer": ""},
+            "answer": "The Corolla is generally considered more reliable than the Elantra."},
     },
     {
-        "inputs": {"question": ""},
+        "inputs": {"question": "In one sentence: Which car sells smore in egypt mercedes or elantra?"},
         "outputs": {
-            "answer": ""},
+            "answer": "Probably Elantra sells more than Meredes"},
     },
     {
-        "inputs": {"question": ""},
+        "inputs": {"question": "Which brand provides better service in egypt Hyundai or Fiat"},
         "outputs": {
-            "answer": ""},
+            "answer": "Hyundai provides better service in egypt"},
     },
     {
-        "inputs": {"question": ""},
+        "inputs": {"question": "List the cheapest 5 car sedan models in egypt that are non chinese and are not manual"},
         "outputs": {
-            "answer": ""},
+            "answer": "1- proton saga 2- Nissan sunny 3- Renault Taliant 4- Mitsubishi Attrage 5- Chevrolet Optra"},
     },
     {
-        "inputs": {"question": ""},
+        "inputs": {"question": "Good Car"},
         "outputs": {
-            "answer": ""},
+            "answer": "Sorry, the request is not clear. I am an AI chatbot that can help you select a car in the egyptian market, Could you tell me about your budget and the type of car you are looking for?"},
     },
     {
-        "inputs": {"question": ""},
+        "inputs": {"question": "I want the cheapest electric car with at least 500 km range"},
         "outputs": {
-            "answer": ""},
+            "answer": "Chery EQ7 2026 Automatic has a range of 520 km and costs 1599000 EGP"},
     },
     {
-        "inputs": {"question": ""},
+        "inputs": {"question": "What is the range of the Zeekr X Longrange?"},
         "outputs": {
-            "answer": ""},
+            "answer": "the range is about 440 km"},
     },
-    {
-        "inputs": {"question": ""},
-        "outputs": {
-            "answer": ""},
-    },
-
 ]
 
 
 # Create the dataset and examples in LangSmith
-dataset_name = "Car Selector Chatbot Evaluation Dataset - 1"
+dataset_name = "Car Selector Chatbot Evaluation Dataset - 2"
 dataset = client.create_dataset(dataset_name=dataset_name)
 client.create_examples(
     dataset_id=dataset.id,
