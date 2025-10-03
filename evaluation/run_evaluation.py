@@ -118,11 +118,21 @@ examples = [
         "outputs": {
             "answer": "the range is about 440 km"},
     },
+    {
+        "inputs": {"question": "What was my first question?"},
+        "outputs": {
+            "answer": "test"},
+    },
+    {
+        "inputs": {"question": "How many CC does the elantra's engine have?"},
+        "outputs": {
+            "answer": "test"},
+    },
 ]
 
 
 # Create the dataset and examples in LangSmith
-dataset_name = "Car Selector Chatbot Evaluation Dataset - 2"
+dataset_name = "Car Selector Chatbot Evaluation Dataset - 5"
 dataset = client.create_dataset(dataset_name=dataset_name)
 client.create_examples(
     dataset_id=dataset.id,
