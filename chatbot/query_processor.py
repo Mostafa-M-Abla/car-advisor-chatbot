@@ -330,10 +330,12 @@ Instructions:
 - For body types, use exact values: sedan, hatchback, crossover/suv, coupe, convertible, van
 - For boolean features (ABS, ESP, etc.), use = 1 for presence
 - Order by Price_EGP ASC for budget-conscious results
+- ALWAYS include LIMIT clause (default LIMIt 20, user can ask for LIMIT less than 20, but never more than 20)
 
 Examples:
-- "crossovers under 2M EGP" → SELECT * FROM cars WHERE body_type = 'crossover/suv' AND Price_EGP < 2000000 ORDER BY Price_EGP ASC
-- "non-Chinese automatic cars with ESP" → SELECT * FROM cars WHERE Origin_Country != 'china' AND Transmission_Type = 'automatic' AND ESP = 1 ORDER BY Price_EGP ASC"""
+- "crossovers under 2M EGP" → SELECT * FROM cars WHERE body_type = 'crossover/suv' AND Price_EGP < 2000000 ORDER BY Price_EGP ASC LIMIT 20
+- "non-Chinese automatic cars with ESP" → SELECT * FROM cars WHERE Origin_Country != 'china' AND Transmission_Type = 'automatic' AND ESP = 1 ORDER BY Price_EGP ASC LIMIT 20
+- "show me 5 sedans" → SELECT * FROM cars WHERE body_type = 'sedan' ORDER BY Price_EGP ASC LIMIT 5"""
 
             response = self.openai_client.chat.completions.create(
                 model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
@@ -390,12 +392,13 @@ Examples:
     def validate_and_clean_sql(self, sql_query: str) -> str:
         """
         Validate and clean the generated SQL query.
+        Adds LIMIT 20 if no LIMIT clause exists to reduce costs and improve performance.
 
         Args:
             sql_query: Raw SQL query
 
         Returns:
-            Cleaned and validated SQL query
+            Cleaned and validated SQL query with LIMIT clause
         """
         if not sql_query:
             return ""
@@ -415,5 +418,12 @@ Examples:
         # Ensure proper table name
         if 'from cars' not in sql_lower:
             return ""
+
+        # Add LIMIT 20 if no LIMIT clause exists (to reduce costs and improve performance)
+        if 'limit' not in sql_lower:
+            sql_query = sql_query.strip()
+            if sql_query.endswith(';'):
+                sql_query = sql_query[:-1].strip()
+            sql_query += ' LIMIT 20'
 
         return sql_query.strip()
