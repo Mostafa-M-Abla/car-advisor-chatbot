@@ -29,7 +29,7 @@ car-selection-chatbot/
 │   └── synonyms.yaml               # Natural language synonym mappings
 │
 ├── evaluation/                     # Evaluation and testing module
-│   └── run_evaluation.py           # Chatbot performance evaluation script
+│   └── run_evaluation.py           # Chatbot performance evaluation script (auto-updates dataset)
 │
 ├── scrapped_data_postprocessing.py # AI-enhanced data processing pipeline
 ├── power_train.csv                 # Powertrain type classifications
@@ -179,6 +179,7 @@ Conversational Response → User
 - **Price Filtering**: Removes entries with invalid pricing
 - **Year Filtering**: Keeps only recent model years based on current date
 - **Column Standardization**: Renames and reorganizes columns
+- **Transmission Type Normalization**: Standardizes transmission types (automatic → automatic_traditional, cvt → automatic_cvt, dsg → automatic_dsg)
 - **Brand Name Normalization**: Fixes brand names (moris-garage → MG, CitroÃ«n → Citroen)
 - **Duplicate Removal**: Eliminates duplicate entries based on car_trim
 
@@ -189,6 +190,8 @@ Conversational Response → User
 - **Regression Testing**: Ensures updates don't break existing functionality
 - **Query Validation**: Tests various query types (price ranges, features, complex filters)
 - **Output Analysis**: Evaluates response format, clarity, and helpfulness
+- **Dataset Management**: Automatically updates existing dataset instead of requiring new names for each run
+- **LangSmith Integration**: Uses LangSmith for experiment tracking and evaluation
 
 ## Configuration System
 
@@ -312,7 +315,7 @@ Customizable error messages for different scenarios:
 - `Battery_Range_km`: Electric range for electric/hybrid vehicles
 
 ### Transmission & Drivetrain
-- `Transmission_Type`: Type of transmission
+- `Transmission_Type`: Type of transmission (standardized: automatic_traditional, automatic_cvt, automatic_dsg, manual)
 - `Number_transmission_Speeds`: Number of gears
 - `Traction_Type`: Drive type (FWD, RWD, AWD)
 
