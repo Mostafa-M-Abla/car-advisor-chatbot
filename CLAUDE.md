@@ -53,9 +53,14 @@ User Input → CarChatbot (Orchestrator)
     ↓
     ├── ConversationManager (Memory & Context)
     ├── KnowledgeHandler (External Knowledge Check)
+    │       ↓
+    │   Unified get_knowledge_response() → GPT-4.1 → Response
+    │
     └── Database Query Path:
-        ├── QueryProcessor (NL → SQL)
-        ├── DatabaseHandler (Execution & Results)
+        ├── QueryProcessor (NL → Criteria + SQL via GPT-4.1)
+        ├── DatabaseHandler (Dual Execution System)
+        │   ├── Primary: execute_query(AI-generated SQL) ✅
+        │   └── Fallback: search_cars(criteria) ⚠️ (logged)
         └── ResponseGenerator (GPT-4.1 Response)
     ↓
 Conversational Response → User
@@ -65,10 +70,15 @@ Conversational Response → User
 1. **CarChatbot** receives user input and orchestrates the entire flow
 2. **ConversationManager** provides context and tracks user preferences
 3. **KnowledgeHandler** determines if query needs external automotive knowledge
-4. **QueryProcessor** converts natural language to SQL using GPT-4.1 and schema knowledge
-5. **DatabaseHandler** executes queries and formats results
+   - Simplified: Single `get_knowledge_response()` method handles all external queries
+   - No rigid categorization - GPT-4.1 adapts response naturally
+4. **QueryProcessor** converts natural language to both structured criteria AND SQL using GPT-4.1
+5. **DatabaseHandler** executes queries using dual system:
+   - **Primary**: AI-generated SQL (flexible, context-aware)
+   - **Fallback**: Non-AI `search_cars()` with comprehensive logging when AI fails
 6. **ResponseGenerator** creates conversational responses with intelligent clarification logic
 7. **Configuration system** provides centralized model and prompt management
+8. **Logging system** tracks AI failures, fallback usage, and system behavior
 
 ### Design Principles
 - **Modular Components**: Each component has a single, well-defined responsibility
@@ -76,8 +86,20 @@ Conversational Response → User
 - **Intelligent Routing**: Automatic detection of database vs. knowledge queries
 - **Conversation Memory**: Tracks user preferences and conversation history
 - **Egyptian Market Focus**: Specialized for local automotive market needs
+- **Comprehensive Monitoring**: Detailed logging tracks AI usage, fallbacks, and system behavior
 
 ## Key Features
+
+### System Monitoring & Logging
+**Comprehensive visibility into system behavior:**
+- **AI Usage Tracking**: Logs when AI-generated SQL is successfully used
+- **Fallback Monitoring**: Warning-level logs when non-AI fallback is triggered
+  - Logs reason: No SQL generated vs. SQL failed validation
+  - Includes user query and criteria used for fallback
+  - Helps identify AI performance issues
+- **Query Validation**: Tracks when generated SQL fails safety checks
+- **Performance Insights**: Monitor which queries require fallback vs. AI handling
+- **Debugging Support**: Detailed context for troubleshooting query processing issues
 
 ### 1. Advanced Conversational AI System
 - **LLM-Integrated Clarification**: Intelligent decision-making for when clarification is needed
@@ -121,11 +143,27 @@ Conversational Response → User
 - **Statistics**: Provides database metrics and insights
 - **Performance**: Optimized queries with proper indexing
 
+**Dual Query Execution System:**
+1. **Primary: AI-Generated SQL** (GPT-4.1)
+   - Flexible natural language understanding
+   - Complex query handling with context awareness
+   - Validated for safety before execution
+   - Logged for monitoring and debugging
+
+2. **Fallback: Non-AI `search_cars()`**
+   - Pure Python structured search (no AI)
+   - Activated when AI fails to generate SQL or SQL fails validation
+   - Builds SQL programmatically from criteria dictionary
+   - Supports: price ranges, body type, origin, transmission, features, brand
+   - Limitations: predefined criteria only, simple AND logic, no context understanding
+   - **Comprehensive logging** tracks when/why fallback is used
+
 **Key Features:**
 - Egyptian Pound formatting with commas
 - Feature categorization (safety, comfort, technology)
 - Car comparison utilities
 - Database validation and health checks
+- Fallback monitoring with detailed warning logs
 
 ### 4. ResponseGenerator (`chatbot/response_generator.py`)
 **GPT-4o powered conversational response creation**
@@ -154,18 +192,18 @@ Conversational Response → User
 - Brand preferences and exclusions
 
 ### 6. KnowledgeHandler (`chatbot/knowledge_handler.py`)
-**External automotive knowledge via LLM**
-- **Query Classification**: Determines if query needs external knowledge
-- **Automotive Expertise**: Provides reliability, reviews, market insights
-- **Car Comparisons**: Detailed comparisons using both database and general knowledge
-- **Market Analysis**: Egyptian automotive market trends and recommendations
+**Simplified external automotive knowledge via LLM**
+- **Query Classification**: Determines if query needs external knowledge beyond database specs
+- **Unified Knowledge Response**: Single flexible method handles all automotive knowledge queries
+- **Context-Aware**: Integrates conversation history and database context automatically
+- **Adaptive Responses**: GPT-4.1 naturally adapts response style to match the question
 
-**Knowledge Categories:**
-- **Reliability**: Common issues, maintenance costs, long-term ownership
-- **Reviews**: Professional and user reviews, market reputation
-- **Comparisons**: Side-by-side analysis with recommendations
-- **Market Insights**: Egyptian market trends, popular segments, buying patterns
-- **Safety**: Crash test ratings, safety features analysis
+**Unified Approach:**
+- Replaced 5 specialized methods with one `get_knowledge_response()` method
+- Handles all query types: reliability, reviews, comparisons, market insights, safety, history
+- Leverages GPT-4.1's intelligence to provide appropriate response format
+- Simpler, more maintainable, and more flexible for diverse user questions
+- Automatically integrates database context when specific cars are mentioned
 
 ### 7. Data Processing Pipeline (`scrapped_data_postprocessing.py`)
 - **Data Cleaning**: Removes invalid entries, normalizes columns
@@ -267,12 +305,19 @@ Customizable error messages for different scenarios:
 - ❓ "Good car" (extremely vague) → Requests specific requirements
 
 ### External Knowledge Integration
-**Beyond Database Queries:**
-- **Reliability Information**: "Is the Toyota Camry reliable?" → Detailed reliability analysis
-- **Car Comparisons**: "Honda Civic vs Toyota Corolla" → Side-by-side analysis
+**Simplified, Unified Approach:**
+The system now uses a single, flexible method that automatically handles all types of automotive knowledge queries without rigid categorization. GPT-4.1 naturally adapts its response to match the question type.
+
+**Example Queries Handled:**
+- **Reliability**: "Is the Toyota Camry reliable?" → Natural reliability analysis
+- **Comparisons**: "Honda Civic vs Toyota Corolla" → Adaptive side-by-side comparison
 - **Market Insights**: "What cars are popular in Egypt?" → Market trends and preferences
 - **Historical Data**: "When was the BMW X5 first introduced?" → Brand and model history
-- **Maintenance Guidance**: "Cost to maintain a BMW?" → Ownership cost analysis
+- **Maintenance**: "Cost to maintain a BMW?" → Ownership cost analysis
+- **Reviews**: "What do people think of the Hyundai Elantra?" → Balanced review summary
+- **Safety**: "Is the Volvo XC90 safe?" → Safety ratings and features analysis
+
+**Key Improvement**: Removed rigid category routing and specialized prompts. The system now flows conversation context and database information naturally to GPT-4.1, which intelligently determines the appropriate response format.
 
 ### Conversation Memory & Learning
 - **Preference Tracking**: Learns user's budget patterns, body type preferences, feature requirements
