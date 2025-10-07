@@ -125,14 +125,45 @@ class DatabaseHandler:
 
     def search_cars(self, criteria: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
-        Search cars based on structured criteria.
+        Search cars based on structured criteria (NON-AI FALLBACK METHOD).
+
+        This method is a pure Python fallback that builds SQL queries programmatically
+        without using AI. It's used when GPT-4.1 fails to generate a valid SQL query
+        or when the generated SQL fails validation checks.
+
+        How it works:
+        1. Starts with base query: "SELECT * FROM cars WHERE 1=1"
+        2. Iterates through criteria dictionary keys
+        3. Appends SQL WHERE clauses based on recognized keys
+        4. Uses parameterized queries for safety (prevents SQL injection)
+        5. Builds query using string concatenation (no AI involved)
+
+        Supported criteria keys:
+        - 'min_price': Minimum price in EGP (adds: AND Price_EGP >= ?)
+        - 'max_price': Maximum price in EGP (adds: AND Price_EGP <= ?)
+        - 'body_type': Body type filter (adds: AND body_type = ?)
+        - 'origin_country': Origin country filter (adds: AND Origin_Country = ?)
+        - 'exclude_origin': Exclude origin country (adds: AND Origin_Country != ?)
+        - 'transmission': Transmission type (adds: AND Transmission_Type = ?)
+        - 'brand': Car brand filter (adds: AND car_brand = ?)
+        - 'limit': Result limit (default: 10)
+        - Feature columns (ABS, ESP, etc.): Adds AND feature = 1
+
+        Limitations vs AI-generated SQL:
+        - Only supports predefined criteria keys (not flexible)
+        - Cannot handle complex natural language variations
+        - Fixed logic for combining criteria (always AND)
+        - Limited to simple WHERE clauses
+        - Cannot understand context or user intent nuances
 
         Args:
-            criteria: Dictionary with search criteria
+            criteria: Dictionary with search criteria (see supported keys above)
 
         Returns:
-            List of matching cars
+            List of matching cars (limited to 10 by default)
         """
+        self.logger.info(f"search_cars() invoked (NON-AI fallback) with criteria: {criteria}")
+
         query_parts = ["SELECT * FROM cars WHERE 1=1"]
         params = []
 
