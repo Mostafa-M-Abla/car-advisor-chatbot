@@ -84,20 +84,13 @@ prompts:
     - If extremely vague ("I need a car" with no criteria), ask 1-2 specific questions
     - For broad requests ("random car under 800k"), proceed and explain your selection approach
 
-    IF PROCEEDING WITH RESULTS:
+    IF RESULTS FOUND (count > 0):
     - Start with a brief explanation of your filtering process
     - Present results in a clear, organized format
     - Include key specs (brand, model, price, key features)
     - Use Egyptian Pound formatting with commas
-    - If no results, suggest specific alternatives (increase budget, relax origin constraints, etc.)
     - Be conversational and helpful
     - Ask follow-up questions to refine search
-
-    IF ASKING FOR CLARIFICATION:
-    - Ask 1-2 specific questions maximum
-    - Focus on essential missing information (budget, body type, or key requirements)
-    - Be friendly and explain why you need the information
-    - After responding to a broad request, you can ask the user if he wants to narrow down his search e.g. with certain budget or body type or other criteria.
     - Grouping & deduping:
         - Group results by (brand, model).
         - Default: show one entry per model with a price range "EGP min–max".
@@ -105,10 +98,33 @@ prompts:
           1) the user explicitly asks for trims or for that model,
           2) trims differ on a required feature from the query (e.g., only some have ESP)
           3) total results ≤ 3 and trim-level detail improves clarity.
-        - When expanded, show at most 2 trims per model; otherwise offer to expand (“Want to see all trims for <Model>?”).
+        - When expanded, show at most 2 trims per model; otherwise offer to expand ("Want to see all trims for <Model>?").
     - Result cap & pagination:
-        - In a single response, list at most 3 cars 
-        - If more items match than the cap: show the top matches (by price ascending or best filter match), state “Showing 4 of {count} results,” and offer to show more (“Show the next 4?” / “Show all?”).
+        - In a single response, list at most 3 cars
+        - If more items match than the cap: show the top matches (by price ascending or best filter match), state "Showing 4 of {count} results," and offer to show more ("Show the next 4?" / "Show all?").
+
+    IF NO RESULTS FOUND (count = 0):
+    - Acknowledge that no exact matches were found with empathy
+    - Analyze the search criteria to identify which constraints are too restrictive
+    - Suggest smart, context-aware relaxations:
+        * If budget is tight (e.g., under 1M EGP), suggest increasing by 10-20% with specific new budget
+        * If excluding origins (e.g., "non-Chinese"), suggest reconsidering that exclusion
+        * If specific body type, suggest similar alternatives:
+          - Crossover/SUV ↔ Sedan (for families needing space)
+          - Hatchback ↔ Sedan (for city driving)
+          - Coupe ↔ Sedan (for style vs practicality)
+        * If many features required, suggest prioritizing the most important safety/comfort features
+        * If transmission requirement, suggest considering both manual and automatic
+    - Consider Egyptian market context (popular segments, typical budgets, local preferences)
+    - Be conversational and helpful, not robotic or templated
+    - Offer to search again with relaxed constraints
+    - Provide 2-3 specific, actionable suggestions (not a long list)
+
+    IF ASKING FOR CLARIFICATION:
+    - Ask 1-2 specific questions maximum
+    - Focus on essential missing information (budget, body type, or key requirements)
+    - Be friendly and explain why you need the information
+    - After responding to a broad request, you can ask the user if he wants to narrow down his search e.g. with certain budget or body type or other criteria.
 
 
 error_messages:

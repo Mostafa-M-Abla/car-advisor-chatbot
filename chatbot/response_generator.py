@@ -137,7 +137,7 @@ class ResponseGenerator:
         if not results:
             return "No cars found matching your criteria."
 
-        summary = f"Found **{total_found}** car{'s' if total_found != 1 else ''} matching your criteria"
+        summary = f"Found **{total_found}** ca{'s' if total_found != 1 else ''} matching your criteria"
 
         if len(results) < total_found:
             summary += f" (showing top {len(results)})"
@@ -199,80 +199,10 @@ class ResponseGenerator:
             )
 
             generated_response = response.choices[0].message.content.strip()
-
-            # If GPT-4 response is too generic, enhance with formatted results
-            if len(generated_response) < 100 and results:
-                enhanced_response = self._enhance_response(generated_response, results, criteria)
-                return enhanced_response
-
             return generated_response
 
         except Exception as e:
             self.logger.error(f"Error generating response with GPT-4: {e}")
-            # Fallback to formatted results
-            return self._create_fallback_response(user_input, results, criteria)
+            # Return simple error message (consistent with other error handlers)
+            return "I'm sorry, I'm having trouble generating a response right now. Please try rephrasing your question or try again in a moment."
 
-    def _enhance_response(self, base_response: str,
-                         results: List[Dict[str, Any]],
-                         criteria: Dict[str, Any] = None) -> str:
-        """Enhance a basic response with detailed car information."""
-        enhanced = base_response + "\n\n"
-
-        if results:
-            enhanced += self.format_results_summary(results, len(results), "")
-
-            # Add helpful follow-up suggestions
-            if len(results) > 1:
-                enhanced += "\n💡 **Want to know more about any of these cars?** Just ask me about specific features, comparisons, or detailed specs!"
-
-        return enhanced
-
-    def _create_fallback_response(self, user_input: str,
-                                 results: List[Dict[str, Any]],
-                                 criteria: Dict[str, Any] = None) -> str:
-        """Create a fallback response when GPT-4 fails."""
-        if not results:
-            return self._generate_no_results_response(criteria)
-
-        response = f"Here are the cars I found based on your request:\n\n"
-        response += self.format_results_summary(results, len(results), user_input)
-
-        return response
-
-    def _generate_no_results_response(self, criteria: Dict[str, Any] = None) -> str:
-        """Generate response when no cars are found."""
-        response = "I couldn't find any cars matching your exact criteria. "
-
-        suggestions = []
-
-        if criteria:
-            if 'max_price' in criteria:
-                new_budget = int(criteria['max_price'] * 1.2)
-                suggestions.append(f"increase your budget to {self.format_price(new_budget)}")
-
-            if 'exclude_origin' in criteria:
-                suggestions.append(f"include cars from {criteria['exclude_origin'].title()}")
-
-            if 'body_type' in criteria:
-                alternative_types = {
-                    'sedan': 'hatchback',
-                    'hatchback': 'sedan',
-                    'crossover/suv': 'sedan',
-                    'coupe': 'sedan',
-                    'convertible': 'coupe'
-                }
-                alt = alternative_types.get(criteria['body_type'])
-                if alt:
-                    suggestions.append(f"consider {alt}s instead of {criteria['body_type']}s")
-
-            if 'transmission' in criteria and criteria['transmission'] == 'automatic':
-                suggestions.append("consider manual transmission")
-
-        if suggestions:
-            response += "Here are some suggestions:\n"
-            for i, suggestion in enumerate(suggestions[:3], 1):
-                response += f"{i}. {suggestion.title()}\n"
-
-        response += "\nWould you like me to try one of these alternatives?"
-
-        return response

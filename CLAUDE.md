@@ -166,11 +166,19 @@ Conversational Response → User
 - Fallback monitoring with detailed warning logs
 
 ### 4. ResponseGenerator (`chatbot/response_generator.py`)
-**GPT-4o powered conversational response creation**
+**Unified GPT-4.1 powered conversational response creation**
+- **Single Response Path**: All scenarios (results found, no results, clarifications) handled by one LLM call
 - **Intelligent Clarification**: LLM-based decision making for when to ask questions
 - **Result Presentation**: Formats search results with Egyptian market context
-- **Alternative Suggestions**: Provides helpful alternatives when no results found
+- **Smart No-Results Handling**: LLM analyzes criteria and suggests context-aware constraint relaxations
 - **Conversation Style**: Maintains friendly, helpful tone throughout interaction
+
+**Unified Approach:**
+- No rigid fallback methods - GPT-4.1 handles all scenarios intelligently
+- When results found: presents them conversationally with grouping and pagination
+- When no results: analyzes criteria and suggests smart relaxations (budget increase, origin reconsideration, body type alternatives, feature prioritization)
+- Considers Egyptian market context for all suggestions
+- Removes ~70 lines of rigid rule-based logic
 
 **Advanced Features:**
 - Smart result grouping by (brand, model) with price ranges
