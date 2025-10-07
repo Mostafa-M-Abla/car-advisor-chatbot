@@ -189,7 +189,7 @@ hints:
   Assembly_Country: "Final assembly country (TEXT). Use only if the user explicitly mentions assembly."
   Origin_Country: "Manufacturer country of origin (TEXT). Default country filter refers to this column unless user explicitly says 'assembly'."
   Price_EGP: "Price in Egyptian Pounds (EGP), INTEGER. Used for sorting and budget filters."
-  Transmission_Type: "Gearbox type (TEXT): automatic, dsg (dual-clutch), cvt, manual. Map 'auto/AT' to 'automatic'."
+  Transmission_Type: "Gearbox type (TEXT), Allowed values: automatic_traditional, automatic_dsg, automatic_cvt, manual."
   car_brand: "Brand/manufacturer (TEXT)."
   car_model: "Model name (TEXT)."
   car_trim: "Trim/variant (TEXT)."

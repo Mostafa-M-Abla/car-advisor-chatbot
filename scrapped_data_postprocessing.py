@@ -803,6 +803,30 @@ def main():
     df.insert(0, 'id', range(1, len(df) + 1))
     print(f"Added 'id' column as first column with values from 1 to {len(df)}")
 
+    # Replace Transmission_Type values
+    print("\nReplacing Transmission_Type values...")
+    if "Transmission_Type" in df.columns:
+        automatic_count = (df["Transmission_Type"] == "automatic").sum()
+        cvt_count = (df["Transmission_Type"] == "cvt").sum()
+        dsg_count = (df["Transmission_Type"] == "dsg").sum()
+
+        if automatic_count > 0:
+            df["Transmission_Type"] = df["Transmission_Type"].replace("automatic", "automatic_traditional")
+            print(f"Replaced 'automatic' with 'automatic_traditional' in {automatic_count} rows")
+
+        if cvt_count > 0:
+            df["Transmission_Type"] = df["Transmission_Type"].replace("cvt", "automatic_cvt")
+            print(f"Replaced 'cvt' with 'automatic_cvt' in {cvt_count} rows")
+
+        if dsg_count > 0:
+            df["Transmission_Type"] = df["Transmission_Type"].replace("dsg", "automatic_dsg")
+            print(f"Replaced 'dsg' with 'automatic_dsg' in {dsg_count} rows")
+
+        if automatic_count == 0 and cvt_count == 0 and dsg_count == 0:
+            print("No Transmission_Type values found to replace")
+    else:
+        print("Column 'Transmission_Type' not found, skipping transmission type replacements.")
+
     # Save back to processed_data.csv
     df.to_csv(dst, index=False)
     print(f"Processed data saved to '{dst}'")

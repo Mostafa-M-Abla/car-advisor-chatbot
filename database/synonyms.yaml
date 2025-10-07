@@ -97,10 +97,10 @@ predicates:
     value: italy
 value_aliases:
   Transmission:
-    automatic: [auto, at, اوتوماتيك]
     manual: [manual, man, مانيوال]
-    dsg: [dsg, dual clutch, dct]
-    cvt: [cvt]
+    automatic_traditional: [auto, at, اوتوماتيك ]
+    automatic_dsg: [dsg, dual clutch, dct, automatic]
+    automatic_cvt: [cvt, automatic]
   body_type:
     hatchback: [hatchback, hatch]
     sedan: [sedan, saloon]
