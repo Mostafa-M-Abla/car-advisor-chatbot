@@ -158,17 +158,21 @@ class ResponseGenerator:
                          context: str = "",
                          criteria: Dict[str, Any] = None) -> str:
         """
-        Generate a conversational response using GPT-4.
+        Generate a conversational response using GPT-4.1 (SIMPLIFIED).
 
         Args:
             user_input: Original user query
-            sql_query: SQL query used
-            results: Query results
+            sql_query: SQL query used (AI-generated)
+            results: Query results from database
             context: Conversation context
-            criteria: Extracted criteria
+            criteria: DEPRECATED - kept for backward compatibility, not used (always None)
 
         Returns:
-            Generated response
+            Generated conversational response
+
+        Note:
+            The criteria parameter is deprecated after removing regex fallback logic.
+            It's kept in the signature to avoid breaking changes but is always None.
         """
         try:
             # Format results for GPT-4 context

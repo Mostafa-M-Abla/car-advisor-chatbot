@@ -1,14 +1,37 @@
-import re
 import yaml
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any
 from openai import OpenAI
 import os
 
 class QueryProcessor:
-    """Processes natural language queries and converts them to SQL."""
+    """
+    Processes natural language queries and converts them to SQL using AI only.
+
+    SIMPLIFIED ARCHITECTURE:
+    This class has ONE responsibility: AI-powered SQL generation using GPT-4.1.
+
+    Previous complexity removed:
+    - No regex pattern matching (~300 lines removed)
+    - No structured criteria extraction
+    - No fallback logic
+
+    Benefits:
+    - Single, clear execution path
+    - Leverages GPT-4.1's high reliability
+    - Much simpler and more maintainable
+    - When AI fails, user is asked to rephrase (honest and often more helpful)
+    """
 
     def __init__(self, schema_path: str = "schema.yaml", synonyms_path: str = "synonyms.yaml", config_path: str = "chatbot_config.yaml"):
+        """
+        Initialize the QueryProcessor with schema, synonyms, and configuration.
+
+        Args:
+            schema_path: Path to database schema YAML file
+            synonyms_path: Path to synonyms YAML file (maps user terms to DB columns)
+            config_path: Path to chatbot configuration YAML file
+        """
         self.schema_path = schema_path
         self.synonyms_path = synonyms_path
         self.config_path = config_path
@@ -44,255 +67,6 @@ class QueryProcessor:
         except Exception as e:
             self.logger.error(f"Failed to load synonyms: {e}")
             return {}
-
-    def extract_criteria(self, user_input: str) -> Dict[str, Any]:
-        """
-        Extract search criteria from user input using pattern matching and GPT-4.
-
-        Args:
-            user_input: User's natural language input
-
-        Returns:
-            Dictionary with extracted criteria
-        """
-        criteria = {}
-        user_lower = user_input.lower()
-
-        # Extract price information
-        criteria.update(self._extract_price(user_lower))
-
-        # Extract body type
-        body_type = self._extract_body_type(user_lower)
-        if body_type:
-            criteria['body_type'] = body_type
-
-        # Extract transmission type
-        transmission = self._extract_transmission(user_lower)
-        if transmission:
-            criteria['transmission'] = transmission
-
-        # Extract origin preferences
-        origin_info = self._extract_origin_preferences(user_lower)
-        criteria.update(origin_info)
-
-        # Extract features
-        features = self._extract_features(user_lower)
-        criteria.update(features)
-
-        # Extract limit (number of results requested)
-        limit = self._extract_limit(user_lower)
-        if limit:
-            criteria['limit'] = limit
-
-        # Extract brand preferences
-        brand = self._extract_brand(user_lower)
-        if brand:
-            criteria['brand'] = brand
-
-        return criteria
-
-    def _extract_price(self, text: str) -> Dict[str, Any]:
-        """Extract price criteria from text."""
-        criteria = {}
-
-        # Pattern for "under X", "below X", "max X", "up to X"
-        under_patterns = [
-            r'under\s+(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m|egp)?',
-            r'below\s+(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m|egp)?',
-            r'max\s+(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m|egp)?',
-            r'up to\s+(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m|egp)?',
-        ]
-
-        for pattern in under_patterns:
-            match = re.search(pattern, text)
-            if match:
-                price_str = match.group(1).replace(',', '')
-                price = float(price_str)
-
-                # Handle millions
-                if 'million' in match.group(0) or 'm' in match.group(0):
-                    price *= 1_000_000
-                elif price < 100:  # Assume millions if number is small
-                    price *= 1_000_000
-
-                criteria['max_price'] = int(price)
-                break
-
-        # Pattern for "over X", "above X", "minimum X"
-        over_patterns = [
-            r'over\s+(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m|egp)?',
-            r'above\s+(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m|egp)?',
-            r'minimum\s+(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m|egp)?',
-        ]
-
-        for pattern in over_patterns:
-            match = re.search(pattern, text)
-            if match:
-                price_str = match.group(1).replace(',', '')
-                price = float(price_str)
-
-                if 'million' in match.group(0) or 'm' in match.group(0):
-                    price *= 1_000_000
-                elif price < 100:
-                    price *= 1_000_000
-
-                criteria['min_price'] = int(price)
-                break
-
-        # Pattern for "X to Y" or "between X and Y"
-        range_patterns = [
-            r'(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m)?\s*to\s*(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m|egp)?',
-            r'between\s+(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m)?\s*and\s*(\d+(?:,\d+)*(?:\.\d+)?)\s*(?:million|m|egp)?'
-        ]
-
-        for pattern in range_patterns:
-            match = re.search(pattern, text)
-            if match:
-                min_price = float(match.group(1).replace(',', ''))
-                max_price = float(match.group(2).replace(',', ''))
-
-                # Handle millions
-                if 'million' in match.group(0) or 'm' in match.group(0):
-                    min_price *= 1_000_000
-                    max_price *= 1_000_000
-                elif min_price < 100 and max_price < 100:
-                    min_price *= 1_000_000
-                    max_price *= 1_000_000
-
-                criteria['min_price'] = int(min_price)
-                criteria['max_price'] = int(max_price)
-                break
-
-        return criteria
-
-    def _extract_body_type(self, text: str) -> Optional[str]:
-        """Extract body type from text."""
-        body_types = {
-            'sedan': ['sedan', 'saloon'],
-            'hatchback': ['hatchback', 'hatch'],
-            'crossover/suv': ['crossover', 'suv', 'cross over', 'sport utility'],
-            'coupe': ['coupe', 'coup'],
-            'convertible': ['convertible', 'cabriolet'],
-            'van': ['van', 'minivan']
-        }
-
-        for standard_type, variants in body_types.items():
-            for variant in variants:
-                if variant in text:
-                    return standard_type
-
-        return None
-
-    def _extract_transmission(self, text: str) -> Optional[str]:
-        """Extract transmission type from text."""
-        # Check synonyms first
-        if self.synonyms and 'value_aliases' in self.synonyms and 'Transmission' in self.synonyms['value_aliases']:
-            aliases = self.synonyms['value_aliases']['Transmission']
-            for standard, variants in aliases.items():
-                for variant in variants:
-                    if variant in text:
-                        return standard
-
-        # Fallback patterns
-        if 'automatic' in text or 'auto' in text or 'at' in text:
-            return 'automatic'
-        if 'manual' in text or 'man' in text:
-            return 'manual'
-        if 'dsg' in text or 'dual clutch' in text:
-            return 'dsg'
-        if 'cvt' in text:
-            return 'cvt'
-
-        return None
-
-    def _extract_origin_preferences(self, text: str) -> Dict[str, Any]:
-        """Extract origin country preferences."""
-        criteria = {}
-
-        # Check for exclusions first
-        if 'non-chinese' in text or 'non chinese' in text or 'not chinese' in text:
-            criteria['exclude_origin'] = 'china'
-
-        # Check for specific countries using synonyms
-        if self.synonyms and 'predicates' in self.synonyms:
-            predicates = self.synonyms['predicates']
-            for predicate_name, predicate_info in predicates.items():
-                if predicate_name in text:
-                    if predicate_info['op'] == '=':
-                        criteria['origin_country'] = predicate_info['value']
-                    elif predicate_info['op'] == '!=':
-                        criteria['exclude_origin'] = predicate_info['value']
-
-        return criteria
-
-    def _extract_features(self, text: str) -> Dict[str, Any]:
-        """Extract feature requirements."""
-        features = {}
-
-        # Use synonyms for feature mapping
-        if self.synonyms and 'columns' in self.synonyms:
-            for column, synonyms_list in self.synonyms['columns'].items():
-                for synonym in synonyms_list:
-                    if synonym in text:
-                        features[column.lower()] = True
-
-        # Direct feature matching
-        feature_keywords = {
-            'abs': 'abs',
-            'esp': 'esp',
-            'airbag': 'driver_airbag',
-            'air conditioning': 'air_conditioning',
-            'ac': 'air_conditioning',
-            'sunroof': 'sunroof',
-            'bluetooth': 'bluetooth',
-            'gps': 'gps',
-            'cruise control': 'cruise_control',
-            'turbo': 'engine_turbo',
-            # Note: electric_vehicle column removed from schema
-        }
-
-        for keyword, column in feature_keywords.items():
-            if keyword in text:
-                if column == 'electric_vehicle':
-                    features[column] = True
-                else:
-                    features[column.lower()] = True
-
-        return features
-
-    def _extract_limit(self, text: str) -> Optional[int]:
-        """Extract number of results requested."""
-        # Pattern for "X cars", "top X", "first X"
-        patterns = [
-            r'(\d+)\s+cars?',
-            r'top\s+(\d+)',
-            r'first\s+(\d+)',
-            r'show\s+(\d+)',
-            r'suggest\s+(\d+)'
-        ]
-
-        for pattern in patterns:
-            match = re.search(pattern, text)
-            if match:
-                return int(match.group(1))
-
-        return None
-
-    def _extract_brand(self, text: str) -> Optional[str]:
-        """Extract specific brand mentions."""
-        # Common brand names
-        brands = [
-            'toyota', 'honda', 'nissan', 'hyundai', 'kia', 'bmw', 'mercedes',
-            'audi', 'volkswagen', 'vw', 'ford', 'chevrolet', 'peugeot',
-            'renault', 'fiat', 'skoda', 'mitsubishi', 'mazda', 'suzuki',
-            'chery', 'geely', 'mg', 'byd', 'xpeng', 'porsche'
-        ]
-
-        for brand in brands:
-            if brand in text:
-                return brand
-
-        return None
 
     def generate_sql_with_gpt4(self, user_input: str, context: str = "") -> str:
         """
@@ -367,27 +141,32 @@ Examples:
             self.logger.error(f"Error generating SQL with GPT-4: {e}")
             return ""
 
-    def parse_query(self, user_input: str, context: str = "") -> Tuple[Dict[str, Any], str]:
+    def parse_query(self, user_input: str, context: str = "") -> str:
         """
-        Parse user query and return both structured criteria and SQL query.
+        Parse user query and generate SQL query using GPT-4.1 (SIMPLIFIED - SINGLE PATH).
+
+        This method now uses ONLY AI to generate SQL queries, removing the
+        redundant regex pattern matching fallback. The system is more reliable
+        by having a single, clear path rather than complex fallback logic.
+
+        When SQL generation fails:
+        - Returns empty string
+        - car_chatbot.py will show error message and ask user to rephrase
+        - Much simpler than trying to parse with inferior regex patterns
 
         Args:
-            user_input: User's natural language input
-            context: Previous conversation context
+            user_input: User's natural language input (e.g., "show me sedans under 1M EGP")
+            context: Previous conversation context for maintaining continuity
 
         Returns:
-            Tuple of (criteria dict, sql query string)
+            SQL query string, or empty string if generation fails
         """
-        # Extract criteria using pattern matching
-        criteria = self.extract_criteria(user_input)
-
-        # Generate SQL query using GPT-4
+        # Generate SQL query using GPT-4.1 (single path - no fallback)
         sql_query = self.generate_sql_with_gpt4(user_input, context)
 
-        self.logger.info(f"Parsed criteria: {criteria}")
         self.logger.info(f"Generated SQL: {sql_query}")
 
-        return criteria, sql_query
+        return sql_query
 
     def validate_and_clean_sql(self, sql_query: str) -> str:
         """

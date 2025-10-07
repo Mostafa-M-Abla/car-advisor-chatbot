@@ -21,33 +21,6 @@ class DatabaseHandler:
             self.logger.error(f"Failed to load schema: {e}")
             return {}
 
-    def _get_boolean_columns(self) -> List[str]:
-        """Extract list of boolean columns from schema."""
-        boolean_cols = []
-        for col in self.schema.get('columns', []):
-            if col['doc_type'] == 'BOOLEAN':
-                boolean_cols.append(col['name'])
-        return boolean_cols
-
-    def _get_feature_columns(self) -> List[str]:
-        """
-        Get commonly used feature columns from schema.
-        Returns boolean columns that are typically used as search criteria.
-        """
-        # Get all boolean columns
-        all_boolean = self._get_boolean_columns()
-
-        # Define priority features (most commonly searched)
-        priority_features = [
-            'ABS', 'ESP', 'Engine_Turbo', 'Air_Conditioning',
-            'Sunroof', 'Bluetooth', 'GPS', 'Cruise_Control',
-            'EBD', 'Driver_Airbag', 'Passenger_Airbag',
-            'Rear_Camera', 'Front_Sensors', 'Rear_Sensors'
-        ]
-
-        # Return priority features that exist in schema
-        return [feat for feat in priority_features if feat in all_boolean]
-
     def get_connection(self) -> sqlite3.Connection:
         """Get database connection with proper configuration."""
         try:
@@ -123,103 +96,6 @@ class DatabaseHandler:
 
         return True
 
-    def search_cars(self, criteria: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        Search cars based on structured criteria (NON-AI FALLBACK METHOD).
-
-        This method is a pure Python fallback that builds SQL queries programmatically
-        without using AI. It's used when GPT-4.1 fails to generate a valid SQL query
-        or when the generated SQL fails validation checks.
-
-        How it works:
-        1. Starts with base query: "SELECT * FROM cars WHERE 1=1"
-        2. Iterates through criteria dictionary keys
-        3. Appends SQL WHERE clauses based on recognized keys
-        4. Uses parameterized queries for safety (prevents SQL injection)
-        5. Builds query using string concatenation (no AI involved)
-
-        Supported criteria keys:
-        - 'min_price': Minimum price in EGP (adds: AND Price_EGP >= ?)
-        - 'max_price': Maximum price in EGP (adds: AND Price_EGP <= ?)
-        - 'body_type': Body type filter (adds: AND body_type = ?)
-        - 'origin_country': Origin country filter (adds: AND Origin_Country = ?)
-        - 'exclude_origin': Exclude origin country (adds: AND Origin_Country != ?)
-        - 'transmission': Transmission type (adds: AND Transmission_Type = ?)
-        - 'brand': Car brand filter (adds: AND car_brand = ?)
-        - 'limit': Result limit (default: 10)
-        - Feature columns (ABS, ESP, etc.): Adds AND feature = 1
-
-        Limitations vs AI-generated SQL:
-        - Only supports predefined criteria keys (not flexible)
-        - Cannot handle complex natural language variations
-        - Fixed logic for combining criteria (always AND)
-        - Limited to simple WHERE clauses
-        - Cannot understand context or user intent nuances
-
-        Args:
-            criteria: Dictionary with search criteria (see supported keys above)
-
-        Returns:
-            List of matching cars (limited to 10 by default)
-        """
-        self.logger.info(f"search_cars() invoked (NON-AI fallback) with criteria: {criteria}")
-
-        query_parts = ["SELECT * FROM cars WHERE 1=1"]
-        params = []
-
-        # Price range
-        if 'min_price' in criteria:
-            query_parts.append("AND Price_EGP >= ?")
-            params.append(criteria['min_price'])
-
-        if 'max_price' in criteria:
-            query_parts.append("AND Price_EGP <= ?")
-            params.append(criteria['max_price'])
-
-        # Body type
-        if 'body_type' in criteria:
-            query_parts.append("AND body_type = ?")
-            params.append(criteria['body_type'])
-
-        # Origin country
-        if 'origin_country' in criteria:
-            query_parts.append("AND Origin_Country = ?")
-            params.append(criteria['origin_country'])
-
-        # Exclude origin country
-        if 'exclude_origin' in criteria:
-            query_parts.append("AND Origin_Country != ?")
-            params.append(criteria['exclude_origin'])
-
-        # Transmission type
-        if 'transmission' in criteria:
-            query_parts.append("AND Transmission_Type = ?")
-            params.append(criteria['transmission'])
-
-        # Features (boolean columns) - dynamically loaded from schema
-        feature_columns = self._get_feature_columns()
-
-        for feature in feature_columns:
-            if feature.lower() in criteria or feature in criteria:
-                query_parts.append(f"AND {feature} = 1")
-
-        # Brand
-        if 'brand' in criteria:
-            query_parts.append("AND car_brand = ?")
-            params.append(criteria['brand'])
-
-        # Sorting and limiting
-        query_parts.append("ORDER BY Price_EGP ASC")
-
-        if 'limit' in criteria:
-            query_parts.append("LIMIT ?")
-            params.append(criteria['limit'])
-        else:
-            query_parts.append("LIMIT 10")  # Default limit
-
-        query = " ".join(query_parts)
-        return self.execute_query(query, tuple(params))
-
     def get_car_by_id(self, car_id: int) -> Optional[Dict[str, Any]]:
         """Get specific car by ID."""
         try:
@@ -246,49 +122,6 @@ class DatabaseHandler:
         except Exception as e:
             self.logger.error(f"Error fetching body types: {e}")
             return []
-
-    def get_price_range(self) -> Tuple[int, int]:
-        """Get min and max prices from database."""
-        try:
-            result = self.execute_query(
-                "SELECT MIN(Price_EGP) as min_price, MAX(Price_EGP) as max_price FROM cars WHERE Price_EGP IS NOT NULL"
-            )
-            if result:
-                return result[0]['min_price'], result[0]['max_price']
-            return 0, 0
-        except Exception as e:
-            self.logger.error(f"Error fetching price range: {e}")
-            return 0, 0
-
-    def get_database_stats(self) -> Dict[str, Any]:
-        """Get general database statistics."""
-        try:
-            stats = {}
-
-            # Total cars
-            total_result = self.execute_query("SELECT COUNT(*) as total FROM cars")
-            stats['total_cars'] = total_result[0]['total'] if total_result else 0
-
-            # Brands count
-            brands_result = self.execute_query("SELECT COUNT(DISTINCT car_brand) as brand_count FROM cars")
-            stats['total_brands'] = brands_result[0]['brand_count'] if brands_result else 0
-
-            # Body types count
-            body_types_result = self.execute_query("SELECT body_type, COUNT(*) as count FROM cars GROUP BY body_type ORDER BY count DESC")
-            stats['body_types'] = {row['body_type']: row['count'] for row in body_types_result if row['body_type']}
-
-            # Price range
-            stats['min_price'], stats['max_price'] = self.get_price_range()
-
-            # Origin distribution
-            origin_result = self.execute_query("SELECT Origin_Country, COUNT(*) as count FROM cars GROUP BY Origin_Country ORDER BY count DESC LIMIT 5")
-            stats['origin_distribution'] = {row['Origin_Country']: row['count'] for row in origin_result if row['Origin_Country']}
-
-            return stats
-
-        except Exception as e:
-            self.logger.error(f"Error fetching database stats: {e}")
-            return {}
 
     def format_price(self, price: Optional[int]) -> str:
         """Format price with proper EGP formatting."""
