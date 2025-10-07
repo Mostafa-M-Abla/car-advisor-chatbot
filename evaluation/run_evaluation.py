@@ -119,25 +119,38 @@ examples = [
             "answer": "the range is about 440 km"},
     },
     {
-        "inputs": {"question": "What was my first question?"},
+        "inputs": {"question": "How many CC does the Elantra's engine have?"},
         "outputs": {
-            "answer": "test"},
-    },
-    {
-        "inputs": {"question": "How many CC does the elantra's engine have?"},
-        "outputs": {
-            "answer": "test"},
+            "answer": "In Egypt the ELantra's Engine has 1600 cc"},
     },
 ]
 
 
-# Create the dataset and examples in LangSmith
-dataset_name = "Car Selector Chatbot Evaluation Dataset - 5"
-dataset = client.create_dataset(dataset_name=dataset_name)
+# Create or update the dataset and examples in LangSmith
+dataset_name = "Car Selector Chatbot Evaluation Dataset"
+
+# Check if dataset already exists
+try:
+    dataset = client.read_dataset(dataset_name=dataset_name)
+    print(f"Dataset '{dataset_name}' already exists. Updating examples...")
+
+    # Delete existing examples
+    existing_examples = list(client.list_examples(dataset_id=dataset.id))
+    for example in existing_examples:
+        client.delete_example(example.id)
+    print(f"Deleted {len(existing_examples)} existing examples.")
+
+except Exception:
+    # Dataset doesn't exist, create it
+    print(f"Creating new dataset '{dataset_name}'...")
+    dataset = client.create_dataset(dataset_name=dataset_name)
+
+# Add the new examples
 client.create_examples(
     dataset_id=dataset.id,
     examples=examples
 )
+print(f"Added {len(examples)} examples to dataset.")
 
 
 
