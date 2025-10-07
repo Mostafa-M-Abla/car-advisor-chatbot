@@ -246,13 +246,13 @@ class CarChatbot:
 
         except Exception as e:
             self.logger.error(f"Error in external knowledge query: {e}")
-            response = self.response_generator.generate_general_knowledge_response(user_input)
+            error_msg = "I'm sorry, I'm having trouble accessing external automotive knowledge right now. Could you try asking about specific cars in our database or rephrase your question?"
             self.conversation_manager.add_turn(
                 user_input=user_input,
-                bot_response=response,
-                response_type="general"
+                bot_response=error_msg,
+                response_type="error"
             )
-            return response
+            return error_msg
 
     def _extract_car_context_from_query(self, query: str) -> List[Dict[str, Any]]:
         """Extract car information mentioned in the query from the database."""

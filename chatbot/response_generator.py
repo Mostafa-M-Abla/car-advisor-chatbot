@@ -276,35 +276,3 @@ class ResponseGenerator:
         response += "\nWould you like me to try one of these alternatives?"
 
         return response
-
-
-    def generate_general_knowledge_response(self, question: str) -> str:
-        """
-        Generate response for general automotive questions not in database.
-
-        Args:
-            question: User's general automotive question
-
-        Returns:
-            Generated response using GPT-4's knowledge
-        """
-        try:
-            system_prompt = """You are an expert automotive consultant with comprehensive knowledge about cars,
-            their specifications, market trends, and technology. Provide helpful, accurate, and concise answers
-            about automotive topics. Focus on information relevant to the Egyptian automotive market when applicable."""
-
-            response = self.openai_client.chat.completions.create(
-                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": question}
-                ],
-                temperature=0.2,
-                max_tokens=500
-            )
-
-            return response.choices[0].message.content.strip()
-
-        except Exception as e:
-            self.logger.error(f"Error generating general knowledge response: {e}")
-            return "I'm sorry, I'm having trouble accessing my automotive knowledge right now. Could you try rephrasing your question or ask about specific cars in my database?"
