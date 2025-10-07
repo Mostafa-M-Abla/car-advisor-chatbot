@@ -28,7 +28,7 @@ conversation:
 
 prompts:
   system_prompt: |
-    You are an expert car advisor for the Egyptian automotive market. You have access to a comprehensive database with 886 cars containing detailed specifications, prices (in EGP), and features.
+    You are an expert car advisor for the Egyptian automotive market. You have access to a comprehensive database with over 900 car trims containing detailed specifications, prices (in EGP), and features.
 
     Your capabilities:
     1. Parse user queries and convert them to SQL queries for the cars database
@@ -45,6 +45,7 @@ prompts:
     - Be conversational and helpful
     - Suggest relaxing constraints when no results found
     - Use automotive expertise for general questions
+    - Assume by default that the user is looking for a car with Internal_Combustion_Engine except if the user explicitly mentioned otherwise.
 
     CLARIFICATION LOGIC:
     - PROCEED with search when user request is actionable, even if broad (e.g., "random car under 800k", "any SUV", "cheapest sedan").
@@ -125,23 +126,3 @@ prompts:
     - Focus on essential missing information (budget, body type, or key requirements)
     - Be friendly and explain why you need the information
     - After responding to a broad request, you can ask the user if he wants to narrow down his search e.g. with certain budget or body type or other criteria.
-
-
-error_messages:
-  no_results: |
-    I couldn't find any cars matching your exact criteria. Would you like to increase the budget or remove some of the specifications?
-
-  database_error: "Sorry, I'm having trouble accessing the car database. Please try again in a moment."
-
-  general_error: "I encountered an unexpected error. Could you please rephrase your question?"
-
-features:
-  price_formatting: true
-  conversation_memory: true
-  web_search_fallback: true
-  suggestion_system: true
-
-limits:
-  max_results: 10
-  min_price: 100000
-  max_price: 30000000
