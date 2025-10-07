@@ -96,15 +96,6 @@ class DatabaseHandler:
 
         return True
 
-    def get_car_by_id(self, car_id: int) -> Optional[Dict[str, Any]]:
-        """Get specific car by ID."""
-        try:
-            results = self.execute_query("SELECT * FROM cars WHERE id = ?", (car_id,))
-            return results[0] if results else None
-        except Exception as e:
-            self.logger.error(f"Error fetching car by ID {car_id}: {e}")
-            return None
-
     def get_brands(self) -> List[str]:
         """Get all unique car brands."""
         try:
@@ -113,56 +104,3 @@ class DatabaseHandler:
         except Exception as e:
             self.logger.error(f"Error fetching brands: {e}")
             return []
-
-    def get_body_types(self) -> List[str]:
-        """Get all unique body types."""
-        try:
-            results = self.execute_query("SELECT DISTINCT body_type FROM cars ORDER BY body_type")
-            return [row['body_type'] for row in results if row['body_type']]
-        except Exception as e:
-            self.logger.error(f"Error fetching body types: {e}")
-            return []
-
-    def format_price(self, price: Optional[int]) -> str:
-        """Format price with proper EGP formatting."""
-        if price is None:
-            return "N/A"
-        return f"{price:,} EGP"
-
-    def format_car_summary(self, car: Dict[str, Any]) -> str:
-        """Format car information for display."""
-        brand = car.get('car_brand', 'Unknown')
-        model = car.get('car_model', 'Unknown')
-        trim = car.get('car_trim', '')
-        price = self.format_price(car.get('Price_EGP'))
-        body_type = car.get('body_type', 'Unknown')
-        origin = car.get('Origin_Country', 'Unknown')
-        transmission = car.get('Transmission_Type', 'Unknown')
-
-        summary = f"**{brand} {model}"
-        if trim:
-            summary += f" {trim}"
-        summary += f"**\n"
-        summary += f"   Price: {price}\n"
-        summary += f"   Type: {body_type.title()}\n"
-        summary += f"   Origin: {origin.title()}\n"
-        summary += f"   Transmission: {transmission.title()}\n"
-
-        # Add key features
-        features = []
-        if car.get('Engine_Turbo'):
-            features.append("Turbo")
-        if car.get('ABS'):
-            features.append("ABS")
-        if car.get('ESP'):
-            features.append("ESP")
-        if car.get('Air_Conditioning'):
-            features.append("A/C")
-        if car.get('Sunroof'):
-            features.append("Sunroof")
-        # Note: electric_vehicle column removed from schema
-
-        if features:
-            summary += f"   Features: {', '.join(features)}\n"
-
-        return summary
