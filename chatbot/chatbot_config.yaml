@@ -54,23 +54,6 @@ prompts:
     - Examples when clarification IS needed: "I need a car" (no budget/criteria), "good car" (extremely vague)
     - When proceeding with broad requests, select diverse options and explain your selection criteria
 
-  query_generation_prompt: |
-    Based on the user's request, generate a SQL query for the cars database.
-
-    Database schema: {schema}
-    Available synonyms: {synonyms}
-
-    User request: {user_input}
-    Conversation context: {context}
-
-    Instructions:
-    - Generate ONLY the SQL query, no explanations
-    - Use proper column names from the schema
-    - Handle synonyms appropriately (e.g., "auto" -> "automatic")
-    - Apply appropriate filters for price, origin, features, etc.
-    - For price ranges, use appropriate comparison operators
-    - For "non-Chinese", use Origin_Country != 'china'
-
   response_generation_prompt: |
     Based on the user's query, either provide a helpful response with database results OR ask for clarification if genuinely needed.
 
