@@ -123,6 +123,11 @@ examples = [
         "outputs": {
             "answer": "In Egypt the ELantra's Engine has 1600 cc"},
     },
+    {
+        "inputs": {"question": "I want an automatic cross over from a european manufacturer that is under 500000 EGP?"},
+        "outputs": {
+            "answer": "No cars found with those specifications and price in the egyptian market, would you consider relaxing some of the constraints, for example increase your budget or remove the country of origin or body type constraint?"},
+    },
 ]
 
 
