@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:eg.hatla2ee.com)",
       "Bash(python:*)",
-      "Read(//d/git/**)"
+      "Read(//d/git/**)",
+      "WebFetch(domain:python.langchain.com)"
     ],
     "deny": [],
     "ask": []

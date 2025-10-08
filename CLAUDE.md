@@ -44,55 +44,60 @@ car-selection-chatbot/
 ## System Architecture
 
 ### Overview
-The chatbot system uses an **agentic architecture with function calling** that enables iterative query refinement and natural response generation. GPT-4.1 acts as an intelligent agent with access to database tools, allowing it to search, refine, and craft contextual responses.
+The chatbot system uses **LangChain and LangGraph** for agentic architecture with function calling, enabling iterative query refinement and natural response generation. GPT-4.1 acts as an intelligent agent with access to database tools, allowing it to search, refine, and craft contextual responses.
 
-### Core Architecture Flow (AGENTIC)
+### Core Architecture Flow (LANGCHAIN + LANGGRAPH)
 ```
 User Input → CarChatbot (Orchestrator)
     ↓
     ├── ConversationManager (Memory & Context)
-    └── Agentic LLM Handler (MULTI-TURN WITH TOOLS)
-        ├── Input: unified_prompt + schema + synonyms + user_input + context
-        ├── LLM decides: Use tool or provide knowledge?
+    └── LangGraph ReAct Agent (MULTI-TURN WITH TOOLS)
+        ├── Input: SystemMessage(unified_prompt + schema + synonyms) + HumanMessage(user_input + context)
+        ├── LangChain ChatOpenAI (GPT-4.1) decides: Use tool or provide knowledge?
         │
-        ├─→ [ITERATION 1] Tool Call: execute_sql_query(sql)
-        │   └── DatabaseHandler executes SQL → Returns results to LLM
+        ├─→ [ITERATION 1] Tool Call: execute_sql_query_bound(sql)
+        │   └── LangChain Tool (@tool decorator) → DatabaseHandler → Returns results to agent
         │
-        ├─→ [ITERATION 2] (Optional) Refine: execute_sql_query(adjusted_sql)
-        │   └── DatabaseHandler executes SQL → Returns results to LLM
+        ├─→ [ITERATION 2] (Optional) Refine: execute_sql_query_bound(adjusted_sql)
+        │   └── LangChain Tool → DatabaseHandler → Returns results to agent
         │
-        ├─→ [ITERATION 3] (Optional) Final attempt: execute_sql_query(final_sql)
-        │   └── DatabaseHandler executes SQL → Returns results to LLM
+        ├─→ [ITERATION 3] (Optional) Final attempt: execute_sql_query_bound(final_sql)
+        │   └── LangChain Tool → DatabaseHandler → Returns results to agent
         │
-        └─→ LLM sees all results → Crafts natural, contextual response
+        └─→ Agent sees all results → Crafts natural, contextual response
     ↓
 Conversational Response → User
 ```
 
-### Component Interaction Model (AGENTIC)
-1. **CarChatbot** receives user input and orchestrates the agentic flow
+### Component Interaction Model (LANGCHAIN + LANGGRAPH)
+1. **CarChatbot** receives user input and orchestrates the LangGraph agent flow
 2. **ConversationManager** provides conversation context from history
-3. **Agentic LLM Handler** (`_unified_llm_handler`) runs multi-turn agent loop (max 3 iterations):
-   - **Tool Definition**: Provides `execute_sql_query` function to LLM
-   - **Decision Making**: LLM decides when to query database vs provide knowledge
-   - **SQL Execution**: LLM calls tool with generated SQL → sees actual results
-   - **Iterative Refinement**: LLM can adjust query if needed (no results, too many results, etc.)
-   - **Natural Responses**: LLM crafts context-specific responses using database results
+3. **LangGraph Agent** (`create_react_agent`) runs multi-turn agent loop:
+   - **Tool Definition**: LangChain `@tool` decorator defines `execute_sql_query_bound`
+   - **Agent Creation**: `create_react_agent(model, tools)` creates ReAct-style agent
+   - **Decision Making**: Agent decides when to query database vs provide knowledge
+   - **SQL Execution**: Agent calls tool with generated SQL → sees actual results
+   - **Iterative Refinement**: Agent can adjust query if needed (up to recursion_limit=10)
+   - **Natural Responses**: Agent crafts context-specific responses using database results
    - **Handles hybrid queries seamlessly** (e.g., "reliable SUVs under 2M" → queries database + adds reliability insights)
-4. **DatabaseHandler** executes validated SQL queries and returns raw results to LLM
-5. **QueryProcessor** serves as configuration holder (schema, synonyms, OpenAI client)
-6. **Configuration system** provides centralized `unified_prompt` in chatbot_config.yaml with tool usage guidelines
+4. **SQL Tool** (`chatbot/tools.py`) wraps DatabaseHandler for LangChain integration
+5. **DatabaseHandler** executes validated SQL queries and returns raw results
+6. **QueryProcessor** provides LangChain ChatOpenAI model and configuration
+7. **Configuration system** provides centralized `unified_prompt` in chatbot_config.yaml
 
-### Design Principles (AGENTIC ARCHITECTURE)
-- **Tool-Based Interaction**: LLM uses `execute_sql_query` function calling to access database
-- **Iterative Refinement**: Up to 3 tool calls allow query adjustment based on results
-- **Natural Response Generation**: LLM sees actual database results and crafts tailored responses
+### Design Principles (LANGCHAIN + LANGGRAPH ARCHITECTURE)
+- **LangChain Framework**: Industry-standard agent framework for reliability and maintainability
+- **LangGraph ReAct Agent**: Reasoning + Acting pattern for intelligent tool usage
+- **Tool-Based Interaction**: LangChain `@tool` decorator for clean SQL tool definition
+- **Iterative Refinement**: Agent can make multiple tool calls (recursion_limit=10)
+- **Natural Response Generation**: Agent sees actual database results and crafts tailored responses
 - **Context-Aware Formatting**: Responses adapt to query type (not rigid templates)
 - **Hybrid Query Support**: Database searches seamlessly include automotive knowledge
 - **Centralized Configuration**: All LLM behavior controlled via `unified_prompt` in YAML
 - **Conversation Memory**: Tracks conversation history for context continuity
 - **Egyptian Market Focus**: Specialized for local automotive market needs
-- **Simplified Components**: Removed rigid formatting (~150 lines), LLM does everything
+- **Observability**: LangSmith tracing for debugging and monitoring
+- **Simplified Components**: Removed rigid formatting (~150 lines), agent does everything
 
 ### Major Architectural Changes (2025)
 
@@ -110,7 +115,7 @@ Conversational Response → User
 - **All prompts in config**: True centralized configuration
 - **Hybrid queries now work correctly**: Database + knowledge in single response
 
-#### Phase 2: Agentic Architecture (October 2025)
+#### Phase 2: Agentic Architecture with Function Calling (October 2025)
 **Problem Identified:**
 - LLM couldn't see database results (formatted with rigid templates before LLM saw them)
 - No iterative refinement (single-shot SQL generation)
@@ -124,6 +129,21 @@ Conversational Response → User
 - **Removed rigid templates**: response_generator.py reduced to utility function (~130 lines removed)
 - **Better hybrid queries**: LLM naturally integrates database results with knowledge
 - **Context-aware responses**: Different queries get different response styles
+
+#### Phase 3: LangChain & LangGraph Integration (October 2025)
+**Why LangChain?**
+- **Industry standard**: Well-tested agent framework used by thousands of projects
+- **Better observability**: Built-in LangSmith tracing for debugging
+- **Consistency**: Same framework for chatbot and evaluation
+- **Future-proof**: Easier to add streaming, memory, more tools
+- **Cleaner code**: High-level abstractions vs manual loops
+
+**Changes Made:**
+- **Migrated to LangChain ChatOpenAI**: Replaced direct OpenAI API calls
+- **LangGraph create_react_agent**: Replaced manual agent loop (~90 lines simplified)
+- **LangChain @tool decorator**: Clean tool definition in `chatbot/tools.py`
+- **Added dependencies**: `langgraph>=0.0.20`, `langchain-core>=0.1.0`
+- **Same behavior**: All tests pass with identical functionality
 
 ## Key Features
 

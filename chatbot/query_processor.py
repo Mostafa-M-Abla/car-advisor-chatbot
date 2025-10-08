@@ -1,26 +1,28 @@
 import yaml
 import logging
 from typing import Dict, Any
-from openai import OpenAI
+from langchain_openai import ChatOpenAI
 import os
 
 class QueryProcessor:
     """
-    Provides schema and synonyms for the unified LLM prompt.
+    Provides schema, synonyms, and LangChain chat model for the agent.
 
-    SIMPLIFIED ARCHITECTURE (post-unification):
+    LANGCHAIN ARCHITECTURE (2025):
     This class now serves as a configuration holder for:
     - Database schema
     - Synonym mappings
-    - OpenAI client access
+    - LangChain ChatOpenAI model instance
 
     Previous responsibilities removed:
-    - SQL generation (now in unified prompt in car_chatbot.py)
+    - SQL generation (now in LangGraph agent with tools)
+    - Direct OpenAI API calls (now using LangChain)
     - Regex pattern matching (~300 lines removed earlier)
     - Complex query parsing logic
 
     Benefits:
     - Single source of truth for schema/synonyms
+    - LangChain integration for agent framework
     - Reusable across components
     - Much simpler and focused
     """
@@ -41,7 +43,14 @@ class QueryProcessor:
         self.schema = self._load_schema()
         self.synonyms = self._load_synonyms()
         self.config = self._load_config()
-        self.openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+        # Initialize LangChain ChatOpenAI model
+        self.chat_model = ChatOpenAI(
+            model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
+            temperature=self.config.get('openai', {}).get('temperature', 0.1),
+            max_tokens=self.config.get('openai', {}).get('max_tokens', 1500),
+            api_key=os.getenv('OPENAI_API_KEY')
+        )
 
     def _load_config(self) -> Dict[str, Any]:
         """Load chatbot configuration from YAML file."""
