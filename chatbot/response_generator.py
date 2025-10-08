@@ -1,26 +1,23 @@
-import yaml
 import logging
 from typing import Dict, Any, List, Optional
-from openai import OpenAI
-import os
 
 class ResponseGenerator:
-    """Generates conversational responses using GPT-4 and car data."""
+    """Formats car data for user-friendly presentation.
 
-    def __init__(self, config_path: str = "chatbot_config.yaml"):
-        self.config_path = config_path
+    SIMPLIFIED ARCHITECTURE (post-unification):
+    This class now focuses solely on formatting database results.
+
+    Previous responsibilities removed:
+    - LLM-based response generation (now in unified prompt in car_chatbot.py)
+
+    Benefits:
+    - Pure formatting logic, no AI dependencies
+    - Reusable formatting methods
+    - Much simpler and focused
+    """
+
+    def __init__(self):
         self.logger = logging.getLogger(__name__)
-        self.config = self._load_config()
-        self.openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-
-    def _load_config(self) -> Dict[str, Any]:
-        """Load chatbot configuration from YAML file."""
-        try:
-            with open(self.config_path, 'r', encoding='utf-8') as file:
-                return yaml.safe_load(file)
-        except Exception as e:
-            self.logger.error(f"Failed to load config: {e}")
-            return {}
 
     def format_price(self, price: Optional[int]) -> str:
         """Format price with proper EGP formatting."""
@@ -151,62 +148,4 @@ class ResponseGenerator:
 
         return summary
 
-    def generate_response(self,
-                         user_input: str,
-                         sql_query: str,
-                         results: List[Dict[str, Any]],
-                         context: str = "",
-                         criteria: Dict[str, Any] = None) -> str:
-        """
-        Generate a conversational response using GPT-4.1 (SIMPLIFIED).
-
-        Args:
-            user_input: Original user query
-            sql_query: SQL query used (AI-generated)
-            results: Query results from database
-            context: Conversation context
-            criteria: DEPRECATED - kept for backward compatibility, not used (always None)
-
-        Returns:
-            Generated conversational response
-
-        Note:
-            The criteria parameter is deprecated after removing regex fallback logic.
-            It's kept in the signature to avoid breaking changes but is always None.
-        """
-        try:
-            # Format results for GPT-4 context
-            results_summary = self.format_results_summary(results, len(results), user_input)
-
-            # Get prompts from config
-            prompts = self.config.get('prompts', {})
-            system_prompt = prompts.get('system_prompt', '')
-            response_prompt = prompts.get('response_generation_prompt', '')
-
-            # Build the user prompt
-            user_prompt = response_prompt.format(
-                user_input=user_input,
-                sql_query=sql_query,
-                results=results_summary,
-                count=len(results),
-                context=context
-            )
-
-            response = self.openai_client.chat.completions.create(
-                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
-                temperature=self.config.get('openai', {}).get('temperature', 0.1),
-                max_tokens=self.config.get('openai', {}).get('max_tokens', 1000)
-            )
-
-            generated_response = response.choices[0].message.content.strip()
-            return generated_response
-
-        except Exception as e:
-            self.logger.error(f"Error generating response with GPT-4: {e}")
-            # Return simple error message (consistent with other error handlers)
-            return "I'm sorry, I'm having trouble generating a response right now. Please try rephrasing your question or try again in a moment."
 

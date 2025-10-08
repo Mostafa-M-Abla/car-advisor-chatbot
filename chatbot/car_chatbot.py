@@ -10,7 +10,6 @@ from database.database_handler import DatabaseHandler
 from chatbot.query_processor import QueryProcessor
 from chatbot.response_generator import ResponseGenerator
 from chatbot.conversation_manager import ConversationManager
-from chatbot.knowledge_handler import KnowledgeHandler
 
 class CarChatbot:
     """Main chatbot class that orchestrates all components."""
@@ -34,11 +33,10 @@ class CarChatbot:
         self.db_handler = DatabaseHandler(db_path=db_path, schema_path=schema_path)
         synonyms_path = os.path.join(project_root, "database", "synonyms.yaml")
         self.query_processor = QueryProcessor(schema_path=schema_path, synonyms_path=synonyms_path, config_path=config_path)
-        self.response_generator = ResponseGenerator(config_path)
+        self.response_generator = ResponseGenerator()
         self.conversation_manager = ConversationManager(
             max_history=self.config.get('conversation', {}).get('max_history', 10)
         )
-        self.knowledge_handler = KnowledgeHandler(config_path=config_path)
 
         self.logger = logging.getLogger(__name__)
 
@@ -135,7 +133,7 @@ class CarChatbot:
 
     def process_message(self, user_input: str) -> str:
         """
-        Process a single user message and return the bot's response.
+        Process a single user message using unified LLM approach.
 
         Args:
             user_input: User's input message
@@ -149,19 +147,12 @@ class CarChatbot:
             # Get conversation context
             context = self.conversation_manager.get_conversation_context()
 
-            # Check if this is an external knowledge query
-            needs_external = self.knowledge_handler.is_external_knowledge_query(user_input)
-
-            if needs_external:
-                return self._handle_external_knowledge_query(user_input, context)
-
-            # Process as database search query
-            return self._handle_database_query(user_input, context)
+            # Use unified LLM call (handles database, knowledge, or hybrid)
+            return self._unified_llm_handler(user_input, context)
 
         except Exception as e:
             self.logger.error(f"Error processing message: {e}")
-            error_msg = self.config.get('error_messages', {}).get('general_error',
-                                                                 "I encountered an error. Please try again.")
+            error_msg = "I encountered an error. Please try again."
             self.conversation_manager.add_turn(
                 user_input=user_input,
                 bot_response=error_msg,
@@ -169,25 +160,69 @@ class CarChatbot:
             )
             return error_msg
 
-    def _handle_database_query(self, user_input: str, context: str) -> str:
-        """Handle queries that search the car database (SIMPLIFIED - SINGLE PATH)."""
+    def _unified_llm_handler(self, user_input: str, context: str) -> str:
+        """
+        Unified LLM handler using single prompt for all query types.
+        Handles database queries, knowledge queries, and hybrid scenarios.
+
+        Args:
+            user_input: User's query
+            context: Conversation context
+
+        Returns:
+            Bot's response
+        """
         try:
-            # Generate SQL query using AI (single path - no fallback)
-            sql_query = self.query_processor.parse_query(user_input, context)
+            # Load unified prompt from config
+            unified_prompt = self.config.get('prompts', {}).get('unified_prompt', '')
+            if not unified_prompt:
+                raise ValueError("Unified prompt not found in configuration")
 
-            # Validate and execute the SQL query
-            if sql_query and self.db_handler.validate_query(sql_query):
-                self.logger.info(f"Executing AI-generated SQL for: '{user_input}'")
-                results = self.db_handler.execute_query(sql_query)
-            else:
-                # SQL generation or validation failed - ask user to rephrase
-                if not sql_query:
-                    self.logger.warning(f"No SQL query generated for: '{user_input}'. Asking user to rephrase.")
-                    error_msg = "I'm having trouble understanding your request. Could you rephrase it with specific details like budget, body type, or features you're looking for?"
-                else:
-                    self.logger.warning(f"SQL validation failed for: '{user_input}'. Query was: '{sql_query}'. Asking user to rephrase.")
-                    error_msg = "I couldn't process that search query. Could you try rephrasing it with more specific criteria?"
+            # Get schema and synonyms
+            schema_str = yaml.dump(self.query_processor.schema, default_flow_style=False)
+            synonyms_str = yaml.dump(self.query_processor.synonyms, default_flow_style=False)
 
+            # Format prompt with schema, synonyms, user input, and context
+            formatted_prompt = unified_prompt.format(
+                schema=schema_str,
+                synonyms=synonyms_str,
+                user_input=user_input,
+                context=context if context else "No previous conversation."
+            )
+
+            # Call GPT-4.1
+            self.logger.info("Calling GPT-4.1 with unified prompt")
+            response = self.query_processor.openai_client.chat.completions.create(
+                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
+                messages=[
+                    {"role": "system", "content": "You are an expert car advisor for the Egyptian automotive market. Always respond with valid JSON."},
+                    {"role": "user", "content": formatted_prompt}
+                ],
+                temperature=self.config.get('openai', {}).get('temperature', 0.1),
+                max_tokens=self.config.get('openai', {}).get('max_tokens', 1000)
+            )
+
+            # Parse JSON response
+            import json
+            response_text = response.choices[0].message.content.strip()
+
+            # Clean markdown code blocks if present
+            if response_text.startswith('```json'):
+                response_text = response_text[7:]
+            if response_text.startswith('```'):
+                response_text = response_text[3:]
+            if response_text.endswith('```'):
+                response_text = response_text[:-3]
+            response_text = response_text.strip()
+
+            self.logger.info(f"LLM raw response: {response_text[:200]}...")
+
+            try:
+                llm_output = json.loads(response_text)
+            except json.JSONDecodeError as e:
+                self.logger.error(f"Failed to parse JSON response: {e}")
+                self.logger.error(f"Raw response: {response_text}")
+                error_msg = "I'm having trouble understanding how to respond. Could you rephrase your question?"
                 self.conversation_manager.add_turn(
                     user_input=user_input,
                     bot_response=error_msg,
@@ -195,87 +230,91 @@ class CarChatbot:
                 )
                 return error_msg
 
-            # Generate conversational response with results
-            response = self.response_generator.generate_response(
-                user_input=user_input,
-                sql_query=sql_query,
-                results=results,
-                context=context,
-                criteria=None  # No longer using regex criteria
-            )
+            # Extract fields from JSON
+            needs_database = llm_output.get('needs_database', False)
+            sql_query = llm_output.get('sql_query', '')
+            response_type = llm_output.get('response_type', 'knowledge')
+            final_response = llm_output.get('response', '')
 
-            # Add to conversation history
-            self.conversation_manager.add_turn(
-                user_input=user_input,
-                bot_response=response,
-                sql_query=sql_query,
-                results_count=len(results),
-                response_type="search"
-            )
+            # If needs database, execute SQL and use formatted results
+            if needs_database and sql_query:
+                self.logger.info(f"Executing SQL: {sql_query}")
 
-            return response
+                # Validate SQL
+                if self.db_handler.validate_query(sql_query):
+                    results = self.db_handler.execute_query(sql_query)
+                    self.logger.info(f"SQL returned {len(results)} results")
 
-        except Exception as e:
-            self.logger.error(f"Error in database query: {e}")
-            error_msg = "I'm having trouble accessing the car database right now. Please try again in a moment or rephrase your question."
-            self.conversation_manager.add_turn(
-                user_input=user_input,
-                bot_response=error_msg,
-                response_type="error"
-            )
-            return error_msg
+                    # Always use formatted results for database queries
+                    # The LLM's response might have placeholders, so we use our formatting
+                    results_summary = self._format_results(results, user_input)
 
-    def _handle_external_knowledge_query(self, user_input: str, context: str) -> str:
-        """Handle queries that require external knowledge beyond the database."""
-        try:
-            # Check if query mentions specific cars from our database
-            car_context = self._extract_car_context_from_query(user_input)
+                    # For hybrid queries, prepend the LLM's additional context/advice
+                    if response_type == "hybrid" and final_response and len(final_response) > 50:
+                        # Check if response has actual advice (not placeholders)
+                        if "[" not in final_response:  # No placeholders
+                            final_response = final_response + "\n\n" + results_summary
+                        else:
+                            final_response = results_summary
+                    else:
+                        final_response = results_summary
 
-            # Use unified knowledge handler
-            response = self.knowledge_handler.get_knowledge_response(
-                query=user_input,
-                conversation_context=context,
-                database_context=car_context if car_context else None
-            )
-
-            # Add to conversation history
-            self.conversation_manager.add_turn(
-                user_input=user_input,
-                bot_response=response,
-                response_type="knowledge"
-            )
-
-            return response
-
-        except Exception as e:
-            self.logger.error(f"Error in external knowledge query: {e}")
-            error_msg = "I'm sorry, I'm having trouble accessing external automotive knowledge right now. Could you try asking about specific cars in our database or rephrase your question?"
-            self.conversation_manager.add_turn(
-                user_input=user_input,
-                bot_response=error_msg,
-                response_type="error"
-            )
-            return error_msg
-
-    def _extract_car_context_from_query(self, query: str) -> List[Dict[str, Any]]:
-        """Extract car information mentioned in the query from the database."""
-        # Simple approach: try to find brand/model mentions
-        brands = self.db_handler.get_brands()
-        mentioned_cars = []
-
-        query_lower = query.lower()
-
-        for brand in brands:
-            if brand.lower() in query_lower:
-                # Try to find specific models of this brand
-                brand_cars = self.db_handler.execute_query(
-                    "SELECT DISTINCT * FROM cars WHERE car_brand = ? LIMIT 5",
-                    (brand,)
+                    # Add to conversation history
+                    self.conversation_manager.add_turn(
+                        user_input=user_input,
+                        bot_response=final_response,
+                        sql_query=sql_query,
+                        results_count=len(results),
+                        response_type=response_type
+                    )
+                else:
+                    self.logger.warning(f"SQL validation failed: {sql_query}")
+                    error_msg = "I couldn't process that search query. Could you try rephrasing it with more specific criteria?"
+                    self.conversation_manager.add_turn(
+                        user_input=user_input,
+                        bot_response=error_msg,
+                        response_type="error"
+                    )
+                    return error_msg
+            else:
+                # Knowledge-only response
+                self.conversation_manager.add_turn(
+                    user_input=user_input,
+                    bot_response=final_response,
+                    response_type=response_type
                 )
-                if brand_cars:
-                    mentioned_cars.extend(brand_cars)
 
-        return mentioned_cars[:2]  # Return up to 2 cars for comparison
+            return final_response
+
+        except Exception as e:
+            self.logger.error(f"Error in unified LLM handler: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
+            error_msg = "I'm having trouble processing your request. Please try again."
+            self.conversation_manager.add_turn(
+                user_input=user_input,
+                bot_response=error_msg,
+                response_type="error"
+            )
+            return error_msg
+
+    def _format_results(self, results: List[Dict[str, Any]], user_query: str) -> str:
+        """
+        Format database results using response_generator's formatting methods.
+
+        Args:
+            results: List of car dictionaries from database
+            user_query: Original user query
+
+        Returns:
+            Formatted response string
+        """
+        if not results:
+            return "I couldn't find any cars matching your criteria. Try adjusting your budget, features, or origin preferences."
+
+        # Use response_generator's formatting
+        return self.response_generator.format_results_summary(results, len(results), user_query)
+
 
     def _show_help(self):
         """Show help information."""
