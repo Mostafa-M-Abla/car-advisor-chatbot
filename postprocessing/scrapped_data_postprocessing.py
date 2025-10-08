@@ -305,8 +305,12 @@ If uncertain, choose the most appropriate from the allowed list."""
 
 def main():
     # 1) Copy the CSV to the current path and name it processed_data.csv
-    src = os.path.join("web_scrapper", "scrapped_data.csv")
-    dst = "processed_data.csv"
+    # Get the project root directory (parent of postprocessing/)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+
+    src = os.path.join(project_root, "web_scrapper", "scrapped_data.csv")
+    dst = os.path.join(project_root, "processed_data.csv")
 
     if not os.path.isfile(src):
         raise FileNotFoundError(f"Source file not found: {src}")
@@ -716,7 +720,8 @@ def main():
         # Load powertrain types from power_train.csv
         print("\nLoading powertrain types from power_train.csv...")
         try:
-            powertrain_df = pd.read_csv("power_train.csv")
+            powertrain_path = os.path.join(script_dir, "power_train.csv")
+            powertrain_df = pd.read_csv(powertrain_path)
             print(f"Loaded {len(powertrain_df)} powertrain mappings from power_train.csv")
 
             # Create a mapping dictionary from car_trim to powertrain_type
