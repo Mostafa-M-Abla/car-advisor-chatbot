@@ -1,15 +1,15 @@
 output_csv,website,d_type
-Official_Price_EGP,Official Prices,int
+Official_Price_EGP,Official Price,int
 Market_Price_EGP,Market Price,int
 Insurance_Price_EGP,Insurance Price,int
-Register_Price_EGP,Registration Price,int
-Engine_CC,Engine capacity,int
+Register_Price_EGP,Register Price,int
+Engine_CC,Engine capacity,string
 Horsepower_HP,Horse Power,int
 Max_Speed_kmh,Maximum Speed,int
 Acceleration_0_100_sec,Acceleration,float
 Speeds,Speeds,int
-Transmission,Transmission Type,string
-Fuel_Type,Fuel,string
+Transmission,transmission type,string
+Fuel_Type,fuel,string
 Number_of_Cylinders,Number of cylinder,int
 Fuel_Tank_L,Fuel tank capacity,int
 Torque_Newton_Meter,Torque of newton,int
@@ -21,9 +21,9 @@ Wheelbase_mm,Wheel Base,int
 Trunk_Size_L,Trunk Size,int
 Origin_Country,Origin Country,string
 Assembly_Country,Assembly Country,string
-Year,Year,int
+Year,yearyear,string
 Number_of_Seats,Seats,int
-Traction_Type,Traction Type,string
+Traction_Type,traction type,string
 ABS,ABS,bool
 EBD,EBD,bool
 Driver_Airbag,Driver Airbag,bool
@@ -48,8 +48,8 @@ Fog_Light,Fog light,bool
 Fog_Lights,Fog Lights,bool
 Fabric_Brushes,Fabric brushes,bool
 Multifunction,Multifunction,bool
-Warranty,Warranty,bool
-Minimum_Installment,Min.Installment,bool
+Warranty,Warranty,string
+Minimum_Installment,Min.Installment,int
 Minimum_Deposit,Min.Deposit,int
 Fuel_Consumption_l_100_km,liter/100KM,float
 Side_Airbag,Side Airbag,bool
@@ -89,5 +89,7 @@ Alarm_or_Anti_Theft_System,Alarm/Anti-Theft System,bool
 Anti_Theft_System,Anti - theft System,bool
 Alarm,Alarm,bool
 Touch_Screen,Touch Screen,bool
-Touch_Screen,Multimedia touch screen,bool
+Multimedia_Touch_Screen,Multimedia touch screen,bool
 Off_Road_Tyres,Off-Road Tyres,bool
+Battery_Capacity_kWh,Battery Capacity (kWH),float
+Battery_Range_km,Battery Range (KM),int

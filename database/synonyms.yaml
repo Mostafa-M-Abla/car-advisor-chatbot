@@ -1,0 +1,123 @@
+version: 1
+columns:
+  Engine_Turbo:
+    - turbo
+    - turbocharged
+    - t-gdi
+    - tsi
+    - tce
+    - boosted
+  Number_transmission_Speeds:
+    - gears
+    - speeds
+    - number of speeds
+    - N-speed
+  body_type:
+    - hatch
+    - saloon
+  ESP:
+    - esc
+    - stability control
+    - electronic stability
+  ABS:
+    - anti lock
+    - anti-lock brakes
+  EBD:
+    - electronic brakeforce distribution
+    - brakeforce distribution
+  Air_Conditioning:
+    - ac
+    - air conditioning
+  Front_Power_Windows:
+    - front power windows
+    - front electric windows
+  Back_Power_Windows:
+    - rear power windows
+    - back electric windows
+  Electric_Mirrors:
+    - power mirrors
+    - electric mirrors
+  Remote_Keyless:
+    - remote keyless
+    - keyless entry
+  Central_Locking:
+    - central locking
+    - remote locking
+  powertrain_type:
+    - powertrain
+    - propulsion
+    - engine type
+    - hybrid
+    - plug-in hybrid
+    - phev
+    - mild hybrid
+    - mhev
+    - electric
+    - ev
+    - bev
+    - petrol
+    - gasoline
+    - diesel
+  Battery_Capacity_kWh:
+    - battery capacity
+    - kwh
+    - battery size
+predicates:
+  non_chinese:
+    column: Origin_Country
+    op: '!='
+    value: china
+  american:
+    column: Origin_Country
+    op: '='
+    value: usa
+  german:
+    column: Origin_Country
+    op: '='
+    value: germany
+  japanese:
+    column: Origin_Country
+    op: '='
+    value: japan
+  korean:
+    column: Origin_Country
+    op: '='
+    value: korea
+  french:
+    column: Origin_Country
+    op: '='
+    value: france
+  british:
+    column: Origin_Country
+    op: '='
+    value: uk
+  italian:
+    column: Origin_Country
+    op: '='
+    value: italy
+value_aliases:
+  Transmission:
+    manual: [manual, man, مانيوال]
+    automatic_traditional: [auto, at, اوتوماتيك ]
+    automatic_dsg: [dsg, dual clutch, dct, automatic]
+    automatic_cvt: [cvt, automatic]
+  body_type:
+    hatchback: [hatchback, hatch]
+    sedan: [sedan, saloon]
+  powertrain_type:
+    electric: [electric, ev, bev, كهرباء]
+    hybrid: [hybrid, hev, هجين]
+    plug_in_hybrid: [plug-in hybrid, phev, هجينة قابلة للشحن]
+    mild_hybrid: [mild hybrid, mhev]
+    petrol: [petrol, gasoline, بنزين]
+    diesel: [diesel, ديزل]
+ranges:
+  price:
+    column: Price_EGP
+    aliases: [under, below, budget, max, up to]
+  battery_capacity_kwh:
+    column: Battery_Capacity_kWh
+    aliases: [minimum capacity, at least, over, capacity]
+  battery_range_km:
+    column: Battery_Range_km
+    aliases: [range, up to, at least, WLTP range]
