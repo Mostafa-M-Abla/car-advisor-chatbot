@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 from langsmith import Client
 from typing_extensions import Annotated, TypedDict
 from langchain_openai import ChatOpenAI
@@ -150,12 +151,16 @@ except Exception:
     print(f"Creating new dataset '{dataset_name}'...")
     dataset = client.create_dataset(dataset_name=dataset_name)
 
-# Add the new examples
+# Sort examples alphabetically by question (input)
+sorted_examples = sorted(examples, key=lambda x: x["inputs"]["question"].lower())
+print(f"Sorted {len(sorted_examples)} examples alphabetically by question.")
+
+# Add the sorted examples
 client.create_examples(
     dataset_id=dataset.id,
-    examples=examples
+    examples=sorted_examples
 )
-print(f"Added {len(examples)} examples to dataset.")
+print(f"Added {len(sorted_examples)} examples to dataset.")
 
 
 
@@ -209,12 +214,27 @@ CHATBOT ANSWER: {outputs['answer']}"""
 def target(inputs: dict) -> dict:
     return rag_bot(inputs["question"])
 
+# Custom wrapper to add delay between evaluations
+evaluation_count = 0
+def target_with_delay(inputs: dict) -> dict:
+    global evaluation_count
+
+    # Add 10 second delay between examples (but not before the first one)
+    if evaluation_count > 0:
+        print(f"\n⏳ Waiting 10 seconds before next evaluation...\n")
+        time.sleep(10)
+
+    evaluation_count += 1
+    print(f"🔄 Evaluating example {evaluation_count}...")
+
+    return rag_bot(inputs["question"])
+
 experiment_results = client.evaluate(
-    target,
+    target_with_delay,
     data=dataset_name,
     evaluators=[correctness],
     experiment_prefix="rag-doc-relevance",
-    metadata={"version": "LCEL context, gpt-4-0125-preview"},
+    metadata={"version": "Agentic architecture with function calling"},
 )
 
 # Explore results locally as a dataframe if you have pandas installed
