@@ -275,7 +275,7 @@ You can ask me about cars in various ways:
    • "Cars between 1.5 and 3 million EGP"
 
 BY BODY TYPE:
-   • "I want a crossover"
+   • "I want a crossover from a european brand"
    • "Show me hatchbacks"
    • "Find me an SUV"
 

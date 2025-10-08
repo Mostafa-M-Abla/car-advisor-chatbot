@@ -102,7 +102,7 @@ examples = [
     {
         "inputs": {"question": "List the cheapest 5 car sedan models in egypt that are non chinese and are not manual"},
         "outputs": {
-            "answer": "1- proton saga 2- Nissan sunny 3- Renault Taliant 4- Mitsubishi Attrage 5- Chevrolet Optra"},
+            "answer": "1- proton saga 2- Nissan sunny 2025 baseline 3- Renault Taliant 4- Nissan sunny 2026 baseline 5- Mitsubishi Attrage"},
     },
     {
         "inputs": {"question": "Good Car"},
