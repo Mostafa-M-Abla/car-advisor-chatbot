@@ -129,6 +129,11 @@ examples = [
         "outputs": {
             "answer": "No cars found with those specifications and price in the egyptian market, would you consider relaxing some of the constraints, for example increase your budget or remove the country of origin or body type constraint?"},
     },
+    {
+        "inputs": {"question": "Suggest me 2 electric car from a reputable brand that has at least 600km of battery range and is below 4.5 m LE"},
+        "outputs": {
+            "answer": "I suggest one of the follwoing cars: Ioniq 6, Volove EX30, smart-3"},
+    },
 ]
 
 
