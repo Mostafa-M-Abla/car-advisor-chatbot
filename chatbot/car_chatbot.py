@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 # Import our custom modules
 from database.database_handler import DatabaseHandler
 from chatbot.query_processor import QueryProcessor
-from chatbot.response_generator import ResponseGenerator
 from chatbot.conversation_manager import ConversationManager
 
 class CarChatbot:
@@ -33,7 +32,6 @@ class CarChatbot:
         self.db_handler = DatabaseHandler(db_path=db_path, schema_path=schema_path)
         synonyms_path = os.path.join(project_root, "database", "synonyms.yaml")
         self.query_processor = QueryProcessor(schema_path=schema_path, synonyms_path=synonyms_path, config_path=config_path)
-        self.response_generator = ResponseGenerator()
         self.conversation_manager = ConversationManager(
             max_history=self.config.get('conversation', {}).get('max_history', 10)
         )
@@ -160,9 +158,69 @@ class CarChatbot:
             )
             return error_msg
 
+    def _get_sql_tool_definition(self) -> Dict[str, Any]:
+        """
+        Define the SQL query execution tool for OpenAI function calling.
+
+        Returns:
+            Tool definition dictionary
+        """
+        return {
+            "type": "function",
+            "function": {
+                "name": "execute_sql_query",
+                "description": "Execute a SQL query against the car database to search for vehicles. Returns a list of car records matching the criteria.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "sql_query": {
+                            "type": "string",
+                            "description": "A valid SELECT SQL query to execute against the 'cars' table. Must be a safe, read-only SELECT statement."
+                        }
+                    },
+                    "required": ["sql_query"]
+                }
+            }
+        }
+
+    def _execute_sql_tool(self, sql_query: str) -> Dict[str, Any]:
+        """
+        Execute SQL query and return results for the LLM.
+
+        Args:
+            sql_query: SQL query to execute
+
+        Returns:
+            Dictionary with success status and results or error message
+        """
+        try:
+            # Validate SQL
+            if not self.db_handler.validate_query(sql_query):
+                return {
+                    "success": False,
+                    "error": "SQL query failed validation (must be SELECT from cars table only)"
+                }
+
+            # Execute query
+            results = self.db_handler.execute_query(sql_query)
+            self.logger.info(f"SQL query returned {len(results)} results")
+
+            return {
+                "success": True,
+                "results_count": len(results),
+                "results": results[:20]  # Limit to 20 results to avoid token overflow
+            }
+
+        except Exception as e:
+            self.logger.error(f"Error executing SQL tool: {e}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
+
     def _unified_llm_handler(self, user_input: str, context: str) -> str:
         """
-        Unified LLM handler using single prompt for all query types.
+        Agentic LLM handler with SQL tool calling (max 3 iterations).
         Handles database queries, knowledge queries, and hybrid scenarios.
 
         Args:
@@ -182,107 +240,97 @@ class CarChatbot:
             schema_str = yaml.dump(self.query_processor.schema, default_flow_style=False)
             synonyms_str = yaml.dump(self.query_processor.synonyms, default_flow_style=False)
 
-            # Format prompt with schema, synonyms, user input, and context
-            formatted_prompt = unified_prompt.format(
+            # Format system prompt with schema and synonyms
+            system_prompt = unified_prompt.format(
                 schema=schema_str,
-                synonyms=synonyms_str,
-                user_input=user_input,
-                context=context if context else "No previous conversation."
+                synonyms=synonyms_str
             )
 
-            # Call GPT-4.1
-            self.logger.info("Calling GPT-4.1 with unified prompt")
-            response = self.query_processor.openai_client.chat.completions.create(
-                model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
-                messages=[
-                    {"role": "system", "content": "You are an expert car advisor for the Egyptian automotive market. Always respond with valid JSON."},
-                    {"role": "user", "content": formatted_prompt}
-                ],
-                temperature=self.config.get('openai', {}).get('temperature', 0.1),
-                max_tokens=self.config.get('openai', {}).get('max_tokens', 1000)
-            )
+            # Initialize conversation messages
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Conversation context: {context if context else 'No previous conversation.'}\n\nUser query: {user_input}"}
+            ]
 
-            # Parse JSON response
-            import json
-            response_text = response.choices[0].message.content.strip()
+            # Tool definition
+            tools = [self._get_sql_tool_definition()]
 
-            # Clean markdown code blocks if present
-            if response_text.startswith('```json'):
-                response_text = response_text[7:]
-            if response_text.startswith('```'):
-                response_text = response_text[3:]
-            if response_text.endswith('```'):
-                response_text = response_text[:-3]
-            response_text = response_text.strip()
+            # Multi-turn agent loop (max 3 tool calls)
+            max_iterations = 3
+            iteration = 0
+            sql_queries_executed = []
 
-            self.logger.info(f"LLM raw response: {response_text[:200]}...")
+            while iteration < max_iterations:
+                self.logger.info(f"Agent iteration {iteration + 1}/{max_iterations}")
 
-            try:
-                llm_output = json.loads(response_text)
-            except json.JSONDecodeError as e:
-                self.logger.error(f"Failed to parse JSON response: {e}")
-                self.logger.error(f"Raw response: {response_text}")
-                error_msg = "I'm having trouble understanding how to respond. Could you rephrase your question?"
-                self.conversation_manager.add_turn(
-                    user_input=user_input,
-                    bot_response=error_msg,
-                    response_type="error"
+                # Call GPT-4.1 with tool support
+                response = self.query_processor.openai_client.chat.completions.create(
+                    model=self.config.get('openai', {}).get('model', 'gpt-4.1'),
+                    messages=messages,
+                    tools=tools,
+                    tool_choice="auto",
+                    temperature=self.config.get('openai', {}).get('temperature', 0.1),
+                    max_tokens=self.config.get('openai', {}).get('max_tokens', 1500)
                 )
-                return error_msg
 
-            # Extract fields from JSON
-            needs_database = llm_output.get('needs_database', False)
-            sql_query = llm_output.get('sql_query', '')
-            response_type = llm_output.get('response_type', 'knowledge')
-            final_response = llm_output.get('response', '')
+                assistant_message = response.choices[0].message
 
-            # If needs database, execute SQL and use formatted results
-            if needs_database and sql_query:
-                self.logger.info(f"Executing SQL: {sql_query}")
+                # Add assistant's response to messages
+                messages.append(assistant_message)
 
-                # Validate SQL
-                if self.db_handler.validate_query(sql_query):
-                    results = self.db_handler.execute_query(sql_query)
-                    self.logger.info(f"SQL returned {len(results)} results")
+                # Check if assistant wants to call a tool
+                if assistant_message.tool_calls:
+                    for tool_call in assistant_message.tool_calls:
+                        if tool_call.function.name == "execute_sql_query":
+                            # Parse arguments
+                            import json
+                            args = json.loads(tool_call.function.arguments)
+                            sql_query = args.get('sql_query', '')
 
-                    # Always use formatted results for database queries
-                    # The LLM's response might have placeholders, so we use our formatting
-                    results_summary = self._format_results(results, user_input)
+                            self.logger.info(f"LLM requested SQL execution: {sql_query}")
+                            sql_queries_executed.append(sql_query)
 
-                    # For hybrid queries, prepend the LLM's additional context/advice
-                    if response_type == "hybrid" and final_response and len(final_response) > 50:
-                        # Check if response has actual advice (not placeholders)
-                        if "[" not in final_response:  # No placeholders
-                            final_response = final_response + "\n\n" + results_summary
-                        else:
-                            final_response = results_summary
-                    else:
-                        final_response = results_summary
+                            # Execute SQL tool
+                            tool_result = self._execute_sql_tool(sql_query)
+
+                            # Add tool result to messages
+                            messages.append({
+                                "role": "tool",
+                                "tool_call_id": tool_call.id,
+                                "content": json.dumps(tool_result)
+                            })
+
+                    iteration += 1
+                else:
+                    # No tool calls, assistant provided final response
+                    final_response = assistant_message.content
+
+                    # Determine response type
+                    response_type = "knowledge"
+                    if sql_queries_executed:
+                        response_type = "database" if len(sql_queries_executed) == 1 else "hybrid"
 
                     # Add to conversation history
                     self.conversation_manager.add_turn(
                         user_input=user_input,
                         bot_response=final_response,
-                        sql_query=sql_query,
-                        results_count=len(results),
+                        sql_query=sql_queries_executed[-1] if sql_queries_executed else None,
+                        results_count=None,  # We don't track this anymore
                         response_type=response_type
                     )
-                else:
-                    self.logger.warning(f"SQL validation failed: {sql_query}")
-                    error_msg = "I couldn't process that search query. Could you try rephrasing it with more specific criteria?"
-                    self.conversation_manager.add_turn(
-                        user_input=user_input,
-                        bot_response=error_msg,
-                        response_type="error"
-                    )
-                    return error_msg
-            else:
-                # Knowledge-only response
-                self.conversation_manager.add_turn(
-                    user_input=user_input,
-                    bot_response=final_response,
-                    response_type=response_type
-                )
+
+                    return final_response
+
+            # If we hit max iterations, force final response
+            self.logger.warning(f"Hit max iterations ({max_iterations}), forcing final response")
+            final_response = assistant_message.content if assistant_message.content else "I've searched the database multiple times but I'm having trouble formulating a response. Could you rephrase your question?"
+
+            self.conversation_manager.add_turn(
+                user_input=user_input,
+                bot_response=final_response,
+                sql_query=sql_queries_executed[-1] if sql_queries_executed else None,
+                response_type="database" if sql_queries_executed else "knowledge"
+            )
 
             return final_response
 
@@ -297,24 +345,6 @@ class CarChatbot:
                 response_type="error"
             )
             return error_msg
-
-    def _format_results(self, results: List[Dict[str, Any]], user_query: str) -> str:
-        """
-        Format database results using response_generator's formatting methods.
-
-        Args:
-            results: List of car dictionaries from database
-            user_query: Original user query
-
-        Returns:
-            Formatted response string
-        """
-        if not results:
-            return "I couldn't find any cars matching your criteria. Try adjusting your budget, features, or origin preferences."
-
-        # Use response_generator's formatting
-        return self.response_generator.format_results_summary(results, len(results), user_query)
-
 
     def _show_help(self):
         """Show help information."""

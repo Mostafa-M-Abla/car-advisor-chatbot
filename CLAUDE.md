@@ -44,46 +44,59 @@ car-selection-chatbot/
 ## System Architecture
 
 ### Overview
-The chatbot system uses a **unified single-prompt architecture** that eliminates the complexity of multiple LLM calls and binary routing. A single GPT-4.1 call handles database queries, automotive knowledge, and hybrid scenarios through structured JSON output.
+The chatbot system uses an **agentic architecture with function calling** that enables iterative query refinement and natural response generation. GPT-4.1 acts as an intelligent agent with access to database tools, allowing it to search, refine, and craft contextual responses.
 
-### Core Architecture Flow (UNIFIED)
+### Core Architecture Flow (AGENTIC)
 ```
 User Input → CarChatbot (Orchestrator)
     ↓
     ├── ConversationManager (Memory & Context)
-    └── Unified LLM Handler (SINGLE GPT-4.1 CALL)
+    └── Agentic LLM Handler (MULTI-TURN WITH TOOLS)
         ├── Input: unified_prompt + schema + synonyms + user_input + context
-        ├── Output JSON: {needs_database, sql_query, response_type, response}
-        ├── If needs_database=true: Execute SQL via DatabaseHandler
-        └── Format results via ResponseGenerator
+        ├── LLM decides: Use tool or provide knowledge?
+        │
+        ├─→ [ITERATION 1] Tool Call: execute_sql_query(sql)
+        │   └── DatabaseHandler executes SQL → Returns results to LLM
+        │
+        ├─→ [ITERATION 2] (Optional) Refine: execute_sql_query(adjusted_sql)
+        │   └── DatabaseHandler executes SQL → Returns results to LLM
+        │
+        ├─→ [ITERATION 3] (Optional) Final attempt: execute_sql_query(final_sql)
+        │   └── DatabaseHandler executes SQL → Returns results to LLM
+        │
+        └─→ LLM sees all results → Crafts natural, contextual response
     ↓
 Conversational Response → User
 ```
 
-### Component Interaction Model (UNIFIED)
-1. **CarChatbot** receives user input and orchestrates the entire flow
+### Component Interaction Model (AGENTIC)
+1. **CarChatbot** receives user input and orchestrates the agentic flow
 2. **ConversationManager** provides conversation context from history
-3. **Unified LLM Handler** (`_unified_llm_handler`) makes SINGLE GPT-4.1 call that:
-   - Decides if database query is needed
-   - Generates SQL query (if needed)
-   - Provides conversational response or automotive knowledge
+3. **Agentic LLM Handler** (`_unified_llm_handler`) runs multi-turn agent loop (max 3 iterations):
+   - **Tool Definition**: Provides `execute_sql_query` function to LLM
+   - **Decision Making**: LLM decides when to query database vs provide knowledge
+   - **SQL Execution**: LLM calls tool with generated SQL → sees actual results
+   - **Iterative Refinement**: LLM can adjust query if needed (no results, too many results, etc.)
+   - **Natural Responses**: LLM crafts context-specific responses using database results
    - **Handles hybrid queries seamlessly** (e.g., "reliable SUVs under 2M" → queries database + adds reliability insights)
-4. **DatabaseHandler** executes validated SQL queries
-5. **ResponseGenerator** formats database results for user-friendly presentation (formatting only, no LLM calls)
-6. **QueryProcessor** serves as configuration holder (schema, synonyms, OpenAI client)
-7. **Configuration system** provides centralized `unified_prompt` in chatbot_config.yaml
+4. **DatabaseHandler** executes validated SQL queries and returns raw results to LLM
+5. **QueryProcessor** serves as configuration holder (schema, synonyms, OpenAI client)
+6. **Configuration system** provides centralized `unified_prompt` in chatbot_config.yaml with tool usage guidelines
 
-### Design Principles (UNIFIED ARCHITECTURE)
-- **Single Prompt, Single Call**: One GPT-4.1 call handles database, knowledge, and hybrid queries
-- **JSON-Based Responses**: Structured LLM output ensures deterministic behavior
-- **No Binary Routing**: LLM intelligently decides query type (no keyword matching)
+### Design Principles (AGENTIC ARCHITECTURE)
+- **Tool-Based Interaction**: LLM uses `execute_sql_query` function calling to access database
+- **Iterative Refinement**: Up to 3 tool calls allow query adjustment based on results
+- **Natural Response Generation**: LLM sees actual database results and crafts tailored responses
+- **Context-Aware Formatting**: Responses adapt to query type (not rigid templates)
 - **Hybrid Query Support**: Database searches seamlessly include automotive knowledge
 - **Centralized Configuration**: All LLM behavior controlled via `unified_prompt` in YAML
 - **Conversation Memory**: Tracks conversation history for context continuity
 - **Egyptian Market Focus**: Specialized for local automotive market needs
-- **Simplified Components**: Pure functions with single responsibilities
+- **Simplified Components**: Removed rigid formatting (~150 lines), LLM does everything
 
 ### Major Architectural Changes (2025)
+
+#### Phase 1: Unified Architecture (January 2025)
 **Problem Identified:**
 - Old architecture had 3 separate LLM prompts that didn't work together
 - Binary routing failed on hybrid queries ("reliable SUVs under 2M" only routed to knowledge, never queried database)
@@ -96,6 +109,21 @@ Conversational Response → User
 - **Simplified response_generator.py**: No LLM calls, just formatting (~50 lines removed)
 - **All prompts in config**: True centralized configuration
 - **Hybrid queries now work correctly**: Database + knowledge in single response
+
+#### Phase 2: Agentic Architecture (October 2025)
+**Problem Identified:**
+- LLM couldn't see database results (formatted with rigid templates before LLM saw them)
+- No iterative refinement (single-shot SQL generation)
+- Hybrid queries just concatenated LLM text + formatted results (not user-friendly)
+- Rigid formatting didn't adapt to query context
+
+**Solution Implemented:**
+- **Function calling architecture**: LLM uses `execute_sql_query` tool to access database
+- **Iterative refinement**: Up to 3 tool calls for query adjustment
+- **LLM sees raw results**: Crafts natural, context-specific responses
+- **Removed rigid templates**: response_generator.py reduced to utility function (~130 lines removed)
+- **Better hybrid queries**: LLM naturally integrates database results with knowledge
+- **Context-aware responses**: Different queries get different response styles
 
 ## Key Features
 
@@ -119,29 +147,32 @@ Conversational Response → User
 ## Core Components
 
 ### 1. CarChatbot (`chatbot/car_chatbot.py`)
-**Main orchestrator with unified LLM handler**
+**Main orchestrator with agentic LLM handler**
 - **Initialization**: Loads configuration, validates database, initializes all components
-- **Unified Processing**: Single LLM call handles all query types
+- **Agentic Processing**: Multi-turn agent loop with function calling (max 3 iterations)
 - **Conversation Flow**: Manages interactive CLI interface with commands
 - **Error Handling**: Comprehensive exception handling and graceful degradation
 - **Session Management**: Tracks conversation statistics and interaction patterns
 
 **Key Methods:**
-- `process_message()`: Main entry point, calls unified LLM handler
-- `_unified_llm_handler()`: **CORE METHOD** - Makes single GPT-4.1 call that:
-  - Loads `unified_prompt` from config
+- `process_message()`: Main entry point, calls agentic LLM handler
+- `_unified_llm_handler()`: **CORE METHOD** - Runs multi-turn agent loop:
+  - Loads `unified_prompt` from config with tool usage guidelines
   - Injects schema, synonyms, user input, and context
-  - Parses JSON response: `{needs_database, sql_query, response_type, response}`
-  - Executes SQL if needed via DatabaseHandler
-  - Formats results via ResponseGenerator
+  - Provides `execute_sql_query` tool via function calling
+  - LLM decides: Call tool or provide knowledge?
+  - Runs up to 3 iterations for query refinement
+  - LLM sees raw database results and crafts natural responses
   - Returns final conversational response
-- `_format_results()`: Formats database results for presentation
+- `_get_sql_tool_definition()`: Defines SQL execution tool for function calling
+- `_execute_sql_tool()`: Executes SQL and returns results to LLM
 - `start_conversation()`: Interactive CLI interface with help, stats, clear commands
 
-**Removed Methods (now unified):**
-- ~~`_handle_database_query()`~~ → Replaced by unified handler
-- ~~`_handle_external_knowledge_query()`~~ → Replaced by unified handler
+**Removed Methods (simplified in agentic architecture):**
+- ~~`_handle_database_query()`~~ → Replaced by tool calling
+- ~~`_handle_external_knowledge_query()`~~ → LLM decides autonomously
 - ~~`_extract_car_context_from_query()`~~ → No longer needed
+- ~~`_format_results()`~~ → LLM formats responses naturally
 
 ### 2. QueryProcessor (`chatbot/query_processor.py`)
 **Configuration holder for schema and synonyms (SIMPLIFIED)**
@@ -190,28 +221,27 @@ Conversational Response → User
 - Clearer error handling when SQL generation fails
 
 ### 4. ResponseGenerator (`chatbot/response_generator.py`)
-**Pure formatting for database results (SIMPLIFIED)**
+**Utility functions (FULLY SIMPLIFIED)**
 
-**Unified Architecture Role:**
-- **No LLM calls** - All conversational responses generated by unified prompt
-- **Pure formatting logic** - Converts raw database results to user-friendly presentation
-- **Reusable methods** - Clean formatting functions used by unified handler
+**Agentic Architecture Role:**
+- **Optional utility functions** - LLM can reference if needed
+- **No rigid templates** - LLM crafts all responses naturally
+- **Minimal code** - Just helper functions
 
-**Key Methods:**
-- `format_car_result()`: Formats single car with price, specs, features (with emojis)
-- `format_results_summary()`: Formats list of cars with pagination info
-- `format_price()`: Egyptian Pound formatting with commas
+**Available Utility:**
+- `format_price()`: Egyptian Pound formatting with commas (e.g., "1,500,000 EGP")
 
-**Removed Methods (moved to unified prompt):**
-- ~~`generate_response()`~~ → Conversational response now in unified prompt (~50 lines removed)
-- No longer depends on OpenAI client
-- No longer loads config (just pure formatting)
+**Removed in Agentic Architecture (~130 lines):**
+- ~~`format_car_result()`~~ → LLM crafts car descriptions naturally
+- ~~`format_results_summary()`~~ → LLM formats results based on context
+- ~~`generate_response()`~~ → LLM generates all responses
+- ~~ResponseGenerator class~~ → Now just standalone functions
 
-**Simplification Benefits:**
-- Removed ~50 lines of LLM call code
-- Single responsibility: Format database results only
-- No AI dependencies - pure function
-- More testable and maintainable
+**Benefits:**
+- LLM crafts context-specific responses (not rigid templates)
+- Different queries get different formatting styles
+- More natural, conversational responses
+- Simpler codebase (~130 lines removed)
 
 ### 5. ConversationManager (`chatbot/conversation_manager.py`)
 **Conversation history and context management (SIMPLIFIED)**
@@ -288,7 +318,7 @@ The entire chatbot behavior is controlled through a comprehensive YAML configura
 openai:
   model: "gpt-4.1"          # Centralized model selection
   temperature: 0.1          # Response randomness control
-  max_tokens: 1000          # Response length limits
+  max_tokens: 1500          # Increased for agentic responses
 ```
 
 #### Conversation Settings
@@ -299,54 +329,62 @@ conversation:
     Hi! I'm your AI car advisor for the Egyptian market...
 ```
 
-#### Unified Prompt (CORE CONFIGURATION)
+#### Agentic Prompt (CORE CONFIGURATION)
 ```yaml
 prompts:
   unified_prompt: |
-    You are an expert car advisor for the Egyptian automotive market with two powerful capabilities:
+    You are an expert car advisor for the Egyptian automotive market with access to a comprehensive database and automotive knowledge.
 
-    1. **DATABASE ACCESS**: Query 900+ car trims (specs, prices in EGP, features)
-    2. **AUTOMOTIVE KNOWLEDGE**: Provide reliability insights, reviews, comparisons, market trends
+    **DATABASE SCHEMA**:
+    {schema}
 
-    Database schema: {schema}
-    Available synonyms: {synonyms}
+    **SYNONYMS** (user terms → database values):
+    {synonyms}
 
     ---
 
-    **YOUR TASK**: For each user query, determine if you need to:
-    - Query the database (for specific car searches with criteria)
-    - Use general automotive knowledge (for reliability, reviews, advice)
-    - Both (hybrid queries like "reliable SUVs under 2M EGP")
+    ## YOUR CAPABILITIES
 
-    **OUTPUT FORMAT (JSON)**:
-    ```json
-    {
-      "needs_database": true/false,
-      "sql_query": "SELECT * FROM cars WHERE ...",
-      "response_type": "database"/"knowledge"/"hybrid",
-      "response": "Your conversational response here"
-    }
-    ```
+    1. **DATABASE ACCESS**: You have the `execute_sql_query` tool to search 900+ car trims
+    2. **AUTOMOTIVE KNOWLEDGE**: You can provide reliability insights, reviews, comparisons
+    3. **ITERATIVE REFINEMENT**: You can call `execute_sql_query` up to 3 times to refine searches
 
-    **SQL GENERATION RULES**: [detailed SQL rules]
-    **RESPONSE GUIDELINES**: [formatting, clarification, hybrid queries]
+    ## TOOL USAGE GUIDELINES
+
+    **When to use `execute_sql_query`**:
+    - User asks for cars with specific criteria (price, body type, features, origin)
+    - Hybrid queries: "reliable SUVs under 2M" (search database + add knowledge)
+
+    **SQL Generation Rules**: [detailed SQL rules]
+
+    **Iterative Refinement Examples**:
+    - First query returns 0 results → Try relaxing budget by 10-20%
+    - First query returns 100+ results → Add more filters to narrow down
+
+    ## RESPONSE FORMATTING
+
+    **After receiving database results**:
+    - Craft natural, conversational responses tailored to the query
+    - Format prices with commas: "1,500,000 EGP"
+    - Highlight key features relevant to user's question
+    - Use emojis sparingly for readability
+
+    **Response Examples**: [context-specific examples]
 ```
 
-**Key Features of Unified Prompt:**
-- **Single source of truth**: All LLM behavior controlled here
-- **JSON output**: Structured, deterministic responses
+**Key Features of Agentic Prompt:**
+- **Tool-based interaction**: Guides LLM on when to use `execute_sql_query`
+- **Iterative refinement**: Instructions for adjusting queries based on results
+- **Natural response generation**: LLM crafts responses after seeing database results
+- **Context-aware formatting**: Different queries get different response styles
 - **Hybrid query support**: Seamlessly combines database + knowledge
-- **Smart clarification**: LLM decides when to ask questions
 - **Egyptian market focus**: Context-specific recommendations
 - **Schema/synonym injection**: Dynamic integration of database structure
 
-**Removed Configuration (no longer needed):**
-- ~~`system_prompt`~~ → Replaced by unified_prompt
-- ~~`query_generation_prompt`~~ → SQL generation now in unified_prompt
-- ~~`response_generation_prompt`~~ → Response generation now in unified_prompt
-- ~~`features`~~ → Unused section (~5 lines)
-- ~~`limits`~~ → Unused section (~5 lines)
-- ~~`error_messages`~~ → Mostly unused (~7 lines)
+**Evolution from Previous Architecture:**
+- ~~JSON output format~~ → Function calling replaces structured JSON
+- ~~Rigid templates~~ → LLM crafts natural responses
+- ~~Single-shot queries~~ → Iterative refinement (max 3 calls)
 
 ### Database System
 #### Database Creator (`database/database_creator.py`)
@@ -467,7 +505,7 @@ The system now uses a single, flexible method that automatically handles all typ
 
 ## AI Integration & Architecture
 
-### Unified AI Integration
+### Agentic AI Integration
 The system leverages OpenAI GPT models across two distinct layers:
 
 #### 1. Data Processing Layer (`scrapped_data_postprocessing.py`)
@@ -478,28 +516,42 @@ The system leverages OpenAI GPT models across two distinct layers:
 - **Duplicate Detection**: Removes duplicate entries based on car_trim
 - **Powertrain Loading**: Loads pre-classified powertrain types from power_train.csv with model-specific adjustments
 
-#### 2. Unified Chatbot Layer (`chatbot/car_chatbot.py`)
-**GPT-4.1 for All Chatbot Intelligence:**
-- **Single LLM Call Architecture**: One unified prompt handles all query types
+#### 2. Agentic Chatbot Layer (`chatbot/car_chatbot.py`)
+**GPT-4.1 as Intelligent Agent with Tools:**
+- **Function Calling Architecture**: LLM uses `execute_sql_query` tool to access database
+- **Iterative Refinement**: Up to 3 tool calls for query adjustment based on results
 - **SQL Generation**: Converts user queries to validated SQL in real-time
-- **Conversational Responses**: Generates natural language responses with context
+- **Result-Aware Responses**: LLM sees raw database results and crafts natural, context-specific responses
 - **Automotive Knowledge**: Provides expertise on reliability, comparisons, market trends
-- **Hybrid Query Handling**: Seamlessly combines database searches with knowledge insights
+- **Hybrid Query Handling**: Seamlessly integrates database results with knowledge insights
 - **Smart Clarification**: Intelligently decides when user input is too vague
-- **Result Integration**: Coordinates database results with conversational context
+- **Adaptive Formatting**: Response style adapts to query context (not rigid templates)
+
+**Tool Definition:**
+```python
+execute_sql_query(sql_query: str) -> Dict[str, Any]
+# Returns: {"success": bool, "results_count": int, "results": List[Dict]}
+```
+
+**Agent Loop (Max 3 Iterations):**
+1. LLM decides: Need database or just knowledge?
+2. If database needed: Call `execute_sql_query` with generated SQL
+3. See results: 0 results? Too many? Refine query
+4. Optional: Call tool again with adjusted SQL
+5. Craft natural response using all gathered information
 
 **Supporting Components (No LLM Calls):**
 - **QueryProcessor**: Configuration holder (schema, synonyms, OpenAI client)
-- **ResponseGenerator**: Pure formatting functions (database results to user-friendly text)
+- **ResponseGenerator**: Optional utility functions (price formatting)
 - **DatabaseHandler**: SQL execution and result retrieval
 - **ConversationManager**: Conversation history and context tracking
 
 ### Centralized Model Management
 - **Single Configuration Point**: All LLM behavior controlled via `unified_prompt` in `chatbot/chatbot_config.yaml`
 - **GPT-4 for Data Processing**: One-time data enhancement during preprocessing
-- **GPT-4.1 for Chatbot**: All runtime chatbot intelligence (SQL generation, responses, knowledge)
+- **GPT-4.1 for Chatbot**: All runtime chatbot intelligence (tool usage, SQL generation, responses, knowledge)
 - **Fallback Handling**: Graceful degradation if AI services are unavailable
-- **Performance Optimization**: Single LLM call per user message reduces latency and cost
+- **Performance Optimization**: Multi-turn agent with max 3 iterations balances flexibility and cost
 
 ## Database Performance
 
