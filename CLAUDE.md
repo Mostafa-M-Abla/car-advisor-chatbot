@@ -28,15 +28,19 @@ car-selection-chatbot/
 │   └── synonyms.yaml               # Natural language synonym mappings
 │
 ├── evaluation/                     # Evaluation and testing module
-│   └── run_evaluation.py           # Chatbot performance evaluation script (auto-updates dataset)
+│   ├── run_evaluation.py           # Chatbot performance evaluation (16 test cases)
+│   └── hyperparameter_tuning.py    # Grid search for optimal parameters
 │
-├── scrapped_data_postprocessing.py # AI-enhanced data processing pipeline
-├── power_train.csv                 # Powertrain type classifications
+├── postprocessing/                 # Data processing module
+│   ├── scrapped_data_postprocessing.py  # AI-enhanced data pipeline
+│   ├── power_train.csv             # Powertrain classifications
+│   └── postprocessing_output.log   # Processing logs
+│
+├── app.py                         # Gradio web interface (recommended entry point)
+├── run_chatbot.py                  # CLI entry point
 ├── processed_data.csv              # Clean, AI-enhanced car data
-├── run_chatbot.py                  # Entry point and launcher script
 ├── .env                           # Environment variables (API keys)
-├── requirements.txt               # Python dependencies
-├── postprocessing_output.log      # Data processing logs
+├── requirements.txt               # Python dependencies (includes gradio>=4.0.0)
 ├── chatbot.log                    # Runtime logs and debugging
 └── CLAUDE.md                      # This comprehensive documentation
 ```
@@ -670,8 +674,22 @@ python database/database_tester.py
 ```
 
 ### Running the Chatbot
+
+#### Option 1: Web Interface (Recommended)
 ```bash
-# Start the advanced AI car chatbot
+# Start the Gradio web interface
+python app.py
+```
+- Opens automatically in your browser at `http://localhost:7860`
+- Modern chat UI with message history
+- Example prompts for easy interaction
+- Copy message functionality
+- Mobile-responsive design
+- Can generate shareable public link (set `share=True` in app.py)
+
+#### Option 2: Command Line Interface
+```bash
+# Start the CLI chatbot
 python run_chatbot.py
 
 # Alternative: Direct module execution
