@@ -321,12 +321,36 @@ Conversational Response → User
 ### 8. Evaluation Module (`evaluation/run_evaluation.py`)
 **Chatbot performance evaluation and testing**
 - **Automated Testing**: Runs predefined test cases to evaluate chatbot responses
-- **Performance Metrics**: Measures response quality, accuracy, and consistency
+- **Dataset**: 4 core test cases (expandable to 16 when uncommenting additional examples)
+  - Cheapest car query
+  - Brand origin knowledge (BMW)
+  - Clarification handling ("I want to buy a good car")
+  - Complex multi-filter query (non-Chinese, automatic, ESP)
+- **Performance Metrics**: Correctness score (0.0-1.0) using GPT-4.1 as evaluator
 - **Regression Testing**: Ensures updates don't break existing functionality
-- **Query Validation**: Tests various query types (price ranges, features, complex filters)
-- **Output Analysis**: Evaluates response format, clarity, and helpfulness
-- **Dataset Management**: Automatically updates existing dataset instead of requiring new names for each run
-- **LangSmith Integration**: Uses LangSmith for experiment tracking and evaluation
+- **Query Validation**: Tests various query types (price ranges, features, complex filters, knowledge)
+- **Output Analysis**: Per-example breakdown with ✅/❌ status and aggregate statistics
+- **Dataset Management**: Automatically updates existing dataset, alphabetically sorted by question
+- **LangSmith Integration**: Full experiment tracking with metadata
+- **10-second delay**: Between evaluations to avoid rate limits
+
+### 9. Hyperparameter Tuning (`evaluation/hyperparameter_tuning.py`)
+**Automated grid search for optimal chatbot parameters**
+- **Architecture**: Imports `rag_bot`, `correctness`, and `client` from run_evaluation.py (no code duplication)
+- **Parameters Tuned**:
+  - Temperature: Controls LLM randomness (default grid: [0.0, 0.1, 0.3, 0.5])
+  - Max Tokens: Controls response length (default grid: [800, 1200, 1500, 2000])
+- **Grid Search**: Configurable test matrix (default: 16 configurations)
+- **Evaluation Metric**: Same correctness evaluator as run_evaluation.py
+- **Results Tracking**:
+  - Saves detailed JSON with all configurations tested
+  - Identifies best configuration automatically
+  - Provides aggregate analysis by parameter (temperature avg, max_tokens avg)
+  - Shows top 5 performing configurations
+- **Safe Operations**: Automatic config backup/restore, always runs in finally block
+- **Usage**: `python evaluation/hyperparameter_tuning.py`
+- **Customization**: Modify `TEMPERATURE_VALUES` and `MAX_TOKENS_VALUES` at lines 33-34
+- **Output**: Saves to `evaluation/tuning_results_TIMESTAMP.json`
 
 ## Configuration System
 
