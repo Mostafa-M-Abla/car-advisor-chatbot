@@ -57,24 +57,24 @@ demo = gr.ChatInterface(
     Try the example prompts below or ask your own questions!
     """,
     examples=[
-        "What's the cheapest car under 1 million EGP?",
-        "Show me non-Chinese crossovers with automatic transmission and ESP",
-        "I want a sedan between 1.5 and 2.5 million EGP",
-        "Is the Toyota Corolla reliable?",
-        "Compare Honda Civic vs Hyundai Elantra",
-        "What's the cheapest electric car with at least 400km range?",
-        "Show me German cars with sunroof under 3 million EGP"
+        "What is the most affordable non chinese sedan with automatic transmission?",
+        "I want a japanese crossover under 2 million LE",
+        "Should I buy a Corolla or an Elantra?",
+        "What is the most affordable crossover with sunroof?",
+        "What is the cheapest 7 seater in Egypt?",
+        "Suggest an electric car with at least 500 km range under 2,000,000 EGP"
     ],
     theme=gr.themes.Soft(
         primary_hue="blue",
         secondary_hue="slate",
     ),
     chatbot=gr.Chatbot(
-        height=500,
+        height=1000,
         show_copy_button=True,
-        avatar_images=(None, "🚗"),  # User: default, Bot: car emoji
+        #avatar_images=(None, "🚗"),  # User: default, Bot: car emoji
         type="messages",  # Use modern messages format instead of deprecated tuples
     ),
+    save_history = True
 )
 
 # Launch the interface
