@@ -13,10 +13,11 @@ car-selection-chatbot/
 │   └── scrapped_data.csv           # Raw scraped car data
 │
 ├── chatbot/                        # Core chatbot system components
-│   ├── car_chatbot.py              # Main orchestrator with unified LLM handler
-│   ├── query_processor.py          # Configuration holder (schema, synonyms)
-│   ├── response_generator.py       # Database result formatting (pure functions)
+│   ├── car_chatbot.py              # Main orchestrator with LangGraph agent
+│   ├── query_processor.py          # Configuration holder (schema, synonyms, LLM)
+│   ├── response_generator.py       # Utility functions (price formatting)
 │   ├── conversation_manager.py     # Conversation history and context tracking
+│   ├── tools.py                    # LangChain SQL tool definition
 │   └── chatbot_config.yaml         # Comprehensive chatbot configuration
 │
 ├── database/                       # Database system
@@ -101,53 +102,6 @@ Conversational Response → User
 - **Conversation Memory**: Tracks conversation history for context continuity
 - **Egyptian Market Focus**: Specialized for local automotive market needs
 - **Observability**: LangSmith tracing for debugging and monitoring
-- **Simplified Components**: Removed rigid formatting (~150 lines), agent does everything
-
-### Major Architectural Changes (2025)
-
-#### Phase 1: Unified Architecture (January 2025)
-**Problem Identified:**
-- Old architecture had 3 separate LLM prompts that didn't work together
-- Binary routing failed on hybrid queries ("reliable SUVs under 2M" only routed to knowledge, never queried database)
-- Config prompts were ignored (hardcoded prompts in query_processor and knowledge_handler)
-
-**Solution Implemented:**
-- **Unified single-prompt architecture**: One call handles everything
-- **Removed knowledge_handler.py entirely** (~200 lines)
-- **Simplified query_processor.py**: No SQL generation, just config holder (~140 lines removed)
-- **Simplified response_generator.py**: No LLM calls, just formatting (~50 lines removed)
-- **All prompts in config**: True centralized configuration
-- **Hybrid queries now work correctly**: Database + knowledge in single response
-
-#### Phase 2: Agentic Architecture with Function Calling (October 2025)
-**Problem Identified:**
-- LLM couldn't see database results (formatted with rigid templates before LLM saw them)
-- No iterative refinement (single-shot SQL generation)
-- Hybrid queries just concatenated LLM text + formatted results (not user-friendly)
-- Rigid formatting didn't adapt to query context
-
-**Solution Implemented:**
-- **Function calling architecture**: LLM uses `execute_sql_query` tool to access database
-- **Iterative refinement**: Up to 3 tool calls for query adjustment
-- **LLM sees raw results**: Crafts natural, context-specific responses
-- **Removed rigid templates**: response_generator.py reduced to utility function (~130 lines removed)
-- **Better hybrid queries**: LLM naturally integrates database results with knowledge
-- **Context-aware responses**: Different queries get different response styles
-
-#### Phase 3: LangChain & LangGraph Integration (October 2025)
-**Why LangChain?**
-- **Industry standard**: Well-tested agent framework used by thousands of projects
-- **Better observability**: Built-in LangSmith tracing for debugging
-- **Consistency**: Same framework for chatbot and evaluation
-- **Future-proof**: Easier to add streaming, memory, more tools
-- **Cleaner code**: High-level abstractions vs manual loops
-
-**Changes Made:**
-- **Migrated to LangChain ChatOpenAI**: Replaced direct OpenAI API calls
-- **LangGraph create_react_agent**: Replaced manual agent loop (~90 lines simplified)
-- **LangChain @tool decorator**: Clean tool definition in `chatbot/tools.py`
-- **Added dependencies**: `langgraph>=0.0.20`, `langchain-core>=0.1.0`
-- **Same behavior**: All tests pass with identical functionality
 
 ## Key Features
 
@@ -179,134 +133,68 @@ Conversational Response → User
 - **Session Management**: Tracks conversation statistics and interaction patterns
 
 **Key Methods:**
-- `process_message()`: Main entry point, calls agentic LLM handler
-- `_unified_llm_handler()`: **CORE METHOD** - Runs multi-turn agent loop:
-  - Loads `unified_prompt` from config with tool usage guidelines
-  - Injects schema, synonyms, user input, and context
-  - Provides `execute_sql_query` tool via function calling
-  - LLM decides: Call tool or provide knowledge?
-  - Runs up to 3 iterations for query refinement
-  - LLM sees raw database results and crafts natural responses
-  - Returns final conversational response
-- `_get_sql_tool_definition()`: Defines SQL execution tool for function calling
-- `_execute_sql_tool()`: Executes SQL and returns results to LLM
-- `start_conversation()`: Interactive CLI interface with help, stats, clear commands
+- `process_message()`: Main entry point, calls unified LLM handler
+- `_create_agent()`: Creates LangGraph agent with SQL tool and system prompt
+- `_unified_llm_handler()`: **CORE METHOD** - Invokes LangGraph agent:
+  - Formats system prompt with schema and synonyms
+  - Passes user input and conversation context
+  - Agent decides when to use SQL tool vs provide knowledge
+  - Returns agent's natural conversational response
+- `start_conversation()`: Interactive CLI interface with help, stats, clear, export commands
 
-**Removed Methods (simplified in agentic architecture):**
-- ~~`_handle_database_query()`~~ → Replaced by tool calling
-- ~~`_handle_external_knowledge_query()`~~ → LLM decides autonomously
-- ~~`_extract_car_context_from_query()`~~ → No longer needed
-- ~~`_format_results()`~~ → LLM formats responses naturally
 
 ### 2. QueryProcessor (`chatbot/query_processor.py`)
-**Configuration holder for schema and synonyms (SIMPLIFIED)**
+**Configuration holder for schema and synonyms**
 
-**Unified Architecture Role:**
+**Responsibilities:**
 - Serves as centralized source for database schema
-- Provides synonym mappings for natural language
-- Maintains OpenAI client instance
-- **No longer generates SQL** (moved to unified prompt)
+- Provides synonym mappings for natural language understanding
+- Maintains LangChain ChatOpenAI model instance
+- Loads chatbot configuration
 
 **Key Attributes:**
 - `schema`: Database schema loaded from schema.yaml
 - `synonyms`: Natural language mappings loaded from synonyms.yaml
-- `openai_client`: Shared OpenAI client instance
+- `llm`: LangChain ChatOpenAI model instance
 - `config`: Chatbot configuration
 
-**Removed Methods (moved to unified prompt):**
-- ~~`generate_sql_with_gpt4()`~~ → SQL generation now in unified prompt
-- ~~`parse_query()`~~ → Query parsing now in unified prompt
-
-**Simplification Benefits:**
-- Removed ~140 lines of SQL generation code
-- Single responsibility: Configuration holder only
-- More maintainable and focused
-- Schema/synonyms accessible to unified handler
-
 ### 3. DatabaseHandler (`database/database_handler.py`)
-**Simplified database operations and result management**
+**Database operations and result management**
 
-**Single Execution Path:**
-- **AI-Generated SQL Only**: Executes GPT-4.1 generated queries
-  - Validated for safety before execution
-  - Parameterized queries prevent SQL injection
-  - Logged for monitoring and debugging
+**Responsibilities:**
+- Executes validated SQL queries from the LLM agent
+- Returns raw results to the agent for natural response crafting
+- Validates queries for safety before execution
+- Logs all query operations for monitoring
 
 **Key Features:**
 - Egyptian Pound formatting with commas
 - Feature categorization (safety, comfort, technology)
 - Car comparison utilities
 - Database validation and health checks
-- Comprehensive query logging
-
-**Simplification:**
-- Removed `search_cars()` fallback method (~60 lines)
-- Single responsibility: Execute validated SQL queries
-- Clearer error handling when SQL generation fails
+- Parameterized queries prevent SQL injection
 
 ### 4. ResponseGenerator (`chatbot/response_generator.py`)
-**Utility functions (FULLY SIMPLIFIED)**
+**Optional utility functions**
 
-**Agentic Architecture Role:**
-- **Optional utility functions** - LLM can reference if needed
-- **No rigid templates** - LLM crafts all responses naturally
-- **Minimal code** - Just helper functions
+**Purpose:**
+- Provides helper functions for consistent formatting
+- LLM agent crafts all responses naturally without rigid templates
+- Functions available if agent needs specific formatting
 
-**Available Utility:**
+**Available Utilities:**
 - `format_price()`: Egyptian Pound formatting with commas (e.g., "1,500,000 EGP")
 
-**Removed in Agentic Architecture (~130 lines):**
-- ~~`format_car_result()`~~ → LLM crafts car descriptions naturally
-- ~~`format_results_summary()`~~ → LLM formats results based on context
-- ~~`generate_response()`~~ → LLM generates all responses
-- ~~ResponseGenerator class~~ → Now just standalone functions
-
-**Benefits:**
-- LLM crafts context-specific responses (not rigid templates)
-- Different queries get different formatting styles
-- More natural, conversational responses
-- Simpler codebase (~130 lines removed)
-
 ### 5. ConversationManager (`chatbot/conversation_manager.py`)
-**Conversation history and context management (SIMPLIFIED)**
+**Conversation history and context management**
+
+**Responsibilities:**
 - **Conversation History**: Maintains structured conversation turns with timestamps
 - **Context Generation**: Provides recent conversation context for LLM interactions
 - **Session Analytics**: Tracks success rates, query patterns, and interaction statistics
 - **Export Functionality**: Can export conversation history to JSON for analysis
 
-**Simplification Note:**
-- Removed ~150 lines of dead preference tracking code
-- User preference learning was never actually functional (criteria always None/empty)
-- Focus on conversation context rather than structured preference extraction
-- Cleaner, more maintainable design that leverages LLM's natural context understanding
-
-### 6. ~~KnowledgeHandler~~ (DELETED - UNIFIED)
-**This component has been removed entirely in the unified architecture.**
-
-**Previous Functionality:**
-- Query classification (database vs. knowledge)
-- External automotive knowledge retrieval
-- Separate LLM calls for knowledge queries
-
-**Problem:**
-- Used hardcoded prompts that ignored config
-- Binary routing failed on hybrid queries
-- Created artificial separation between database and knowledge
-
-**Solution:**
-- **Deleted knowledge_handler.py (~200 lines removed)**
-- Functionality moved to unified prompt
-- Hybrid queries now work seamlessly
-- All prompts centralized in config
-
-**Unified Approach:**
-- Replaced 5 specialized methods with one `get_knowledge_response()` method
-- Handles all query types: reliability, reviews, comparisons, market insights, safety, history
-- Leverages GPT-4.1's intelligence to provide appropriate response format
-- Simpler, more maintainable, and more flexible for diverse user questions
-- Automatically integrates database context when specific cars are mentioned
-
-### 7. Data Processing Pipeline (`scrapped_data_postprocessing.py`)
+### 6. Data Processing Pipeline (`scrapped_data_postprocessing.py`)
 - **Data Cleaning**: Removes invalid entries, normalizes columns
 - **AI Enhancement**: Uses OpenAI GPT-4 for:
   - Body type classification (sedan, hatchback, crossover/suv, coupe, convertible, van)
@@ -322,7 +210,7 @@ Conversational Response → User
 - **Brand Name Normalization**: Fixes brand names (moris-garage → MG, CitroÃ«n → Citroen)
 - **Duplicate Removal**: Eliminates duplicate entries based on car_trim
 
-### 8. Evaluation Module (`evaluation/run_evaluation.py`)
+### 7. Evaluation Module (`evaluation/run_evaluation.py`)
 **Chatbot performance evaluation and testing**
 - **Automated Testing**: Runs predefined test cases to evaluate chatbot responses
 - **Dataset**: 4 core test cases (expandable to 16 when uncommenting additional examples)
@@ -338,7 +226,7 @@ Conversational Response → User
 - **LangSmith Integration**: Full experiment tracking with metadata
 - **10-second delay**: Between evaluations to avoid rate limits
 
-### 9. Hyperparameter Tuning (`evaluation/hyperparameter_tuning.py`)
+### 8. Hyperparameter Tuning (`evaluation/hyperparameter_tuning.py`)
 **Automated grid search for optimal chatbot parameters**
 - **Architecture**: Imports `rag_bot`, `correctness`, and `client` from run_evaluation.py (no code duplication)
 - **Parameters Tuned**:
@@ -428,11 +316,6 @@ prompts:
 - **Hybrid query support**: Seamlessly combines database + knowledge
 - **Egyptian market focus**: Context-specific recommendations
 - **Schema/synonym injection**: Dynamic integration of database structure
-
-**Evolution from Previous Architecture:**
-- ~~JSON output format~~ → Function calling replaces structured JSON
-- ~~Rigid templates~~ → LLM crafts natural responses
-- ~~Single-shot queries~~ → Iterative refinement (max 3 calls)
 
 ### Database System
 #### Database Creator (`database/database_creator.py`)
