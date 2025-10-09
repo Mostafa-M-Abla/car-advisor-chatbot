@@ -242,5 +242,53 @@ experiment_results = client.evaluate(
     metadata={"version": "Agentic architecture with function calling"},
 )
 
-# Explore results locally as a dataframe if you have pandas installed
-# experiment_results.to_pandas()
+# Extract and display evaluation results
+print("\n" + "="*80)
+print("EVALUATION RESULTS")
+print("="*80)
+
+# Convert to pandas DataFrame for analysis
+df = experiment_results.to_pandas()
+
+# Extract correctness scores
+# The feedback column contains evaluation results
+correctness_scores = []
+for idx, row in df.iterrows():
+    # LangSmith stores feedback in 'feedback.correctness' or 'evaluators.correctness'
+    if 'feedback.correctness' in row and row['feedback.correctness'] is not None:
+        correctness_scores.append(1.0 if row['feedback.correctness'] else 0.0)
+    elif 'evaluators.correctness' in row and row['evaluators.correctness'] is not None:
+        correctness_scores.append(1.0 if row['evaluators.correctness'] else 0.0)
+
+if correctness_scores:
+    # Calculate aggregate statistics
+    total_examples = len(correctness_scores)
+    correct_count = sum(correctness_scores)
+    aggregate_correctness = correct_count / total_examples if total_examples > 0 else 0
+
+    print(f"\n📊 Overall Statistics:")
+    print(f"   Total examples evaluated: {total_examples}")
+    print(f"   Correct answers: {int(correct_count)}")
+    print(f"   Incorrect answers: {int(total_examples - correct_count)}")
+    print(f"   Average Correctness Score: {aggregate_correctness:.2%}")
+    print(f"   Pass Rate (correctness=1.0): {int(correct_count)}/{total_examples}")
+
+    # Show per-example breakdown
+    print(f"\n📝 Per-Example Results:")
+    for idx, row in df.iterrows():
+        question = row.get('inputs.question', 'N/A')
+        if 'feedback.correctness' in row:
+            correctness_val = row['feedback.correctness']
+        elif 'evaluators.correctness' in row:
+            correctness_val = row['evaluators.correctness']
+        else:
+            correctness_val = None
+
+        status = "✅ PASS" if correctness_val else "❌ FAIL"
+        print(f"   {idx+1}. [{status}] {question[:60]}...")
+
+else:
+    print("⚠️ No correctness scores found in experiment results.")
+    print("Available columns:", df.columns.tolist())
+
+print("="*80)
