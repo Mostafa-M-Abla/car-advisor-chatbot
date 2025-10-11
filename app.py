@@ -64,17 +64,36 @@ demo = gr.ChatInterface(
         "What is the cheapest 7 seater in Egypt?",
         "Suggest an electric car with at least 500 km range under 2,000,000 EGP"
     ],
+    cache_examples=False,  # Don't cache examples for better performance
     theme=gr.themes.Soft(
         primary_hue="blue",
         secondary_hue="slate",
     ),
     chatbot=gr.Chatbot(
-        height=1000,
+        height=600,
         show_copy_button=True,
-        #avatar_images=(None, "🚗"),  # User: default, Bot: car emoji
+        #avatar_images=(None, "🚗"),  # User: default, Bot: car emojiclaude.md
         type="messages",  # Use modern messages format instead of deprecated tuples
     ),
-    save_history = True
+    #save_history = True,
+    css="""
+    /* Make example buttons larger and arrange in 3 columns */
+    .examples {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 12px !important;
+        margin-top: 16px !important;
+    }
+    .examples > button {
+        padding: 16px 20px !important;
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+        min-height: 80px !important;
+        height: auto !important;
+        white-space: normal !important;
+        text-align: left !important;
+    }
+    """
 )
 
 # Launch the interface
