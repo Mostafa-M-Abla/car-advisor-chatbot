@@ -73,6 +73,7 @@ demo = gr.ChatInterface(
     /* Make the chat interface responsive and ensure input is always visible */
     .gradio-container {
         max-height: 100vh !important;
+        overflow-y: auto !important;
     }
 
     /* Make chatbot area responsive with viewport height */
@@ -80,15 +81,26 @@ demo = gr.ChatInterface(
         height: 60vh !important;
         min-height: 300px !important;
         max-height: 70vh !important;
+        overflow-y: auto !important;
     }
 
-    /* Ensure the input box is always visible */
-    .input-row {
+    /* Ensure the input box and submit button are always visible - multiple selectors for robustness */
+    .input-row,
+    [class*="input"],
+    form[class*="form"] {
         position: sticky !important;
         bottom: 0 !important;
         background: white !important;
         z-index: 100 !important;
         padding: 10px 0 !important;
+    }
+
+    /* Ensure proper layout for the entire chat interface */
+    [class*="ChatInterface"] {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
     }
 
     /* Make example buttons larger and arrange in 3 columns */
@@ -106,9 +118,41 @@ demo = gr.ChatInterface(
         height: auto !important;
         white-space: normal !important;
         text-align: left !important;
+        /* Make buttons look clickable */
+        border: 2px solid #d1d5db !important;
+        border-radius: 8px !important;
+        background: #f9fafb !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    }
+    .examples > button:hover {
+        background: #e0e7ff !important;
+        border-color: #6366f1 !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-2px) !important;
+    }
+    .examples > button:active {
+        transform: translateY(0) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
     }
 
-    /* Responsive design for smaller screens */
+    /* Tablet breakpoint (768px - 1024px) */
+    @media (max-width: 1024px) and (min-width: 769px) {
+        .chatbot {
+            height: 55vh !important;
+            min-height: 280px !important;
+        }
+        .examples {
+            grid-template-columns: repeat(2, 1fr) !important;
+        }
+        .examples > button {
+            font-size: 14px !important;
+            padding: 14px 16px !important;
+        }
+    }
+
+    /* Mobile breakpoint (phones and small tablets) */
     @media (max-width: 768px) {
         .chatbot {
             height: 50vh !important;
@@ -117,6 +161,45 @@ demo = gr.ChatInterface(
         .examples {
             grid-template-columns: 1fr !important;
         }
+        .examples > button {
+            min-height: 60px !important;
+            padding: 12px 16px !important;
+        }
+    }
+
+    /* Small phone breakpoint (< 600px height) */
+    @media (max-height: 600px) {
+        .chatbot {
+            height: 40vh !important;
+            min-height: 200px !important;
+        }
+        .examples > button {
+            min-height: 50px !important;
+            padding: 10px 12px !important;
+            font-size: 13px !important;
+        }
+    }
+
+    /* Very small phones (< 400px width) */
+    @media (max-width: 400px) {
+        .chatbot {
+            min-height: 180px !important;
+        }
+        .examples > button {
+            font-size: 12px !important;
+            padding: 8px 10px !important;
+        }
+    }
+
+    /* Hide Gradio footer buttons (Use via API, Built with Gradio, Settings) */
+    footer {
+        display: none !important;
+    }
+    .footer {
+        display: none !important;
+    }
+    [class*="footer"] {
+        display: none !important;
     }
     """
 )
