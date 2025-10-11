@@ -6,12 +6,18 @@ Users can interact with the chatbot through a modern chat interface with example
 """
 
 import os
+import yaml
 import gradio as gr
 from chatbot.car_chatbot import CarChatbot
 
 # Determine correct config path
 project_root = os.path.dirname(os.path.abspath(__file__))
 config_path = os.path.join(project_root, "chatbot", "chatbot_config.yaml")
+
+# Load configuration to get greeting
+with open(config_path, 'r', encoding='utf-8') as f:
+    config = yaml.safe_load(f)
+    greeting = config.get('conversation', {}).get('greeting', 'Welcome!')
 
 # Initialize chatbot
 print("Initializing car chatbot...")
@@ -42,20 +48,7 @@ def chat_response(message, history):
 demo = gr.ChatInterface(
     fn=chat_response,
     title="🚗 Egyptian Car Market AI Assistant",
-    description="""
-    **Welcome to your AI-powered car advisor for the Egyptian automotive market!**
-
-    I have access to detailed information about **900+ new cars** in Egypt with comprehensive specs, prices, and features.
-
-    Ask me about:
-    • Cars within your budget (in EGP)
-    • Specific features (automatic transmission, ESP, sunroof, etc.)
-    • Body types (sedan, hatchback, crossover/SUV)
-    • Brand preferences or exclusions (e.g., "non-Chinese cars")
-    • Car reliability, comparisons, and reviews
-
-    Try the example prompts below or ask your own questions!
-    """,
+    description=greeting,
     examples=[
         "What is the most affordable non chinese sedan with automatic transmission?",
         "I want a japanese crossover under 2 million LE",
@@ -70,13 +63,34 @@ demo = gr.ChatInterface(
         secondary_hue="slate",
     ),
     chatbot=gr.Chatbot(
-        height=600,
+        height="60vh",  # Use viewport height for dynamic sizing
         show_copy_button=True,
         #avatar_images=(None, "🚗"),  # User: default, Bot: car emojiclaude.md
         type="messages",  # Use modern messages format instead of deprecated tuples
     ),
     #save_history = True,
     css="""
+    /* Make the chat interface responsive and ensure input is always visible */
+    .gradio-container {
+        max-height: 100vh !important;
+    }
+
+    /* Make chatbot area responsive with viewport height */
+    .chatbot {
+        height: 60vh !important;
+        min-height: 300px !important;
+        max-height: 70vh !important;
+    }
+
+    /* Ensure the input box is always visible */
+    .input-row {
+        position: sticky !important;
+        bottom: 0 !important;
+        background: white !important;
+        z-index: 100 !important;
+        padding: 10px 0 !important;
+    }
+
     /* Make example buttons larger and arrange in 3 columns */
     .examples {
         display: grid !important;
@@ -92,6 +106,17 @@ demo = gr.ChatInterface(
         height: auto !important;
         white-space: normal !important;
         text-align: left !important;
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+        .chatbot {
+            height: 50vh !important;
+            min-height: 250px !important;
+        }
+        .examples {
+            grid-template-columns: 1fr !important;
+        }
     }
     """
 )
