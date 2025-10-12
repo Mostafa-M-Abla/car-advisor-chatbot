@@ -13,6 +13,7 @@ from chatbot.car_chatbot import CarChatbot
 # Determine correct config path
 project_root = os.path.dirname(os.path.abspath(__file__))
 config_path = os.path.join(project_root, "chatbot", "chatbot_config.yaml")
+logo_path = os.path.join(project_root, "logo.png")
 
 # Load configuration to get greeting
 with open(config_path, 'r', encoding='utf-8') as f:
@@ -44,32 +45,45 @@ def chat_response(message, history):
         return error_msg
 
 
-# Create Gradio ChatInterface
-demo = gr.ChatInterface(
-    fn=chat_response,
-    title="🚗 Egyptian Car Market AI Assistant",
-    description=greeting,
-    examples=[
-        "What is the most affordable non chinese sedan with automatic transmission?",
-        "I want a japanese crossover under 2 million LE",
-        "Should I buy a Corolla or an Elantra?",
-        "What is the most affordable crossover with sunroof?",
-        "What is the cheapest 7 seater in Egypt?",
-        "Suggest an electric car with at least 500 km range under 2,000,000 EGP"
-    ],
-    cache_examples=False,  # Don't cache examples for better performance
+# Create Gradio interface using Blocks for more control
+with gr.Blocks(
     theme=gr.themes.Soft(
         primary_hue="blue",
         secondary_hue="slate",
     ),
-    chatbot=gr.Chatbot(
-        height="60vh",  # Use viewport height for dynamic sizing
-        show_copy_button=True,
-        #avatar_images=(None, "🚗"),  # User: default, Bot: car emojiclaude.md
-        type="messages",  # Use modern messages format instead of deprecated tuples
-    ),
-    #save_history = True,
     css="""
+    /* Logo styling - using gr.Image component with fixed positioning */
+    #logo-image {
+        position: fixed !important;
+        top: 20px !important;
+        right: 40px !important;
+        z-index: 9999 !important;
+        width: 145px !important;
+        height: 145px !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        background: transparent !important;
+    }
+    #logo-image img {
+        width: 145px !important;
+        height: 145px !important;
+        border-radius: 16px !important;
+        object-fit: contain !important;
+        display: block !important;
+    }
+    /* Hide interactive buttons on logo */
+    #logo-image button,
+    #logo-image .download,
+    #logo-image [class*="button"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
     /* Make the chat interface responsive and ensure input is always visible */
     .gradio-container {
         max-height: 100vh !important;
@@ -93,14 +107,6 @@ demo = gr.ChatInterface(
         background: white !important;
         z-index: 100 !important;
         padding: 10px 0 !important;
-    }
-
-    /* Ensure proper layout for the entire chat interface */
-    [class*="ChatInterface"] {
-        display: flex !important;
-        flex-direction: column !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
     }
 
     /* Make example buttons larger and arrange in 3 columns */
@@ -143,6 +149,17 @@ demo = gr.ChatInterface(
 
     /* Tablet breakpoint (768px - 1024px) */
     @media (max-width: 1024px) and (min-width: 769px) {
+        #logo-image {
+            top: 15px !important;
+            right: 30px !important;
+            width: 120px !important;
+            height: 120px !important;
+        }
+        #logo-image img {
+            width: 120px !important;
+            height: 120px !important;
+            border-radius: 14px !important;
+        }
         .chatbot {
             height: 55vh !important;
             min-height: 280px !important;
@@ -158,6 +175,17 @@ demo = gr.ChatInterface(
 
     /* Mobile breakpoint (phones and small tablets) */
     @media (max-width: 768px) {
+        #logo-image {
+            top: 10px !important;
+            right: 15px !important;
+            width: 85px !important;
+            height: 85px !important;
+        }
+        #logo-image img {
+            width: 85px !important;
+            height: 85px !important;
+            border-radius: 12px !important;
+        }
         .chatbot {
             height: 50vh !important;
             min-height: 250px !important;
@@ -186,6 +214,17 @@ demo = gr.ChatInterface(
 
     /* Very small phones (< 400px width) */
     @media (max-width: 400px) {
+        #logo-image {
+            top: 8px !important;
+            right: 10px !important;
+            width: 60px !important;
+            height: 60px !important;
+        }
+        #logo-image img {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 10px !important;
+        }
         .chatbot {
             min-height: 180px !important;
         }
@@ -206,7 +245,40 @@ demo = gr.ChatInterface(
         display: none !important;
     }
     """
-)
+) as demo:
+    # Add logo using gr.Image with fixed positioning
+    gr.Image(
+        value=logo_path,
+        elem_id="logo-image",
+        show_label=False,
+        show_download_button=False,
+        show_share_button=False,
+        interactive=False,
+        container=False,
+        height=145,
+        width=145
+    )
+
+    # Chat interface with centered title and description
+    gr.ChatInterface(
+        fn=chat_response,
+        title="🚗 Egyptian Car Market AI Assistant",
+        description=greeting,
+        examples=[
+            "What is the most affordable non chinese sedan with automatic transmission?",
+            "I want a japanese crossover under 2 million LE",
+            "Should I buy a Corolla or an Elantra?",
+            "What is the most affordable crossover with sunroof?",
+            "What is the cheapest 7 seater in Egypt?",
+            "Suggest an electric car with at least 500 km range under 2,000,000 EGP"
+        ],
+        cache_examples=False,
+        chatbot=gr.Chatbot(
+            height="60vh",
+            show_copy_button=True,
+            type="messages",
+        ),
+    )
 
 # Launch the interface
 if __name__ == "__main__":

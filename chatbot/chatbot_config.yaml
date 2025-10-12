@@ -15,11 +15,9 @@ web_search:
 conversation:
   max_history: 20
   greeting: |
-    Hi! I'm your **AI assistant** that helps you explore and compare **new cars available in Egypt**, complete with up-to-date **specifications, prices, and features**.
+    Hi! I'm your **AI assistant** that helps you explore and compare **new cars in Egypt** with the latest specs, prices, and features. 
     
-    I can help you find the perfect car based on your **budget**, **body type** (e.g., sedan, crossover, SUV, etc.), **brand preferences** (e.g., “non-Chinese”), and desired **features** such as number of seats, sunroof, ESP and more.
-    
-    **Just tell me what kind of car you're looking for — I'll show your best options!**
+    Just tell me your **budget**, preferred **body type**, **brand preferences** (e.g. non-chinese), or desired **features** — and I’ll show you the best options!
 
 prompts:
   unified_prompt: |
