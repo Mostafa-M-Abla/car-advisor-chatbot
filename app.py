@@ -107,6 +107,7 @@ demo = gr.ChatInterface(
     .examples {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
+        grid-auto-rows: 1fr !important;  /* Make all rows same height */
         gap: 12px !important;
         margin-top: 16px !important;
     }
@@ -115,9 +116,12 @@ demo = gr.ChatInterface(
         font-size: 15px !important;
         line-height: 1.5 !important;
         min-height: 80px !important;
-        height: auto !important;
+        height: 100% !important;  /* Fill grid cell to match tallest button */
         white-space: normal !important;
         text-align: left !important;
+        /* Flexbox for vertical centering */
+        display: flex !important;
+        align-items: center !important;
         /* Make buttons look clickable */
         border: 2px solid #d1d5db !important;
         border-radius: 8px !important;
