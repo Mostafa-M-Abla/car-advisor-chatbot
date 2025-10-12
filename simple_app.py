@@ -55,33 +55,77 @@ def chat_response(message, history):
 
 
 # Create Gradio interface using Blocks for more control
-with gr.Blocks(
-    theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate"),
-) as demo:
-
-    # Small CSS + shared container
+with gr.Blocks(theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate")) as demo:
+    # --- CSS (keep inside your Blocks, before the header) ---
     gr.HTML("""
     <style>
+      /* Shared width so header, logo and chat line up */
       #app-container { max-width: 1200px; margin: 0 auto; }
-      #app-logo-wrap { display:flex; justify-content:flex-end; padding: 8px 12px 0 12px; }
-      #app-logo-wrap img { height: 60px; object-fit: contain; }
-      @media (max-width: 640px) { #app-logo-wrap img { height: 44px; } }
+
+      /* Logo base size (20% larger than 78px ≈ 94px) */
+      :root { --logo-size: 94px; }
+
+      /* Header row: [spacer] [centered title] [logo] */
+      #app-header {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          padding: 0 12px;
+          margin-top: 8px;
+      }
+      #app-header .spacer { width: var(--logo-size); }
+
+      #app-title { flex: 1; text-align: center; }
+      #app-title h1 { margin: 0; font-weight: 800; }
+
+      #app-logo img {
+          height: var(--logo-size);
+          width: var(--logo-size);
+          object-fit: contain;
+          display: block;
+      }
+
+      /* Description: anchored to left, aligned with chat content */
+      #app-desc-md {
+          text-align: left;
+          padding: 12px 0 0 12px;   /* small left padding only */
+          max-width: 800px;         /* line length comfort */
+          margin-left: 0;           /* fully left-aligned */
+      }
+
+      @media (max-width: 640px) {
+          :root { --logo-size: 70px; }
+          #app-desc-md { padding-left: 8px; }
+      }
     </style>
     """)
 
     with gr.Column(elem_id="app-container"):
-        # Logo (served as data URI so the browser can load it)
-        gr.HTML(f"""
-        <div id="app-logo-wrap">
-          <img src="{_data_uri(logo_path)}" alt="Logo" />
-        </div>
-        """)
+        gr.HTML(
+            f"""
+            <div id="app-header">
+              <div class="spacer" aria-hidden="true"></div>
+              <div id="app-title">
+                <h1>🚗 Egyptian Car Market AI Assistant</h1>
+              </div>
+              <div id="app-logo">
+                <img src="{_data_uri(logo_path)}" alt="Logo" />
+              </div>
+            </div>
+            """,
+            container=False,
+        )
 
-        # Your existing chat (unchanged)
+        # Description rendered as Markdown, now anchored left
+        gr.Markdown(greeting, elem_id="app-desc-md", container=False)
+
+        # Chat area – keep your existing config; title/description stay None here
         gr.ChatInterface(
             fn=chat_response,
-            title="🚗 Egyptian Car Market AI Assistant",
-            description=greeting,
+            title=None,
+            description=None,
+            cache_examples=False,
+            chatbot=gr.Chatbot(height="60vh", show_copy_button=True, type="messages"),
             examples=[
                 "What is the most affordable non chinese sedan with automatic transmission?",
                 "I want a japanese crossover under 2 million LE",
@@ -90,20 +134,14 @@ with gr.Blocks(
                 "What is the cheapest 7 seater in Egypt?",
                 "Suggest an electric car with at least 500 km range under 2,000,000 EGP"
             ],
-            cache_examples=False,
-            chatbot=gr.Chatbot(
-                height="60vh",
-                show_copy_button=True,
-                type="messages",
-            ),
-    )
+        )
 
 # Launch the interface
 if __name__ == "__main__":
     demo.launch(
-        share=False,  # Set to True to create a public link
-        server_name="0.0.0.0",  # Allow external access
+        share=False,
+        server_name="0.0.0.0",
         server_port=7860,
         show_error=True,
-        inbrowser=True,  # Automatically open in browser
+        inbrowser=True,
     )
