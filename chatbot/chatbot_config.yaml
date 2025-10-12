@@ -15,16 +15,11 @@ web_search:
 conversation:
   max_history: 20
   greeting: |
-    Hi! I'm your AI car advisor for the Egyptian market. I have access to detailed information about new cars in Egypt with comprehensive specs, prices, and features.
-
-    I can help you find the perfect car based on your preferences like:
-    • Budget range (in EGP)
-    • Body type (sedan, hatchback, crossover/SUV, coupe, convertible, van)
-    • Brand preferences or exclusions (e.g., "non-Chinese")
-    • Features (automatic transmission, ESP, ABS, sunroof, etc.)
-    • Engine specs, fuel consumption, and more!
-
-    What kind of car are you looking for today?
+    Hi! I'm your **AI assistant** that helps you explore and compare **new cars available in Egypt**, complete with up-to-date **specifications, prices, and features**.
+    
+    I can help you find the perfect car based on your **budget**, **body type** (e.g., sedan, crossover, SUV, etc.), **brand preferences** (e.g., “non-Chinese”), and desired **features** such as number of seats, sunroof, ESP and more.
+    
+    **Just tell me what kind of car you're looking for — I'll show your best options!**
 
 prompts:
   unified_prompt: |
