@@ -62,16 +62,17 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate")) 
       /* Shared width so header, logo and chat line up */
       #app-container { max-width: 1200px; margin: 0 auto; }
 
-      /* Logo base size (20% larger than 78px ≈ 94px) */
-      :root { --logo-size: 94px; }
+      /* 20% larger logo */
+      :root { --logo-size:120px; }
 
-      /* Header row: [spacer] [centered title] [logo] */
+      /* Header: [spacer] [centered title] [logo] */
       #app-header {
           display: flex;
           align-items: flex-start;
           gap: 16px;
           padding: 0 12px;
-          margin-top: 8px;
+          margin-top: 4px;
+          margin-bottom: 0;       /* remove bottom gap below title */
       }
       #app-header .spacer { width: var(--logo-size); }
 
@@ -85,17 +86,26 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate")) 
           display: block;
       }
 
-      /* Description: anchored to left, aligned with chat content */
+      /* Description: left-aligned and moved up */
       #app-desc-md {
           text-align: left;
-          padding: 12px 0 0 12px;   /* small left padding only */
-          max-width: 800px;         /* line length comfort */
-          margin-left: 0;           /* fully left-aligned */
+          padding: 0 0 0 12px;
+          max-width: 1100px;        /*I increaed make line longer*/
+          margin-left: 0;
+          margin-top: -90px;       /* more negative pull description closer to title */
+      }
+
+      /* Remove all top margins from inner markdown elements */
+      #app-desc-md .prose,
+      #app-desc-md.prose,
+      #app-desc-md > *:first-child,
+      #app-desc-md p:first-child {
+          margin-top: 0 !important;
       }
 
       @media (max-width: 640px) {
           :root { --logo-size: 70px; }
-          #app-desc-md { padding-left: 8px; }
+          #app-desc-md { padding-left: 8px; margin-top: -10px; }
       }
     </style>
     """)
