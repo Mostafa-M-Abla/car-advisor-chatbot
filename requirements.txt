@@ -6,21 +6,11 @@ python-dotenv>=1.0.0
 pyyaml>=6.0
 pandas>=2.0.0
 
-# Database
-sqlite3  # Built-in with Python
+# Database (sqlite3 is built-in with Python, no installation needed)
 
-# Web requests (for potential future web search integration)
+# Web scraping
 requests>=2.28.0
-
-# Logging and utilities (built-in)
-# logging
-# datetime
-# typing
-# dataclasses
-# json
-# re
-# os
-# sys
+beautifulsoup4>=4.12.0
 
 # LangChain & LangGraph (Agent Framework)
 langchain>=0.1.0
@@ -28,10 +18,16 @@ langchain-openai>=0.0.5
 langchain-core>=0.1.0
 langgraph>=0.0.20
 pydantic>=2.0.0
-asyncio-throttle>=1.0.2
+
+# Evaluation & Testing
+langsmith>=0.1.0
+typing-extensions>=4.5.0
 
 # Web Interface
 gradio>=4.0.0
+
+# Logging and utilities (built-in with Python)
+# logging, datetime, typing, dataclasses, json, re, os, sys, sqlite3
 
 # Optional: For enhanced text processing
 # nltk>=3.8
