@@ -71,7 +71,7 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate")) 
           align-items: flex-start;
           gap: 16px;
           padding: 0 12px;
-          margin-top: 4px;
+          margin-top: -13px;
           margin-bottom: 0;       /* remove bottom gap below title */
       }
       #app-header .spacer { width: var(--logo-size); }
