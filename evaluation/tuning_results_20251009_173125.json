@@ -1,0 +1,57 @@
+{
+  "tuning_date": "2025-10-09T17:31:25.243076",
+  "parameter_grid": {
+    "temperature": [
+      0.0,
+      0.3,
+      0.8
+    ],
+    "max_tokens": [
+      10,
+      1000
+    ]
+  },
+  "best_configuration": {
+    "temperature": 0.0,
+    "max_tokens": 1000
+  },
+  "best_score": 1.0,
+  "all_results": [
+    {
+      "temperature": 0.0,
+      "max_tokens": 10,
+      "correctness_score": 0.25,
+      "duration_seconds": 46.97468852996826
+    },
+    {
+      "temperature": 0.0,
+      "max_tokens": 1000,
+      "correctness_score": 1.0,
+      "duration_seconds": 62.76921796798706
+    },
+    {
+      "temperature": 0.3,
+      "max_tokens": 10,
+      "correctness_score": 0.25,
+      "duration_seconds": 45.84372663497925
+    },
+    {
+      "temperature": 0.3,
+      "max_tokens": 1000,
+      "correctness_score": 1.0,
+      "duration_seconds": 61.328322410583496
+    },
+    {
+      "temperature": 0.8,
+      "max_tokens": 10,
+      "correctness_score": 0.25,
+      "duration_seconds": 45.48031735420227
+    },
+    {
+      "temperature": 0.8,
+      "max_tokens": 1000,
+      "correctness_score": 1.0,
+      "duration_seconds": 56.25209403038025
+    }
+  ]
+}

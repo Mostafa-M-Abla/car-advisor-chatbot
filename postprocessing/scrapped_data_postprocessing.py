@@ -305,8 +305,12 @@ If uncertain, choose the most appropriate from the allowed list."""
 
 def main():
     # 1) Copy the CSV to the current path and name it processed_data.csv
-    src = os.path.join("web_scrapper", "scrapped_data.csv")
-    dst = "processed_data.csv"
+    # Get the project root directory (parent of postprocessing/)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+
+    src = os.path.join(project_root, "web_scrapper", "scrapped_data.csv")
+    dst = os.path.join(project_root, "processed_data.csv")
 
     if not os.path.isfile(src):
         raise FileNotFoundError(f"Source file not found: {src}")
@@ -716,7 +720,8 @@ def main():
         # Load powertrain types from power_train.csv
         print("\nLoading powertrain types from power_train.csv...")
         try:
-            powertrain_df = pd.read_csv("power_train.csv")
+            powertrain_path = os.path.join(script_dir, "power_train.csv")
+            powertrain_df = pd.read_csv(powertrain_path)
             print(f"Loaded {len(powertrain_df)} powertrain mappings from power_train.csv")
 
             # Create a mapping dictionary from car_trim to powertrain_type
@@ -827,9 +832,125 @@ def main():
     else:
         print("Column 'Transmission_Type' not found, skipping transmission type replacements.")
 
+    # Detect and remove duplicate car trims (where all columns except id, car_trim, and Year are identical)
+    print("\n" + "="*80)
+    print("DUPLICATE DETECTION: Cars with identical specs but different trims/years")
+    print("="*80)
+
+    # Get all columns except id, car_trim, and Year for comparison
+    comparison_cols = [col for col in df.columns if col not in ['id', 'car_trim', 'Year']]
+
+    # Group by all comparison columns and find groups with multiple trims/years
+    duplicates_found = False
+    duplicates_info = []
+    rows_to_keep = []
+    original_count = len(df)
+
+    grouped = df.groupby(comparison_cols, dropna=False)
+
+    for name, group in grouped:
+        if len(group) > 1:
+            duplicates_found = True
+
+            # Sort by Year descending (highest year first), then by index to ensure deterministic ordering
+            group_sorted = group.sort_values('Year', ascending=False, na_position='last').reset_index(drop=False)
+
+            # Keep the row with the highest Year value
+            row_to_keep = group_sorted.iloc[0]
+            kept_index = row_to_keep['index']  # Original index from dataframe
+
+            trims_and_years = [(row['car_trim'], row['Year']) for _, row in group_sorted.iterrows()]
+            brand = group_sorted['car_brand'].iloc[0]
+            model = group_sorted['car_model'].iloc[0]
+            price = group_sorted['Price_EGP'].iloc[0] if 'Price_EGP' in group_sorted.columns else 'N/A'
+
+            print(f"\n🔍 Found {len(group)} identical cars:")
+            print(f"   Brand/Model: {brand} {model}")
+            print(f"   Price: {price:,} EGP" if isinstance(price, (int, float)) else f"   Price: {price}")
+            print(f"   Trims/Years (keeping highest year):")
+            for i, (trim, year) in enumerate(trims_and_years):
+                year_display = f"{int(year)}" if pd.notna(year) else "N/A"
+                if i == 0:
+                    print(f"      ✅ KEPT: {trim} (Year: {year_display})")
+                else:
+                    print(f"      ❌ REMOVED: {trim} (Year: {year_display})")
+
+            # Store duplicate info for the log file
+            duplicate_entry = {
+                'brand': brand,
+                'model': model,
+                'price': price,
+                'kept_trim': trims_and_years[0][0],
+                'kept_year': trims_and_years[0][1],
+                'removed_items': trims_and_years[1:]
+            }
+            duplicates_info.append(duplicate_entry)
+
+            # Keep only the row with highest Year
+            rows_to_keep.append(kept_index)
+        else:
+            # No duplicates, keep this row
+            rows_to_keep.append(group.index[0])
+
+    if not duplicates_found:
+        print("\n✅ No duplicate cars found (all cars have unique specifications)")
+    else:
+        print(f"\n{'='*80}")
+        print("End of duplicate detection")
+        print("="*80)
+
+        # Write duplicates to a text file before removing them
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        duplicates_log_file = f"duplicate_trims_removed_{timestamp}.txt"
+
+        with open(duplicates_log_file, 'w', encoding='utf-8') as f:
+            f.write("="*80 + "\n")
+            f.write("DUPLICATE CAR TRIMS REMOVED - LOG FILE\n")
+            f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Strategy: Keep row with HIGHEST Year value\n")
+            f.write("="*80 + "\n\n")
+            f.write(f"Original dataset size: {original_count} cars\n")
+            f.write(f"Duplicate groups found: {len(duplicates_info)}\n")
+            f.write(f"Total rows removed: {original_count - len(rows_to_keep)}\n")
+            f.write(f"Final dataset size: {len(rows_to_keep)} cars\n")
+            f.write("\n" + "="*80 + "\n\n")
+
+            for i, dup in enumerate(duplicates_info, 1):
+                f.write(f"DUPLICATE GROUP #{i}\n")
+                f.write(f"  Brand/Model: {dup['brand']} {dup['model']}\n")
+                if isinstance(dup['price'], (int, float)):
+                    f.write(f"  Price: {dup['price']:,} EGP\n")
+                else:
+                    f.write(f"  Price: {dup['price']}\n")
+
+                # Format kept year
+                kept_year_display = f"{int(dup['kept_year'])}" if pd.notna(dup['kept_year']) else "N/A"
+                f.write(f"  KEPT: {dup['kept_trim']} (Year: {kept_year_display})\n")
+
+                f.write(f"  REMOVED ({len(dup['removed_items'])}):\n")
+                for removed_trim, removed_year in dup['removed_items']:
+                    removed_year_display = f"{int(removed_year)}" if pd.notna(removed_year) else "N/A"
+                    f.write(f"    - {removed_trim} (Year: {removed_year_display})\n")
+                f.write("\n")
+
+            f.write("="*80 + "\n")
+            f.write("END OF LOG\n")
+            f.write("="*80 + "\n")
+
+        print(f"\n📝 Duplicate removal log saved to: {duplicates_log_file}")
+
+        # Filter dataframe to keep only non-duplicate rows
+        df = df.loc[rows_to_keep].copy()
+
+        # Reset the id column to be sequential after removal
+        df['id'] = range(1, len(df) + 1)
+
+        print(f"\n🗑️  Removed {original_count - len(df)} duplicate rows")
+        print(f"📊 Final dataset size: {len(df)} cars (was {original_count})")
+
     # Save back to processed_data.csv
     df.to_csv(dst, index=False)
-    print(f"Processed data saved to '{dst}'")
+    print(f"\nProcessed data saved to '{dst}'")
 
 if __name__ == "__main__":
     main()

@@ -8,9 +8,12 @@ from dotenv import load_dotenv
 # Import our custom modules
 from database.database_handler import DatabaseHandler
 from chatbot.query_processor import QueryProcessor
-from chatbot.response_generator import ResponseGenerator
 from chatbot.conversation_manager import ConversationManager
-from chatbot.knowledge_handler import KnowledgeHandler
+from chatbot.tools import create_sql_tool_with_db
+
+# LangChain imports
+from langgraph.prebuilt import create_react_agent
+from langchain_core.messages import HumanMessage, SystemMessage
 
 class CarChatbot:
     """Main chatbot class that orchestrates all components."""
@@ -34,18 +37,22 @@ class CarChatbot:
         self.db_handler = DatabaseHandler(db_path=db_path, schema_path=schema_path)
         synonyms_path = os.path.join(project_root, "database", "synonyms.yaml")
         self.query_processor = QueryProcessor(schema_path=schema_path, synonyms_path=synonyms_path, config_path=config_path)
-        self.response_generator = ResponseGenerator(config_path)
         self.conversation_manager = ConversationManager(
             max_history=self.config.get('conversation', {}).get('max_history', 10)
         )
-        self.knowledge_handler = KnowledgeHandler(config_path=config_path)
 
         self.logger = logging.getLogger(__name__)
+
+        # Create SQL tool bound to database handler
+        self.sql_tool = create_sql_tool_with_db(self.db_handler)
+
+        # Create LangGraph agent with tools
+        self.agent = self._create_agent()
 
         # Validate setup
         self._validate_setup()
 
-        self.logger.info("Car chatbot initialized successfully")
+        self.logger.info("Car chatbot with LangGraph initialized successfully")
 
     def _setup_logging(self):
         """Set up logging configuration."""
@@ -135,7 +142,7 @@ class CarChatbot:
 
     def process_message(self, user_input: str) -> str:
         """
-        Process a single user message and return the bot's response.
+        Process a single user message using unified LLM approach.
 
         Args:
             user_input: User's input message
@@ -149,19 +156,12 @@ class CarChatbot:
             # Get conversation context
             context = self.conversation_manager.get_conversation_context()
 
-            # Check if this is an external knowledge query
-            needs_external = self.knowledge_handler.is_external_knowledge_query(user_input)
-
-            if needs_external:
-                return self._handle_external_knowledge_query(user_input, context)
-
-            # Process as database search query
-            return self._handle_database_query(user_input, context)
+            # Use unified LLM call (handles database, knowledge, or hybrid)
+            return self._unified_llm_handler(user_input, context)
 
         except Exception as e:
             self.logger.error(f"Error processing message: {e}")
-            error_msg = self.config.get('error_messages', {}).get('general_error',
-                                                                 "I encountered an error. Please try again.")
+            error_msg = "I encountered an error. Please try again."
             self.conversation_manager.add_turn(
                 user_input=user_input,
                 bot_response=error_msg,
@@ -169,113 +169,98 @@ class CarChatbot:
             )
             return error_msg
 
-    def _handle_database_query(self, user_input: str, context: str) -> str:
-        """Handle queries that search the car database (SIMPLIFIED - SINGLE PATH)."""
+    def _create_agent(self):
+        """
+        Create LangGraph agent with SQL tool and system prompt.
+
+        Returns:
+            LangGraph agent executor
+        """
+        # Get schema and synonyms for system prompt
+        schema_str = yaml.dump(self.query_processor.schema, default_flow_style=False)
+        synonyms_str = yaml.dump(self.query_processor.synonyms, default_flow_style=False)
+
+        # Load and format unified prompt
+        unified_prompt = self.config.get('prompts', {}).get('unified_prompt', '')
+        self.system_prompt = unified_prompt.format(
+            schema=schema_str,
+            synonyms=synonyms_str
+        )
+
+        # Create agent with tools only (system prompt added at invocation time)
+        agent = create_react_agent(
+            model=self.query_processor.chat_model,
+            tools=[self.sql_tool]
+        )
+
+        return agent
+
+    def _unified_llm_handler(self, user_input: str, context: str) -> str:
+        """
+        LangGraph agentic LLM handler with SQL tool calling.
+        Handles database queries, knowledge queries, and hybrid scenarios.
+
+        Args:
+            user_input: User's query
+            context: Conversation context
+
+        Returns:
+            Bot's response
+        """
         try:
-            # Generate SQL query using AI (single path - no fallback)
-            sql_query = self.query_processor.parse_query(user_input, context)
+            # Prepare messages with system prompt and user message
+            context_str = f"Conversation context: {context if context else 'No previous conversation.'}\n\nUser query: {user_input}"
 
-            # Validate and execute the SQL query
-            if sql_query and self.db_handler.validate_query(sql_query):
-                self.logger.info(f"Executing AI-generated SQL for: '{user_input}'")
-                results = self.db_handler.execute_query(sql_query)
-            else:
-                # SQL generation or validation failed - ask user to rephrase
-                if not sql_query:
-                    self.logger.warning(f"No SQL query generated for: '{user_input}'. Asking user to rephrase.")
-                    error_msg = "I'm having trouble understanding your request. Could you rephrase it with specific details like budget, body type, or features you're looking for?"
-                else:
-                    self.logger.warning(f"SQL validation failed for: '{user_input}'. Query was: '{sql_query}'. Asking user to rephrase.")
-                    error_msg = "I couldn't process that search query. Could you try rephrasing it with more specific criteria?"
-
-                self.conversation_manager.add_turn(
-                    user_input=user_input,
-                    bot_response=error_msg,
-                    response_type="error"
-                )
-                return error_msg
-
-            # Generate conversational response with results
-            response = self.response_generator.generate_response(
-                user_input=user_input,
-                sql_query=sql_query,
-                results=results,
-                context=context,
-                criteria=None  # No longer using regex criteria
+            # Invoke LangGraph agent with system prompt
+            self.logger.info("Invoking LangGraph agent")
+            result = self.agent.invoke(
+                {"messages": [
+                    SystemMessage(content=self.system_prompt),
+                    HumanMessage(content=context_str)
+                ]},
+                config={"recursion_limit": 10}  # Allow up to 10 steps (agent uses ~3 per tool call)
             )
+
+            # Extract final response from agent messages
+            final_message = result["messages"][-1]
+            final_response = final_message.content
+
+            # Track SQL queries executed (if any)
+            sql_queries_executed = []
+            for msg in result["messages"]:
+                if hasattr(msg, 'tool_calls') and msg.tool_calls:
+                    for tool_call in msg.tool_calls:
+                        if tool_call.get('name') == 'execute_sql_query_bound':
+                            sql_queries_executed.append(tool_call.get('args', {}).get('sql_query', ''))
+
+            # Determine response type
+            response_type = "knowledge"
+            if sql_queries_executed:
+                response_type = "database" if len(sql_queries_executed) == 1 else "hybrid"
 
             # Add to conversation history
             self.conversation_manager.add_turn(
                 user_input=user_input,
-                bot_response=response,
-                sql_query=sql_query,
-                results_count=len(results),
-                response_type="search"
+                bot_response=final_response,
+                sql_query=sql_queries_executed[-1] if sql_queries_executed else None,
+                results_count=None,  # We don't track this in LangGraph
+                response_type=response_type
             )
 
-            return response
+            self.logger.info(f"Agent completed with response type: {response_type}")
+            return final_response
 
         except Exception as e:
-            self.logger.error(f"Error in database query: {e}")
-            error_msg = "I'm having trouble accessing the car database right now. Please try again in a moment or rephrase your question."
+            self.logger.error(f"Error in LangGraph handler: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
+            error_msg = "I'm having trouble processing your request. Please try again."
             self.conversation_manager.add_turn(
                 user_input=user_input,
                 bot_response=error_msg,
                 response_type="error"
             )
             return error_msg
-
-    def _handle_external_knowledge_query(self, user_input: str, context: str) -> str:
-        """Handle queries that require external knowledge beyond the database."""
-        try:
-            # Check if query mentions specific cars from our database
-            car_context = self._extract_car_context_from_query(user_input)
-
-            # Use unified knowledge handler
-            response = self.knowledge_handler.get_knowledge_response(
-                query=user_input,
-                conversation_context=context,
-                database_context=car_context if car_context else None
-            )
-
-            # Add to conversation history
-            self.conversation_manager.add_turn(
-                user_input=user_input,
-                bot_response=response,
-                response_type="knowledge"
-            )
-
-            return response
-
-        except Exception as e:
-            self.logger.error(f"Error in external knowledge query: {e}")
-            error_msg = "I'm sorry, I'm having trouble accessing external automotive knowledge right now. Could you try asking about specific cars in our database or rephrase your question?"
-            self.conversation_manager.add_turn(
-                user_input=user_input,
-                bot_response=error_msg,
-                response_type="error"
-            )
-            return error_msg
-
-    def _extract_car_context_from_query(self, query: str) -> List[Dict[str, Any]]:
-        """Extract car information mentioned in the query from the database."""
-        # Simple approach: try to find brand/model mentions
-        brands = self.db_handler.get_brands()
-        mentioned_cars = []
-
-        query_lower = query.lower()
-
-        for brand in brands:
-            if brand.lower() in query_lower:
-                # Try to find specific models of this brand
-                brand_cars = self.db_handler.execute_query(
-                    "SELECT DISTINCT * FROM cars WHERE car_brand = ? LIMIT 5",
-                    (brand,)
-                )
-                if brand_cars:
-                    mentioned_cars.extend(brand_cars)
-
-        return mentioned_cars[:2]  # Return up to 2 cars for comparison
 
     def _show_help(self):
         """Show help information."""
@@ -290,7 +275,7 @@ You can ask me about cars in various ways:
    • "Cars between 1.5 and 3 million EGP"
 
 BY BODY TYPE:
-   • "I want a crossover"
+   • "I want a crossover from a european brand"
    • "Show me hatchbacks"
    • "Find me an SUV"
 

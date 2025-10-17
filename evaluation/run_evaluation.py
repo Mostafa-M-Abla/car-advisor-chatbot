@@ -1,13 +1,22 @@
 import os
 import sys
+import time
 from langsmith import Client
 from typing_extensions import Annotated, TypedDict
 from langchain_openai import ChatOpenAI
 from langsmith import traceable
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Verify required API keys are present
+if not os.getenv('OPENAI_API_KEY'):
+    raise ValueError("OPENAI_API_KEY not found in environment variables. Please add it to your .env file.")
+if not os.getenv('LANGSMITH_API_KEY'):
+    raise ValueError("LANGSMITH_API_KEY not found in environment variables. Please add it to your .env file.")
 
 os.environ["LANGSMITH_TRACING"] = "true"
-os.environ["LANGSMITH_API_KEY"] = "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"  #TODO
-os.environ["OPENAI_API_KEY"] = "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"  #TODO
 
 
 llm = ChatOpenAI(model="gpt-4o", temperature=1)
@@ -101,7 +110,7 @@ examples = [
     {
         "inputs": {"question": "List the cheapest 5 car sedan models in egypt that are non chinese and are not manual"},
         "outputs": {
-            "answer": "1- proton saga 2- Nissan sunny 3- Renault Taliant 4- Mitsubishi Attrage 5- Chevrolet Optra"},
+            "answer": "1- proton saga 2- Nissan sunny 2025 baseline 3- Renault Taliant 4- Nissan sunny 2026 baseline 5- Mitsubishi Attrage"},
     },
     {
         "inputs": {"question": "Good Car"},
@@ -128,6 +137,11 @@ examples = [
         "outputs": {
             "answer": "No cars found with those specifications and price in the egyptian market, would you consider relaxing some of the constraints, for example increase your budget or remove the country of origin or body type constraint?"},
     },
+    {
+        "inputs": {"question": "Suggest me 2 electric car from a reputable brand that has at least 600km of battery range and is below 4.5 m LE"},
+        "outputs": {
+            "answer": "I suggest one of the follwoing cars: Ioniq 6, Volove EX30, smart-3"},
+    },
 ]
 
 
@@ -150,12 +164,16 @@ except Exception:
     print(f"Creating new dataset '{dataset_name}'...")
     dataset = client.create_dataset(dataset_name=dataset_name)
 
-# Add the new examples
+# Sort examples alphabetically by question (input)
+sorted_examples = sorted(examples, key=lambda x: x["inputs"]["question"].lower())
+print(f"Sorted {len(sorted_examples)} examples alphabetically by question.")
+
+# Add the sorted examples
 client.create_examples(
     dataset_id=dataset.id,
-    examples=examples
+    examples=sorted_examples
 )
-print(f"Added {len(examples)} examples to dataset.")
+print(f"Added {len(sorted_examples)} examples to dataset.")
 
 
 
@@ -209,13 +227,76 @@ CHATBOT ANSWER: {outputs['answer']}"""
 def target(inputs: dict) -> dict:
     return rag_bot(inputs["question"])
 
+# Custom wrapper to add delay between evaluations
+evaluation_count = 0
+def target_with_delay(inputs: dict) -> dict:
+    global evaluation_count
+
+    # Add 10 second delay between examples (but not before the first one)
+    if evaluation_count > 0:
+        print(f"\n⏳ Waiting 10 seconds before next evaluation...\n")
+        time.sleep(10)
+
+    evaluation_count += 1
+    print(f"🔄 Evaluating example {evaluation_count}...")
+
+    return rag_bot(inputs["question"])
+
 experiment_results = client.evaluate(
-    target,
+    target_with_delay,
     data=dataset_name,
     evaluators=[correctness],
     experiment_prefix="rag-doc-relevance",
-    metadata={"version": "LCEL context, gpt-4-0125-preview"},
+    metadata={"version": "Agentic architecture with function calling"},
 )
 
-# Explore results locally as a dataframe if you have pandas installed
-# experiment_results.to_pandas()
+# Extract and display evaluation results
+print("\n" + "="*80)
+print("EVALUATION RESULTS")
+print("="*80)
+
+# Convert to pandas DataFrame for analysis
+df = experiment_results.to_pandas()
+
+# Extract correctness scores
+# The feedback column contains evaluation results
+correctness_scores = []
+for idx, row in df.iterrows():
+    # LangSmith stores feedback in 'feedback.correctness' or 'evaluators.correctness'
+    if 'feedback.correctness' in row and row['feedback.correctness'] is not None:
+        correctness_scores.append(1.0 if row['feedback.correctness'] else 0.0)
+    elif 'evaluators.correctness' in row and row['evaluators.correctness'] is not None:
+        correctness_scores.append(1.0 if row['evaluators.correctness'] else 0.0)
+
+if correctness_scores:
+    # Calculate aggregate statistics
+    total_examples = len(correctness_scores)
+    correct_count = sum(correctness_scores)
+    aggregate_correctness = correct_count / total_examples if total_examples > 0 else 0
+
+    print(f"\n📊 Overall Statistics:")
+    print(f"   Total examples evaluated: {total_examples}")
+    print(f"   Correct answers: {int(correct_count)}")
+    print(f"   Incorrect answers: {int(total_examples - correct_count)}")
+    print(f"   Average Correctness Score: {aggregate_correctness:.2%}")
+    print(f"   Pass Rate (correctness=1.0): {int(correct_count)}/{total_examples}")
+
+    # Show per-example breakdown
+    print(f"\n📝 Per-Example Results:")
+    for idx, row in df.iterrows():
+        question = row.get('inputs.question', 'N/A')
+        if 'feedback.correctness' in row:
+            correctness_val = row['feedback.correctness']
+        elif 'evaluators.correctness' in row:
+            correctness_val = row['evaluators.correctness']
+        else:
+            correctness_val = None
+
+        status = "✅ PASS" if correctness_val else "❌ FAIL"
+        print(f"   {idx+1}. [{status}] {question[:60]}...")
+
+else:
+    print("⚠️ No correctness scores found in experiment results.")
+    print("Available columns:", df.columns.tolist())
+
+print("="*80)
