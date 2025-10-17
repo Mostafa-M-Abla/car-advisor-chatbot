@@ -126,6 +126,31 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate")) 
           gap: 10px !important;
       }
 
+      /* Style example buttons to look clickable */
+      [class*="examples"] button {
+          background: #f0f4f8 !important;
+          border: 2px solid #d1dbe6 !important;
+          border-radius: 8px !important;
+          padding: 12px 16px !important;
+          cursor: pointer !important;
+          transition: all 0.2s ease !important;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+          font-size: 14px !important;
+          text-align: left !important;
+      }
+
+      [class*="examples"] button:hover {
+          background: #e3edf7 !important;
+          border-color: #6b9bd1 !important;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+          transform: translateY(-2px) !important;
+      }
+
+      [class*="examples"] button:active {
+          transform: translateY(0) !important;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+      }
+
       /* Tablet: 2 columns */
       @media (max-width: 1024px) {
           [class*="examples"] {
