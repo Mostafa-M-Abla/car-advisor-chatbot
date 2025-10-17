@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/git/test_hugging_face/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
