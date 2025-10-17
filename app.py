@@ -118,6 +118,27 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate")) 
       [class*="footer"] {
           display: none !important;
       }
+
+      /* Force examples into 3 columns (2 rows x 3 examples) - responsive */
+      [class*="examples"] {
+          display: grid !important;
+          grid-template-columns: repeat(3, 1fr) !important;
+          gap: 10px !important;
+      }
+
+      /* Tablet: 2 columns */
+      @media (max-width: 1024px) {
+          [class*="examples"] {
+              grid-template-columns: repeat(2, 1fr) !important;
+          }
+      }
+
+      /* Mobile: 1 column */
+      @media (max-width: 768px) {
+          [class*="examples"] {
+              grid-template-columns: 1fr !important;
+          }
+      }
     </style>
     """)
 
