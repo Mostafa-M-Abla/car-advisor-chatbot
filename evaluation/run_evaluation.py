@@ -5,10 +5,18 @@ from langsmith import Client
 from typing_extensions import Annotated, TypedDict
 from langchain_openai import ChatOpenAI
 from langsmith import traceable
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Verify required API keys are present
+if not os.getenv('OPENAI_API_KEY'):
+    raise ValueError("OPENAI_API_KEY not found in environment variables. Please add it to your .env file.")
+if not os.getenv('LANGSMITH_API_KEY'):
+    raise ValueError("LANGSMITH_API_KEY not found in environment variables. Please add it to your .env file.")
 
 os.environ["LANGSMITH_TRACING"] = "true"
-os.environ["LANGSMITH_API_KEY"] = "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"  #TODO
-os.environ["OPENAI_API_KEY"] = "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"  #TODO
 
 
 llm = ChatOpenAI(model="gpt-4o", temperature=1)
