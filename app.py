@@ -107,6 +107,17 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate")) 
           :root { --logo-size: 70px; }
           #app-desc-md { padding-left: 8px; margin-top: -10px; }
       }
+
+      /* Hide Gradio footer buttons (Use via API, Built with Gradio, Settings) */
+      footer {
+          display: none !important;
+      }
+      .footer {
+          display: none !important;
+      }
+      [class*="footer"] {
+          display: none !important;
+      }
     </style>
     """)
 
@@ -135,7 +146,7 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate")) 
             title=None,
             description=None,
             cache_examples=False,
-            chatbot=gr.Chatbot(height="60vh", show_copy_button=True, type="messages"),
+            chatbot=gr.Chatbot(height="65vh", show_copy_button=True, type="messages"),
             examples=[
                 "What is the most affordable non chinese sedan with automatic transmission?",
                 "I want a japanese crossover under 2 million LE",
