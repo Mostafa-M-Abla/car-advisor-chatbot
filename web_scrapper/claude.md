@@ -1,6 +1,6 @@
 # Car Selection Chatbot - Universal Web Scraper
 
-This project contains a comprehensive, multi-brand web scraper for extracting car information from the hatla2ee.com website.
+This project contains a comprehensive, multi-brand web scraper for extracting car information from a website.
 
 ## Project Overview
 
@@ -216,7 +216,7 @@ hyundai,i30,Hyundai I30 2026 A/T / Blaze,1149000,dsg,95,2026
 - Implemented comprehensive progress tracking
 
 ### Known Limitations
-- Currently optimized for Hyundai models on hatla2ee.com
+- Currently optimized for Hyundai models on the website
 - Requires manual field mapping updates for new data fields
 - Depends on website structure remaining consistent
 

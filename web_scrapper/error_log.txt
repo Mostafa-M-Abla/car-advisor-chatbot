@@ -3906,22 +3906,22 @@
 2025-09-30 15:59:57,776 - INFO - Processing trim 1/7 of porsche cayenne: Porsche Cayenne 2025 Automatic
 2025-09-30 15:59:58,490 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 Automatic
 2025-09-30 15:59:58,518 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 Automatic
-2025-09-30 15:59:58,518 - INFO - Processing trim 2/7 of porsche cayenne: Porsche Cayenne 2025 A/T / Coupé
-2025-09-30 15:59:59,380 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 A/T / Coupé
-2025-09-30 15:59:59,403 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 A/T / Coupé
+2025-09-30 15:59:58,518 - INFO - Processing trim 2/7 of porsche cayenne: Porsche Cayenne 2025 A/T / Coupï¿½
+2025-09-30 15:59:59,380 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 A/T / Coupï¿½
+2025-09-30 15:59:59,403 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 A/T / Coupï¿½
 2025-09-30 15:59:59,403 - INFO - Progress update: 910 trims processed in 865.6s
 2025-09-30 15:59:59,403 - INFO - Processing trim 3/7 of porsche cayenne: Porsche Cayenne 2025 Automtic / s
 2025-09-30 16:00:00,446 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 Automtic / s
 2025-09-30 16:00:00,473 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 Automtic / s
-2025-09-30 16:00:00,473 - INFO - Processing trim 4/7 of porsche cayenne: Porsche Cayenne 2025 A/T /  S Coupé
-2025-09-30 16:00:01,247 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 A/T /  S Coupé
-2025-09-30 16:00:01,261 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 A/T /  S Coupé
+2025-09-30 16:00:00,473 - INFO - Processing trim 4/7 of porsche cayenne: Porsche Cayenne 2025 A/T /  S Coupï¿½
+2025-09-30 16:00:01,247 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 A/T /  S Coupï¿½
+2025-09-30 16:00:01,261 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 A/T /  S Coupï¿½
 2025-09-30 16:00:01,261 - INFO - Processing trim 5/7 of porsche cayenne: Porsche Cayenne 2025 A/T / GTS
 2025-09-30 16:00:02,119 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 A/T / GTS
 2025-09-30 16:00:02,136 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 A/T / GTS
-2025-09-30 16:00:02,136 - INFO - Processing trim 6/7 of porsche cayenne: Porsche Cayenne 2025 A/T / GTS Coupé
-2025-09-30 16:00:02,961 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 A/T / GTS Coupé
-2025-09-30 16:00:02,982 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 A/T / GTS Coupé
+2025-09-30 16:00:02,136 - INFO - Processing trim 6/7 of porsche cayenne: Porsche Cayenne 2025 A/T / GTS Coupï¿½
+2025-09-30 16:00:02,961 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 A/T / GTS Coupï¿½
+2025-09-30 16:00:02,982 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 A/T / GTS Coupï¿½
 2025-09-30 16:00:02,983 - INFO - Processing trim 7/7 of porsche cayenne: Porsche Cayenne 2025 A/T / Coupe Turbo GT
 2025-09-30 16:00:03,897 - INFO - Set Market_Price_EGP to Official_Price_EGP for Porsche cayenne Porsche Cayenne 2025 A/T / Coupe Turbo GT
 2025-09-30 16:00:03,917 - INFO - Successfully scraped data for Porsche cayenne Porsche Cayenne 2025 A/T / Coupe Turbo GT
@@ -4935,7 +4935,6 @@
 2025-09-30 16:04:10,074 - INFO - Found 0 trims for seat arona
 2025-09-30 16:04:10,074 - INFO - No trims found for seat arona
 2025-09-30 16:04:10,074 - INFO - Processing model 8/18 of seat: arona
-2025-09-30 16:04:40,458 - ERROR - Attempt 1 failed for https://eg.hatla2ee.com/en/new-car/seat/arona: HTTPSConnectionPool(host='eg.hatla2ee.com', port=443): Read timed out. (read timeout=30)
 2025-09-30 16:04:40,459 - INFO - Retrying request (attempt 2) after 2s...
 2025-09-30 16:04:43,417 - INFO - Found 0 trims for seat arona
 2025-09-30 16:04:43,417 - INFO - No trims found for seat arona
@@ -5415,105 +5414,105 @@
 2025-09-30 16:06:22,381 - INFO - Processing model 1/20 of citroen: c-elysee
 2025-09-30 16:06:23,243 - INFO - Found 10 trims for citroen c-elysee
 2025-09-30 16:06:23,243 - INFO - Found 10 trims for citroen c-elysee
-2025-09-30 16:06:23,243 - INFO - Processing trim 1/10 of citroen c-elysee: Citroën C Elysee 2024 A/T / Luxury
-2025-09-30 16:06:24,152 - INFO - Successfully scraped data for Citroen c-elysee Citroën C Elysee 2024 A/T / Luxury
-2025-09-30 16:06:24,152 - INFO - Processing trim 2/10 of citroen c-elysee: Citroën C Elysee A/T / Luxury
-2025-09-30 16:06:24,653 - INFO - Successfully scraped data for Citroen c-elysee Citroën C Elysee A/T / Luxury
-2025-09-30 16:06:24,653 - INFO - Processing trim 3/10 of citroen c-elysee: Citroën C Elysee A/T / Luxury
-2025-09-30 16:06:24,653 - INFO - Skipping duplicate trim: Citroen c-elysee Citroën C Elysee A/T / Luxury
-2025-09-30 16:06:24,653 - INFO - Processing trim 4/10 of citroen c-elysee: Citroën C Elysee A/T / Luxury
-2025-09-30 16:06:24,653 - INFO - Skipping duplicate trim: Citroen c-elysee Citroën C Elysee A/T / Luxury
-2025-09-30 16:06:24,654 - INFO - Processing trim 5/10 of citroen c-elysee: Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,100 - INFO - Successfully scraped data for Citroen c-elysee Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,101 - INFO - Processing trim 6/10 of citroen c-elysee: Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,101 - INFO - Processing trim 7/10 of citroen c-elysee: Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,101 - INFO - Processing trim 8/10 of citroen c-elysee: Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,101 - INFO - Processing trim 9/10 of citroen c-elysee: Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroën C Elysee A/T / Luxury 2024
+2025-09-30 16:06:23,243 - INFO - Processing trim 1/10 of citroen c-elysee: Citroï¿½n C Elysee 2024 A/T / Luxury
+2025-09-30 16:06:24,152 - INFO - Successfully scraped data for Citroen c-elysee Citroï¿½n C Elysee 2024 A/T / Luxury
+2025-09-30 16:06:24,152 - INFO - Processing trim 2/10 of citroen c-elysee: Citroï¿½n C Elysee A/T / Luxury
+2025-09-30 16:06:24,653 - INFO - Successfully scraped data for Citroen c-elysee Citroï¿½n C Elysee A/T / Luxury
+2025-09-30 16:06:24,653 - INFO - Processing trim 3/10 of citroen c-elysee: Citroï¿½n C Elysee A/T / Luxury
+2025-09-30 16:06:24,653 - INFO - Skipping duplicate trim: Citroen c-elysee Citroï¿½n C Elysee A/T / Luxury
+2025-09-30 16:06:24,653 - INFO - Processing trim 4/10 of citroen c-elysee: Citroï¿½n C Elysee A/T / Luxury
+2025-09-30 16:06:24,653 - INFO - Skipping duplicate trim: Citroen c-elysee Citroï¿½n C Elysee A/T / Luxury
+2025-09-30 16:06:24,654 - INFO - Processing trim 5/10 of citroen c-elysee: Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,100 - INFO - Successfully scraped data for Citroen c-elysee Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Processing trim 6/10 of citroen c-elysee: Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Processing trim 7/10 of citroen c-elysee: Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Processing trim 8/10 of citroen c-elysee: Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Processing trim 9/10 of citroen c-elysee: Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroï¿½n C Elysee A/T / Luxury 2024
 2025-09-30 16:06:25,101 - INFO - Progress update: 1280 trims processed in 1251.3s
-2025-09-30 16:06:25,101 - INFO - Processing trim 10/10 of citroen c-elysee: Citroën C Elysee A/T / Luxury 2024
-2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroën C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Processing trim 10/10 of citroen c-elysee: Citroï¿½n C Elysee A/T / Luxury 2024
+2025-09-30 16:06:25,101 - INFO - Skipping duplicate trim: Citroen c-elysee Citroï¿½n C Elysee A/T / Luxury 2024
 2025-09-30 16:06:25,101 - INFO - Processing model 2/20 of citroen: c-elysee
 2025-09-30 16:06:25,639 - INFO - Found 0 trims for citroen c-elysee
 2025-09-30 16:06:25,639 - INFO - No trims found for citroen c-elysee
 2025-09-30 16:06:25,639 - INFO - Processing model 3/20 of citroen: c3
 2025-09-30 16:06:26,367 - INFO - Found 2 trims for citroen c3
 2025-09-30 16:06:26,367 - INFO - Found 2 trims for citroen c3
-2025-09-30 16:06:26,367 - INFO - Processing trim 1/2 of citroen c3: Citroën C3 2025 A/T / Feel
-2025-09-30 16:06:27,253 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c3 Citroën C3 2025 A/T / Feel
-2025-09-30 16:06:27,267 - INFO - Successfully scraped data for Citroen c3 Citroën C3 2025 A/T / Feel
-2025-09-30 16:06:27,267 - INFO - Processing trim 2/2 of citroen c3: Citroën C3 2025 A/T / Shine
-2025-09-30 16:06:28,407 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c3 Citroën C3 2025 A/T / Shine
-2025-09-30 16:06:28,408 - INFO - Successfully scraped data for Citroen c3 Citroën C3 2025 A/T / Shine
+2025-09-30 16:06:26,367 - INFO - Processing trim 1/2 of citroen c3: Citroï¿½n C3 2025 A/T / Feel
+2025-09-30 16:06:27,253 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c3 Citroï¿½n C3 2025 A/T / Feel
+2025-09-30 16:06:27,267 - INFO - Successfully scraped data for Citroen c3 Citroï¿½n C3 2025 A/T / Feel
+2025-09-30 16:06:27,267 - INFO - Processing trim 2/2 of citroen c3: Citroï¿½n C3 2025 A/T / Shine
+2025-09-30 16:06:28,407 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c3 Citroï¿½n C3 2025 A/T / Shine
+2025-09-30 16:06:28,408 - INFO - Successfully scraped data for Citroen c3 Citroï¿½n C3 2025 A/T / Shine
 2025-09-30 16:06:28,408 - INFO - Processing model 4/20 of citroen: c3
 2025-09-30 16:06:28,901 - INFO - Found 0 trims for citroen c3
 2025-09-30 16:06:28,901 - INFO - No trims found for citroen c3
 2025-09-30 16:06:28,901 - INFO - Processing model 5/20 of citroen: C3-Aircross
 2025-09-30 16:06:29,445 - INFO - Found 4 trims for citroen C3-Aircross
 2025-09-30 16:06:29,445 - INFO - Found 4 trims for citroen C3-Aircross
-2025-09-30 16:06:29,445 - INFO - Processing trim 1/4 of citroen C3-Aircross: Citroën C3 Aircross 2025 A/T / Feel
-2025-09-30 16:06:30,366 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C3-Aircross Citroën C3 Aircross 2025 A/T / Feel
-2025-09-30 16:06:30,389 - INFO - Successfully scraped data for Citroen C3-Aircross Citroën C3 Aircross 2025 A/T / Feel
-2025-09-30 16:06:30,389 - INFO - Processing trim 2/4 of citroen C3-Aircross: Citroën C3 Aircross 2025 A/T / Shine
-2025-09-30 16:06:31,549 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C3-Aircross Citroën C3 Aircross 2025 A/T / Shine
-2025-09-30 16:06:31,563 - INFO - Successfully scraped data for Citroen C3-Aircross Citroën C3 Aircross 2025 A/T / Shine
-2025-09-30 16:06:31,563 - INFO - Processing trim 3/4 of citroen C3-Aircross: Citroën C3 Aircross Automatic / Shine
-2025-09-30 16:06:32,413 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C3-Aircross Citroën C3 Aircross Automatic / Shine
-2025-09-30 16:06:32,428 - INFO - Successfully scraped data for Citroen C3-Aircross Citroën C3 Aircross Automatic / Shine
-2025-09-30 16:06:32,428 - INFO - Processing trim 4/4 of citroen C3-Aircross: Citroën C3 Aircross A/T / Shine
-2025-09-30 16:06:32,999 - INFO - Successfully scraped data for Citroen C3-Aircross Citroën C3 Aircross A/T / Shine
+2025-09-30 16:06:29,445 - INFO - Processing trim 1/4 of citroen C3-Aircross: Citroï¿½n C3 Aircross 2025 A/T / Feel
+2025-09-30 16:06:30,366 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C3-Aircross Citroï¿½n C3 Aircross 2025 A/T / Feel
+2025-09-30 16:06:30,389 - INFO - Successfully scraped data for Citroen C3-Aircross Citroï¿½n C3 Aircross 2025 A/T / Feel
+2025-09-30 16:06:30,389 - INFO - Processing trim 2/4 of citroen C3-Aircross: Citroï¿½n C3 Aircross 2025 A/T / Shine
+2025-09-30 16:06:31,549 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C3-Aircross Citroï¿½n C3 Aircross 2025 A/T / Shine
+2025-09-30 16:06:31,563 - INFO - Successfully scraped data for Citroen C3-Aircross Citroï¿½n C3 Aircross 2025 A/T / Shine
+2025-09-30 16:06:31,563 - INFO - Processing trim 3/4 of citroen C3-Aircross: Citroï¿½n C3 Aircross Automatic / Shine
+2025-09-30 16:06:32,413 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C3-Aircross Citroï¿½n C3 Aircross Automatic / Shine
+2025-09-30 16:06:32,428 - INFO - Successfully scraped data for Citroen C3-Aircross Citroï¿½n C3 Aircross Automatic / Shine
+2025-09-30 16:06:32,428 - INFO - Processing trim 4/4 of citroen C3-Aircross: Citroï¿½n C3 Aircross A/T / Shine
+2025-09-30 16:06:32,999 - INFO - Successfully scraped data for Citroen C3-Aircross Citroï¿½n C3 Aircross A/T / Shine
 2025-09-30 16:06:32,999 - INFO - Processing model 6/20 of citroen: C3-Aircross
 2025-09-30 16:06:33,480 - INFO - Found 0 trims for citroen C3-Aircross
 2025-09-30 16:06:33,480 - INFO - No trims found for citroen C3-Aircross
 2025-09-30 16:06:33,480 - INFO - Processing model 7/20 of citroen: C4X
 2025-09-30 16:06:34,084 - INFO - Found 4 trims for citroen C4X
 2025-09-30 16:06:34,084 - INFO - Found 4 trims for citroen C4X
-2025-09-30 16:06:34,084 - INFO - Processing trim 1/4 of citroen C4X: Citroën C4X 2026 A/T / Feel
-2025-09-30 16:06:35,186 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X Citroën C4X 2026 A/T / Feel
-2025-09-30 16:06:35,205 - INFO - Successfully scraped data for Citroen C4X Citroën C4X 2026 A/T / Feel
-2025-09-30 16:06:35,206 - INFO - Processing trim 2/4 of citroen C4X: Citroën C4X 2026 A/T / Shine
-2025-09-30 16:06:35,852 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X Citroën C4X 2026 A/T / Shine
-2025-09-30 16:06:35,865 - INFO - Successfully scraped data for Citroen C4X Citroën C4X 2026 A/T / Shine
-2025-09-30 16:06:35,865 - INFO - Processing trim 3/4 of citroen C4X: Citroën C4X 2025 A/T / Feel
-2025-09-30 16:06:36,784 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X Citroën C4X 2025 A/T / Feel
-2025-09-30 16:06:36,798 - INFO - Successfully scraped data for Citroen C4X Citroën C4X 2025 A/T / Feel
+2025-09-30 16:06:34,084 - INFO - Processing trim 1/4 of citroen C4X: Citroï¿½n C4X 2026 A/T / Feel
+2025-09-30 16:06:35,186 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X Citroï¿½n C4X 2026 A/T / Feel
+2025-09-30 16:06:35,205 - INFO - Successfully scraped data for Citroen C4X Citroï¿½n C4X 2026 A/T / Feel
+2025-09-30 16:06:35,206 - INFO - Processing trim 2/4 of citroen C4X: Citroï¿½n C4X 2026 A/T / Shine
+2025-09-30 16:06:35,852 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X Citroï¿½n C4X 2026 A/T / Shine
+2025-09-30 16:06:35,865 - INFO - Successfully scraped data for Citroen C4X Citroï¿½n C4X 2026 A/T / Shine
+2025-09-30 16:06:35,865 - INFO - Processing trim 3/4 of citroen C4X: Citroï¿½n C4X 2025 A/T / Feel
+2025-09-30 16:06:36,784 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X Citroï¿½n C4X 2025 A/T / Feel
+2025-09-30 16:06:36,798 - INFO - Successfully scraped data for Citroen C4X Citroï¿½n C4X 2025 A/T / Feel
 2025-09-30 16:06:36,798 - INFO - Progress update: 1290 trims processed in 1263.0s
-2025-09-30 16:06:36,798 - INFO - Processing trim 4/4 of citroen C4X: Citroën C4X 2025 A/T / Shine
-2025-09-30 16:06:37,789 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X Citroën C4X 2025 A/T / Shine
-2025-09-30 16:06:37,808 - INFO - Successfully scraped data for Citroen C4X Citroën C4X 2025 A/T / Shine
+2025-09-30 16:06:36,798 - INFO - Processing trim 4/4 of citroen C4X: Citroï¿½n C4X 2025 A/T / Shine
+2025-09-30 16:06:37,789 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X Citroï¿½n C4X 2025 A/T / Shine
+2025-09-30 16:06:37,808 - INFO - Successfully scraped data for Citroen C4X Citroï¿½n C4X 2025 A/T / Shine
 2025-09-30 16:06:37,809 - INFO - Processing model 8/20 of citroen: C4X
 2025-09-30 16:06:38,452 - INFO - Found 0 trims for citroen C4X
 2025-09-30 16:06:38,452 - INFO - No trims found for citroen C4X
 2025-09-30 16:06:38,452 - INFO - Processing model 9/20 of citroen: C4X-shape-facelift
 2025-09-30 16:06:39,216 - INFO - Found 2 trims for citroen C4X-shape-facelift
 2025-09-30 16:06:39,217 - INFO - Found 2 trims for citroen C4X-shape-facelift
-2025-09-30 16:06:39,217 - INFO - Processing trim 1/2 of citroen C4X-shape-facelift: Citroën C4X 2025 A/T / Feel
-2025-09-30 16:06:40,097 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X-shape-facelift Citroën C4X 2025 A/T / Feel
-2025-09-30 16:06:40,098 - INFO - Successfully scraped data for Citroen C4X-shape-facelift Citroën C4X 2025 A/T / Feel
-2025-09-30 16:06:40,098 - INFO - Processing trim 2/2 of citroen C4X-shape-facelift: Citroën C4X 2025 A/T / Shine
-2025-09-30 16:06:40,862 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X-shape-facelift Citroën C4X 2025 A/T / Shine
-2025-09-30 16:06:40,884 - INFO - Successfully scraped data for Citroen C4X-shape-facelift Citroën C4X 2025 A/T / Shine
+2025-09-30 16:06:39,217 - INFO - Processing trim 1/2 of citroen C4X-shape-facelift: Citroï¿½n C4X 2025 A/T / Feel
+2025-09-30 16:06:40,097 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X-shape-facelift Citroï¿½n C4X 2025 A/T / Feel
+2025-09-30 16:06:40,098 - INFO - Successfully scraped data for Citroen C4X-shape-facelift Citroï¿½n C4X 2025 A/T / Feel
+2025-09-30 16:06:40,098 - INFO - Processing trim 2/2 of citroen C4X-shape-facelift: Citroï¿½n C4X 2025 A/T / Shine
+2025-09-30 16:06:40,862 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C4X-shape-facelift Citroï¿½n C4X 2025 A/T / Shine
+2025-09-30 16:06:40,884 - INFO - Successfully scraped data for Citroen C4X-shape-facelift Citroï¿½n C4X 2025 A/T / Shine
 2025-09-30 16:06:40,884 - INFO - Processing model 10/20 of citroen: C4X-shape-facelift
 2025-09-30 16:06:41,417 - INFO - Found 0 trims for citroen C4X-shape-facelift
 2025-09-30 16:06:41,417 - INFO - No trims found for citroen C4X-shape-facelift
 2025-09-30 16:06:41,417 - INFO - Processing model 11/20 of citroen: c4
 2025-09-30 16:06:42,167 - INFO - Found 4 trims for citroen c4
 2025-09-30 16:06:42,167 - INFO - Found 4 trims for citroen c4
-2025-09-30 16:06:42,167 - INFO - Processing trim 1/4 of citroen c4: Citroën C4 2026 A/T / Shine Two Tone
-2025-09-30 16:06:42,999 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c4 Citroën C4 2026 A/T / Shine Two Tone
-2025-09-30 16:06:43,028 - INFO - Successfully scraped data for Citroen c4 Citroën C4 2026 A/T / Shine Two Tone
-2025-09-30 16:06:43,028 - INFO - Processing trim 2/4 of citroen c4: Citroën C4 2025 A/T / Feel
-2025-09-30 16:06:43,788 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c4 Citroën C4 2025 A/T / Feel
-2025-09-30 16:06:43,807 - INFO - Successfully scraped data for Citroen c4 Citroën C4 2025 A/T / Feel
-2025-09-30 16:06:43,808 - INFO - Processing trim 3/4 of citroen c4: Citroën C4 2025 A/T / Shine
-2025-09-30 16:06:44,753 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c4 Citroën C4 2025 A/T / Shine
-2025-09-30 16:06:44,784 - INFO - Successfully scraped data for Citroen c4 Citroën C4 2025 A/T / Shine
-2025-09-30 16:06:44,784 - INFO - Processing trim 4/4 of citroen c4: Citroën C4 A/T / Shine Two Tone 2026
-2025-09-30 16:06:45,467 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c4 Citroën C4 A/T / Shine Two Tone 2026
-2025-09-30 16:06:45,494 - INFO - Successfully scraped data for Citroen c4 Citroën C4 A/T / Shine Two Tone 2026
+2025-09-30 16:06:42,167 - INFO - Processing trim 1/4 of citroen c4: Citroï¿½n C4 2026 A/T / Shine Two Tone
+2025-09-30 16:06:42,999 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c4 Citroï¿½n C4 2026 A/T / Shine Two Tone
+2025-09-30 16:06:43,028 - INFO - Successfully scraped data for Citroen c4 Citroï¿½n C4 2026 A/T / Shine Two Tone
+2025-09-30 16:06:43,028 - INFO - Processing trim 2/4 of citroen c4: Citroï¿½n C4 2025 A/T / Feel
+2025-09-30 16:06:43,788 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c4 Citroï¿½n C4 2025 A/T / Feel
+2025-09-30 16:06:43,807 - INFO - Successfully scraped data for Citroen c4 Citroï¿½n C4 2025 A/T / Feel
+2025-09-30 16:06:43,808 - INFO - Processing trim 3/4 of citroen c4: Citroï¿½n C4 2025 A/T / Shine
+2025-09-30 16:06:44,753 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c4 Citroï¿½n C4 2025 A/T / Shine
+2025-09-30 16:06:44,784 - INFO - Successfully scraped data for Citroen c4 Citroï¿½n C4 2025 A/T / Shine
+2025-09-30 16:06:44,784 - INFO - Processing trim 4/4 of citroen c4: Citroï¿½n C4 A/T / Shine Two Tone 2026
+2025-09-30 16:06:45,467 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen c4 Citroï¿½n C4 A/T / Shine Two Tone 2026
+2025-09-30 16:06:45,494 - INFO - Successfully scraped data for Citroen c4 Citroï¿½n C4 A/T / Shine Two Tone 2026
 2025-09-30 16:06:45,494 - INFO - Processing model 12/20 of citroen: c4
 2025-09-30 16:06:46,443 - INFO - Found 0 trims for citroen c4
 2025-09-30 16:06:46,443 - INFO - No trims found for citroen c4
@@ -5532,49 +5531,49 @@
 2025-09-30 16:06:48,580 - INFO - Processing model 17/20 of citroen: C5-Aircross
 2025-09-30 16:06:49,265 - INFO - Found 15 trims for citroen C5-Aircross
 2025-09-30 16:06:49,265 - INFO - Found 15 trims for citroen C5-Aircross
-2025-09-30 16:06:49,265 - INFO - Processing trim 1/15 of citroen C5-Aircross: Citroën C5 Aircross 2026 A/T / Shine Entry
-2025-09-30 16:06:50,488 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross 2026 A/T / Shine Entry
-2025-09-30 16:06:50,516 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross 2026 A/T / Shine Entry
-2025-09-30 16:06:50,516 - INFO - Processing trim 2/15 of citroen C5-Aircross: Citroën C5 Aircross 2026 A/T / Shine
-2025-09-30 16:06:51,481 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross 2026 A/T / Shine
-2025-09-30 16:06:51,494 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross 2026 A/T / Shine
-2025-09-30 16:06:51,494 - INFO - Processing trim 3/15 of citroen C5-Aircross: Citroën C5 Aircross 2025 A/T / FEEL / with out sunroof
-2025-09-30 16:06:52,355 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross 2025 A/T / FEEL / with out sunroof
-2025-09-30 16:06:52,370 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross 2025 A/T / FEEL / with out sunroof
+2025-09-30 16:06:49,265 - INFO - Processing trim 1/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross 2026 A/T / Shine Entry
+2025-09-30 16:06:50,488 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross 2026 A/T / Shine Entry
+2025-09-30 16:06:50,516 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross 2026 A/T / Shine Entry
+2025-09-30 16:06:50,516 - INFO - Processing trim 2/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross 2026 A/T / Shine
+2025-09-30 16:06:51,481 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross 2026 A/T / Shine
+2025-09-30 16:06:51,494 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross 2026 A/T / Shine
+2025-09-30 16:06:51,494 - INFO - Processing trim 3/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross 2025 A/T / FEEL / with out sunroof
+2025-09-30 16:06:52,355 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross 2025 A/T / FEEL / with out sunroof
+2025-09-30 16:06:52,370 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross 2025 A/T / FEEL / with out sunroof
 2025-09-30 16:06:52,370 - INFO - Progress update: 1300 trims processed in 1278.6s
-2025-09-30 16:06:52,370 - INFO - Processing trim 4/15 of citroen C5-Aircross: Citroën C5 Aircross 2025 A/T / Live
-2025-09-30 16:06:53,083 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross 2025 A/T / Live
-2025-09-30 16:06:53,083 - INFO - Processing trim 5/15 of citroen C5-Aircross: Citroën C5 Aircross 2025 A/T / Feel with sunroof
-2025-09-30 16:06:53,852 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross 2025 A/T / Feel with sunroof
-2025-09-30 16:06:53,866 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross 2025 A/T / Feel with sunroof
-2025-09-30 16:06:53,867 - INFO - Processing trim 6/15 of citroen C5-Aircross: Citroën C5 Aircross 2025 A/T / SHINE
-2025-09-30 16:06:54,764 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross 2025 A/T / SHINE
-2025-09-30 16:06:54,785 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross 2025 A/T / SHINE
-2025-09-30 16:06:54,785 - INFO - Processing trim 7/15 of citroen C5-Aircross: Citroën C5 Aircross A/T / SHINE
-2025-09-30 16:06:55,524 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross A/T / SHINE
-2025-09-30 16:06:55,542 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross A/T / SHINE
-2025-09-30 16:06:55,542 - INFO - Processing trim 8/15 of citroen C5-Aircross: Citroën C5 Aircross A/T / SHINE
-2025-09-30 16:06:55,542 - INFO - Skipping duplicate trim: Citroen C5-Aircross Citroën C5 Aircross A/T / SHINE
-2025-09-30 16:06:55,542 - INFO - Processing trim 9/15 of citroen C5-Aircross: Citroën C5 Aircross A/T / SHINE
-2025-09-30 16:06:55,542 - INFO - Skipping duplicate trim: Citroen C5-Aircross Citroën C5 Aircross A/T / SHINE
-2025-09-30 16:06:55,542 - INFO - Processing trim 10/15 of citroen C5-Aircross: Citroën C5 Aircross A/T / SHINE
-2025-09-30 16:06:55,542 - INFO - Skipping duplicate trim: Citroen C5-Aircross Citroën C5 Aircross A/T / SHINE
-2025-09-30 16:06:55,542 - INFO - Processing trim 11/15 of citroen C5-Aircross: Citroën C5 Aircross A/T / Shine 2026
-2025-09-30 16:06:56,196 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross A/T / Shine 2026
-2025-09-30 16:06:56,218 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross A/T / Shine 2026
-2025-09-30 16:06:56,218 - INFO - Processing trim 12/15 of citroen C5-Aircross: Citroën C5 Aircross A/T / Shine Entry 2026
-2025-09-30 16:06:56,676 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross A/T / Shine Entry 2026
-2025-09-30 16:06:56,693 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross A/T / Shine Entry 2026
-2025-09-30 16:06:56,693 - INFO - Processing trim 13/15 of citroen C5-Aircross: Citroën C5 Aircross A/T / FEEL / with out sunroof 2025
-2025-09-30 16:06:57,161 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross A/T / FEEL / with out sunroof 2025
-2025-09-30 16:06:57,182 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross A/T / FEEL / with out sunroof 2025
+2025-09-30 16:06:52,370 - INFO - Processing trim 4/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross 2025 A/T / Live
+2025-09-30 16:06:53,083 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross 2025 A/T / Live
+2025-09-30 16:06:53,083 - INFO - Processing trim 5/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross 2025 A/T / Feel with sunroof
+2025-09-30 16:06:53,852 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross 2025 A/T / Feel with sunroof
+2025-09-30 16:06:53,866 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross 2025 A/T / Feel with sunroof
+2025-09-30 16:06:53,867 - INFO - Processing trim 6/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross 2025 A/T / SHINE
+2025-09-30 16:06:54,764 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross 2025 A/T / SHINE
+2025-09-30 16:06:54,785 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross 2025 A/T / SHINE
+2025-09-30 16:06:54,785 - INFO - Processing trim 7/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross A/T / SHINE
+2025-09-30 16:06:55,524 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / SHINE
+2025-09-30 16:06:55,542 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / SHINE
+2025-09-30 16:06:55,542 - INFO - Processing trim 8/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross A/T / SHINE
+2025-09-30 16:06:55,542 - INFO - Skipping duplicate trim: Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / SHINE
+2025-09-30 16:06:55,542 - INFO - Processing trim 9/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross A/T / SHINE
+2025-09-30 16:06:55,542 - INFO - Skipping duplicate trim: Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / SHINE
+2025-09-30 16:06:55,542 - INFO - Processing trim 10/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross A/T / SHINE
+2025-09-30 16:06:55,542 - INFO - Skipping duplicate trim: Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / SHINE
+2025-09-30 16:06:55,542 - INFO - Processing trim 11/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross A/T / Shine 2026
+2025-09-30 16:06:56,196 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / Shine 2026
+2025-09-30 16:06:56,218 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / Shine 2026
+2025-09-30 16:06:56,218 - INFO - Processing trim 12/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross A/T / Shine Entry 2026
+2025-09-30 16:06:56,676 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / Shine Entry 2026
+2025-09-30 16:06:56,693 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / Shine Entry 2026
+2025-09-30 16:06:56,693 - INFO - Processing trim 13/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross A/T / FEEL / with out sunroof 2025
+2025-09-30 16:06:57,161 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / FEEL / with out sunroof 2025
+2025-09-30 16:06:57,182 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / FEEL / with out sunroof 2025
 2025-09-30 16:06:57,183 - INFO - Progress update: 1310 trims processed in 1283.4s
-2025-09-30 16:06:57,183 - INFO - Processing trim 14/15 of citroen C5-Aircross: Citroën C5 Aircross A/T / SHINE 2025
-2025-09-30 16:06:57,600 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross A/T / SHINE 2025
-2025-09-30 16:06:57,616 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross A/T / SHINE 2025
-2025-09-30 16:06:57,616 - INFO - Processing trim 15/15 of citroen C5-Aircross: Citroën C5 Aircross A/T / Feel with sunroof 2025
-2025-09-30 16:06:58,195 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroën C5 Aircross A/T / Feel with sunroof 2025
-2025-09-30 16:06:58,212 - INFO - Successfully scraped data for Citroen C5-Aircross Citroën C5 Aircross A/T / Feel with sunroof 2025
+2025-09-30 16:06:57,183 - INFO - Processing trim 14/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross A/T / SHINE 2025
+2025-09-30 16:06:57,600 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / SHINE 2025
+2025-09-30 16:06:57,616 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / SHINE 2025
+2025-09-30 16:06:57,616 - INFO - Processing trim 15/15 of citroen C5-Aircross: Citroï¿½n C5 Aircross A/T / Feel with sunroof 2025
+2025-09-30 16:06:58,195 - INFO - Set Market_Price_EGP to Official_Price_EGP for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / Feel with sunroof 2025
+2025-09-30 16:06:58,212 - INFO - Successfully scraped data for Citroen C5-Aircross Citroï¿½n C5 Aircross A/T / Feel with sunroof 2025
 2025-09-30 16:06:58,212 - INFO - Processing model 18/20 of citroen: C5-Aircross
 2025-09-30 16:06:58,684 - INFO - Found 0 trims for citroen C5-Aircross
 2025-09-30 16:06:58,684 - INFO - No trims found for citroen C5-Aircross
@@ -6931,7 +6930,6 @@
 2025-09-30 16:12:10,404 - INFO - Processing trim 25/25 of geely Coolray: Geely Cool Ray A/T / Premium ( AUTO MOBILITY) Local simplified 2025
 2025-09-30 16:12:10,404 - INFO - Skipping duplicate trim: Geely Coolray Geely Cool Ray A/T / Premium ( AUTO MOBILITY) Local simplified 2025
 2025-09-30 16:12:10,404 - INFO - Processing model 6/16 of geely: Coolray
-2025-09-30 16:12:32,382 - ERROR - Attempt 1 failed for https://eg.hatla2ee.com/en/new-car/geely/Coolray: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
 2025-09-30 16:12:32,383 - INFO - Retrying request (attempt 2) after 2s...
 2025-09-30 16:12:35,414 - INFO - Found 0 trims for geely Coolray
 2025-09-30 16:12:35,414 - INFO - No trims found for geely Coolray

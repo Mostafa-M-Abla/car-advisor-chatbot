@@ -12,7 +12,7 @@ from datetime import datetime
 
 class CarScraper:
     def __init__(self, min_delay=0.2, max_delay=0.5, brand_delay=1.5, excluded_brands=None):
-        self.base_url = "https://eg.hatla2ee.com/en/new-car"
+        self.base_url = "https://......./en/new-car"
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -458,7 +458,7 @@ class CarScraper:
                 return
 
             # Get trim details page
-            trim_url = trim['url'] if trim['url'].startswith('http') else f"https://eg.hatla2ee.com{trim['url']}"
+            trim_url = trim['url'] if trim['url'].startswith('http') else f"https://eg..........com{trim['url']}"
             soup = self.make_request(trim_url)
 
             if not soup:
@@ -704,7 +704,7 @@ class CarScraper:
 
 def main():
     """Main function with command-line argument parsing"""
-    parser = argparse.ArgumentParser(description='Car Scraper for hatla2ee.com')
+    parser = argparse.ArgumentParser(description='Car Scraper for ....... .com')
     parser.add_argument('--brands', nargs='*', help='Specific brands to scrape (default: all brands)')
     parser.add_argument('--exclude', nargs='*', default=[], help='Brands to exclude from scraping')
     parser.add_argument('--min-delay', type=float, default=0.2, help='Minimum delay between requests (seconds)')

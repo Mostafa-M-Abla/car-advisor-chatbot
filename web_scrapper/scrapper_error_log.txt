@@ -1,2 +1,0 @@
-2025-09-30 16:04:40 - ERROR: Attempt 1 failed for https://eg.hatla2ee.com/en/new-car/seat/arona: HTTPSConnectionPool(host='eg.hatla2ee.com', port=443): Read timed out. (read timeout=30)
-2025-09-30 16:12:32 - ERROR: Attempt 1 failed for https://eg.hatla2ee.com/en/new-car/geely/Coolray: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))

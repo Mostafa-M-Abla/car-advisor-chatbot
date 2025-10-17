@@ -16,6 +16,7 @@ pip install -r requirements.txt
 
 # Set up environment (required)
 echo "OPENAI_API_KEY=your-key-here" > .env
+echo "LANGSMITH_API_KEY=your-key-here" >> .env
 
 # Run web interface (recommended)
 python app.py  # Opens at http://localhost:7860
@@ -176,7 +177,7 @@ result = self.agent.invoke(
 ### 4. Gradio Interface Responsiveness
 `app.py` uses viewport-based heights for responsive design:
 ```python
-chatbot=gr.Chatbot(height="60vh")  # Dynamic sizing
+chatbot=gr.Chatbot(height="65vh")  # Dynamic sizing
 ```
 CSS ensures input box is always visible via `min-height` and responsive breakpoints.
 
@@ -200,6 +201,8 @@ car_brand, car_model, car_trim, body_type, Price_EGP, Transmission_Type, Origin_
 - Tests: cheapest car, brand knowledge, clarification handling, complex filters
 - LangSmith integration for experiment tracking
 - 10-second delay between evaluations to avoid rate limits
+- **Requires both OPENAI_API_KEY and LANGSMITH_API_KEY in .env file**
+- Uses `python-dotenv` to load environment variables (validates keys on startup)
 
 ### Hyperparameter Tuning (`evaluation/hyperparameter_tuning.py`)
 - Grid search over temperature and max_tokens
