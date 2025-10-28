@@ -1,6 +1,17 @@
 # Egyptian Car Market AI Chatbot 🚗
 
-An advanced AI-powered conversational assistant for the Egyptian automotive market with 900+ cars.
+An AI-powered chatbot hat helps users find new cars that suit their preferences — such as body type, brand, and features. The chatbot is equipped with a database of new cars available in Egypt, which was developed as part of this project.
+
+Try the project live at mostafaabla.com
+
+## Tech Stack
+
+LangChain + LangGraph | GPT-4.1 | Gradio | SQLite
+
+## Implementation
+
+The projects involves the following steps:
+
 
 ## Quick Start
 
@@ -11,10 +22,4 @@ python app.py
 
 Opens at `http://localhost:7860`
 
-## Documentation
 
-**For complete documentation, see [CLAUDE.md](CLAUDE.md)**
-
-## Tech Stack
-
-LangChain + LangGraph | GPT-4.1 | Gradio | SQLite
